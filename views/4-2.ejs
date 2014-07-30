@@ -2,19 +2,23 @@
 
 <script type="text/javascript" src="/js/ichartjs/ichart.1.2.min.js"></script>
 <link rel="stylesheet" href="/css/ichartjs/demo.css" type="text/css"/>
-<br><br><br>
+<% include select_date.ejs %>
+<% include save_print.ejs %>
+
 <script type="text/javascript">
     //周回流用户数据
     $(function(){
+        var active_user = [45,52,54,74,90,84,45,52,54,74,90,84,45,52,54,74,90,84,45,52,54,74,90,84,45,52,54,74,90,84,45,52,54,74,90,84,45,52,54,74,90,84,45,52,54,74,90,84,54,74,90,84];
+        var high_active_user = [60,80,105,125,108,120,60,80,105,125,108,120,60,80,105,125,108,120,60,80,105,125,108,120,60,80,105,125,108,120,60,80,105,125,108,120,60,80,105,125,108,120,60,80,105,125,108,120,105,125,108,120];
         var data = [
             {
                 name : '回流活跃用户',
-                value:[45,52,54,74,90,84],
+                value:active_user,
                 color:'#1385a5'
             },
             {
                 name : '回流高活用户',
-                value:[60,80,105,125,108,120],
+                value:high_active_user,
                 color:'#c56966'
             }
         ];
@@ -56,6 +60,32 @@
 </script>
 <div class="col-lg-12">
     <div id='columnmulti2d'></div>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th></th>
+            <% for(var i=1;i<53;i++){ %>
+            <th><%=i%></th>
+            <% } %>
+        </tr>
+
+        </thead>
+        <tbody>
+        <tr>
+            <td>回流活跃用户</td>
+            <% active_user.forEach(function( a ){%>
+            <td><%= a %></td>
+            <%});%>
+        </tr>
+        <tr>
+            <td>回流高活用户</td>
+            <% high_active_user.forEach(function( a ){%>
+            <td><%= a %></td>
+            <%});%>
+        </tr>
+        </tbody>
+    </table>
+
 </div>
 
 

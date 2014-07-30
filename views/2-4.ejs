@@ -1,8 +1,41 @@
+<!--用户使用时长-->
 <% include nav.ejs %>
 
 <script type="text/javascript" src="/js/ichartjs/ichart.1.2.min.js"></script>
 <link rel="stylesheet" href="/css/ichartjs/demo.css" type="text/css"/>
-<br><br><br>
+<% include select_date.ejs %>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="col-lg-1">
+            <button name="day" id="day">日时长</button>
+        </div>
+        <div class="col-lg-1">
+            <button name="week" id="week">周时长</button>
+        </div>
+        <div class="col-lg-1">
+            <button name="month" id="month">月时长</button>
+        </div>
+        <div class="col-lg-1">
+            <button name="active_day" id="active_day">活跃日时长</button>
+        </div>
+        <div class="col-lg-1">
+            <button name="active_week" id="active_week">活跃周时长</button>
+        </div>
+        <div class="col-lg-1">
+            <button name="active_month" id="active_month">活跃月时长</button>
+        </div>
+        <div class="col-lg-1">
+            <button name="pay_day" id="pay_day">日付费时长</button>
+        </div>
+        <div class="col-lg-1">
+            <button name="pay_week" id="pay_week">周付费时长</button>
+        </div>
+        <div class="col-lg-1">
+            <button name="pay_month" id="pay_month">月付费时长</button>
+        </div>
+        <% include save_print.ejs %>
+    </div>
+</div>
 <script type="text/javascript">
     //线型图表
     $(function(){
