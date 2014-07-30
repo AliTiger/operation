@@ -1,0 +1,68 @@
+<script type="text/javascript" src="/js/selectbox/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/js/selectbox/prettify.js"></script>
+<script type="text/javascript" src="/js/selectbox/jquery.multiselect.js"></script>
+<script type="text/javascript" src="/js/selectbox/jquery.multiselect.filter.js"></script>
+
+<link rel="stylesheet" type="text/css" href="/css/selectbox/jquery.multiselect.css" />
+<link rel="stylesheet" type="text/css" href="/css/selectbox/jquery.multiselect.filter.css" />
+<link rel="stylesheet" type="text/css" href="/css/selectbox/style.css" />
+<link rel="stylesheet" type="text/css" href="/css/selectbox/prettify.css" />
+<link rel="stylesheet" type="text/css" href="/css/selectbox/jquery-ui.css" />
+
+<script type="text/javascript">
+    $(function(){
+        $( "#datepicker" ).datepicker({
+            showWeek: true,
+            firstDay: 1,
+            numberOfMonths: 2
+        });
+        $("select").multiselect().multiselectfilter();
+    });
+</script>
+<br><br><br>
+<div id="test" onload="prettyPrint();"></div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="col-lg-3">
+            <p>
+                <select title="platform" multiple="multiple" id="platform" name="platform" size="5">
+                    <option value="xiaomi">小米平台</option>
+                    <option value="baidu">百度平台</option>
+                    <option value="tengxun">腾讯平台</option>
+                    <option value="youshi">优视平台</option>
+                    <option value="reku">热酷平台</option>
+                </select>
+            </p>
+        </div>
+        <div class="col-lg-3">
+            <p>
+                <select title="myselect" multiple="multiple" id="myselect" name="myselect" size="5">
+                </select>
+            </p>
+        </div>
+        <div class="col-lg-3">
+            <label for="datepicker">选择日期</label>
+            <input type="text" id="datepicker">
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function(){
+        //选择平台之后，相应的区服列表动态更新
+        $('#platform').on('change',function(){
+            //需要修改
+            var selected = $('#platform').val();
+            console.log('=====selected:',selected);
+            var options = [{id:1,value:'1001'},{id:2,value:'1002'},{id:3,value:'1003'}];
+            for(var i=0;i<selected.length;i++){
+                for(var j = 0; j < options.length; j++) {
+                    var data = options[j];
+                    var option = '<option value="' + data['value'] + '">' + data['value'] + '</option>';
+                    $('#myselect').append(option);
+                    $('#myselect').multiselect( 'refresh' );//刷新select数据
+                }
+            }
+        });
+
+    });
+</script>

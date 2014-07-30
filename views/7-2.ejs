@@ -1,0 +1,62 @@
+<% include nav.ejs %>
+
+<script type="text/javascript" src="/js/ichartjs/ichart.1.2.min.js"></script>
+<link rel="stylesheet" href="/css/ichartjs/demo.css" type="text/css"/>
+<br><br><br>
+<script type="text/javascript">
+    //周回流用户数据
+    $(function(){
+        var data = [
+            {
+                name : '回流活跃用户',
+                value:[45,52,54,74,90,84],
+                color:'#1385a5'
+            },
+            {
+                name : '回流高活用户',
+                value:[60,80,105,125,108,120],
+                color:'#c56966'
+            }
+        ];
+        var labels = [];
+        for(var i=0;i<52;i++){
+            labels[i] = i + 1;
+        }
+        var chart = new iChart.ColumnMulti2D({
+            render : 'columnmulti2d',
+            data: data,
+            labels:labels,
+            title : '用户推广成本',
+            subtitle : '单位:千',
+            footnote : '数据来源：周用户回流数据',
+            width : 1200,
+            height : 400,
+            background_color : '#ffffff',
+            legend:{
+                enable:true,
+                background_color : null,
+                border : {
+                    enable : false
+                }
+            },
+            coordinate:{
+                background_color : '#f1f1f1',
+                scale:[{
+                    position:'left',
+                    start_scale:0,
+                    end_scale:300,
+                    scale_space:50
+                }],
+                width:1100,
+                height:260
+            }
+        });
+        chart.draw();
+    });
+</script>
+<div class="col-lg-12">
+    <div id='columnmulti2d'></div>
+</div>
+
+
+<% include footer.ejs %>

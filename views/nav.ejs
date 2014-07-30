@@ -1,0 +1,122 @@
+<% include header.ejs %>
+<!-- Sidebar -->
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">欢迎<%= user.name %>登陆运营后台数据查询系统</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse navbar-ex1-collapse">
+        <ul class="nav navbar-nav side-nav">
+            <li class="active"><a href="/home"><i class="fa fa-dashboard"></i> 首页</a></li>
+			<% user.power.forEach(function( a ){ %>
+				<% if( a & 1 ){ %>
+					<li><a href="/setPower"><i class="fa fa-dashboard"></i> 设置用户权限</a></li>
+				<% } %>
+				<% if( a & 2 ){ %>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-square-o-down"></i> 获取用户<b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li><a href="/getUsers/1-1">点击下载注册登陆数</a></li>
+							<li><a href="/getUsers/1-2">新增实增数及转化率</a></li>
+						</ul>
+					</li>
+				<% } %>
+				<% if( a & 4 ){ %>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-square-o-down"></i> 用户活跃<b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li><a href="/activeUsers/2-1">活跃用户数量</a></li>
+							<li><a href="/activeUsers/2-2">新增活跃用户</a></li>
+							<li><a href="/activeUsers/2-3">登陆游戏次数</a></li>
+							<li><a href="/activeUsers/2-4">用户使用时长</a></li>
+							<li><a href="/activeUsers/2-5">一次用户数量</a></li>
+							<li><a href="/activeUsers/2-6">高活跃用户量</a></li>
+						</ul>
+					</li>
+				<% } %>
+				<% if( a & 8 ){ %>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-square-o-down"></i> 用户在线<b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li><a href="/onlineUsers/3-1">在线用户数量</a></li>
+						</ul>
+					</li>
+				<% } %>
+				<% if( a & 16 ){ %>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-square-o-down"></i> 用户留存<b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li><a href="/remainUsers/4-1">用户的留存率</a></li>
+							<li><a href="/remainUsers/4-2">回流活跃用户</a></li>
+						</ul>
+					</li>
+				<% } %>
+				<% if( a & 32){ %>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-square-o-down"></i> 用户流失<b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li><a href="/lostUsers/5-1">流失用户数及流失率</a></li>
+							<li><a href="/lostUsers/5-2">用户流失的等级分布</a></li>
+							<li><a href="/lostUsers/5-3">用户流失的任务分布</a></li>
+							<li><a href="/lostUsers/5-4">用户的平均生命周期</a></li>
+						</ul>
+					</li>
+				<% } %>
+				<% if( a & 64){ %>
+					<!--只有最高权限的用户才可以查看游戏收入和运营成本-->
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-square-o-down"></i> 游戏收入<b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li><a href="/gameIncome/6-1">充值消费金额</a></li>
+							<li><a href="/gameIncome/6-2">用户平均收益</a></li>
+							<li><a href="/gameIncome/6-3">用户充值比例</a></li>
+							<li><a href="/gameIncome/6-4">活跃充值比例</a></li>
+							<li><a href="/gameIncome/6-5">充值用户流失</a></li>
+							<li><a href="/gameIncome/6-6">其他相关统计</a></li>
+						</ul>
+					</li>
+				<% } %>
+				<% if( a & 128){ %>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-square-o-down"></i> 运营成本<b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li><a href="/operationCost/7-1">投入产出比值</a></li>
+							<li><a href="/operationCost/7-2">用户推广成本</a></li>
+						</ul>
+					</li>
+				<% } %>
+				<% if( a & 256 ){ %>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-square-o-down"></i> 用户行为<b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li><a href="/userInformation/8-1">用户等级分布</a></li>
+							<li><a href="/userInformation/8-2">用户等级排名</a></li>
+							<li><a href="/userInformation/8-3">用户任务分布</a></li>
+							<li><a href="/userInformation/8-4">用户充值排名</a></li>
+							<li><a href="/userInformation/8-5">地图通关分布</a></li>
+							<li><a href="/userInformation/8-6">日均战场次数</a></li>
+						</ul>
+					</li>
+				<% } %>
+			<% }); %>
+        </ul>
+
+        <ul class="nav navbar-nav navbar-right navbar-user">
+            <li class="dropdown user-dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> <%=user.name %><b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    <li><a href="/logout"><i class="fa fa-power-off"></i> Log Out</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div><!-- /.navbar-collapse -->
+</nav>
+<div id="page-wrapper">
