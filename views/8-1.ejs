@@ -1,8 +1,10 @@
+<!--用户等级分布-->
 <% include nav.ejs %>
 
 <script type="text/javascript" src="/js/ichartjs/ichart.1.2.min.js"></script>
 <link rel="stylesheet" href="/css/ichartjs/demo.css" type="text/css"/>
-<br><br><br>
+<% include select_date.ejs %>
+<% include save_print.ejs %>
 <script type="text/javascript">
     //线型图表
     $(function(){
@@ -11,14 +13,14 @@
 
         var data = [
             {
-                name : '活跃用户数量',
+                name : '用户等级分布',
                 value:active,
                 color:'#0d8ecf',
                 line_width:2
             }
         ];
 
-        var labels = []; //= ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"];
+        var labels = [];
         for(var i=0;i<31;i++){
             labels[i] = i+1;
         }
@@ -28,7 +30,7 @@
             align:'center',
             title : '用户等级分布',
             subtitle : '平均每月的人数(访问量单位：万)',
-            footnote : '数据来源：点击下载安装注册数',
+            footnote : '数据来源：用户等级分布',
             width : 1100,
             height : 400,
             tip:{
@@ -88,11 +90,7 @@
 </script>
 <div class="col-lg-12">
     <div id='canvasDiv'></div>
-    <table class="table table-bordered">
-        <% for(var i=1;i<32;i++){ %>
-        <tr><%=i%></tr>&nbsp;&nbsp;&nbsp;
-        <% } %>
-    </table>
+
     <div class='ichartjs_info'>
         <div class='ichartjs_sm'>说明</div>
         <div class='ichartjs_details'>

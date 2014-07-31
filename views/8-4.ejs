@@ -1,0 +1,36 @@
+<!--用户充值分布-->
+<% include nav.ejs %>
+
+<% include select_date.ejs %>
+<% include save_print.ejs %>
+
+
+<div class="col-lg-12">
+    <div id='canvasDiv'></div>
+    <table id="table_first_charge" class="table table-bordered">
+        <thead>
+        <tr>
+            <th>排名</th>
+            <th>名称</th>
+            <th>充值金额</th>
+
+        </tr>
+
+        </thead>
+        <tbody>
+        <tr>
+            <td>1</td>
+            <td>轩辕射手</td>
+            <td>100000</td>
+
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>天外飞仙</td>
+            <td>100000</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<% include footer.ejs %>

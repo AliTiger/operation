@@ -1,0 +1,41 @@
+<!--用户流失的任务分布-->
+<% include nav.ejs %>
+
+<script type="text/javascript" src="/js/ichartjs/ichart.1.2.min.js"></script>
+<link rel="stylesheet" href="/css/ichartjs/demo.css" type="text/css"/>
+<% include select_date.ejs %>
+<% include save_print.ejs %>
+<br>
+<div class="row">
+<div class="col-lg-12">
+    <div id='canvasDiv'></div>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>编号</th>
+            <th>任务id</th>
+            <th>任务名称</th>
+            <th>人数</th>
+            <th>占比</th>
+        </tr>
+
+        </thead>
+        <tbody>
+        <tr>
+
+            <!--<% day_lost.forEach(function( a ){%>-->
+            <!--<td><%= a %></td>-->
+            <!--<%});%>-->
+            <td>1</td>
+            <td>200001</td>
+            <td></td>
+            <td>100000</td>
+            <td>10%</td>
+        </tr>
+
+        </tbody>
+    </table>
+
+</div>
+</div>
+<% include footer.ejs %>

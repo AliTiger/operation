@@ -1,12 +1,28 @@
+<!--流失用户数及流失率-->
 <% include nav.ejs %>
 
 <script type="text/javascript" src="/js/ichartjs/ichart.1.2.min.js"></script>
 <link rel="stylesheet" href="/css/ichartjs/demo.css" type="text/css"/>
-<br><br><br>
+<% include select_date.ejs %>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="col-lg-1">
+            <button name="day" id="day">日流失</button>
+        </div>
+        <div class="col-lg-1">
+            <button name="month" id="month">月流失</button>
+        </div>
+        <div class="col-lg-1">
+            <button name="high_active" id="high_active">高活流失</button>
+        </div>
+
+        <% include save_print.ejs %>
+    </div>
+</div>
 <script type="text/javascript">
     //线型图表
     $(function(){
-        var active    = [90000,90000,98000,90000,97000,99000,90000,90000,98000,92000,97000,99000,90000,90000,98000,90000,97000,99000,90000,97000,98000,92000,97000,99000,92000,93000,96000,91000,94000,94000,92000];
+        var active = [90000,90000,98000,90000,97000,99000,90000,90000,98000,92000,97000,99000,90000,90000,98000,90000,97000,99000,90000,97000,98000,92000,97000,99000,92000,93000,96000,91000,94000,94000,92000];
 
 
         var data = [
@@ -26,9 +42,9 @@
             render : 'canvasDiv',
             data: data,
             align:'center',
-            title : '用户流失数及流失率',
+            title : '每日用户流失率',
             subtitle : '平均每月的人数(访问量单位：万)',
-            footnote : '数据来源：点击下载安装注册数',
+            footnote : '数据来源：用户流失',
             width : 1100,
             height : 400,
             tip:{
@@ -89,9 +105,29 @@
 <div class="col-lg-12">
     <div id='canvasDiv'></div>
     <table class="table table-bordered">
-        <% for(var i=1;i<32;i++){ %>
-        <tr><%=i%></tr>&nbsp;&nbsp;&nbsp;
-        <% } %>
+        <thead>
+        <tr>
+            <th>日期</th>
+            <% for(var i=1;i<32;i++){ %>
+            <th><%=i%></th>
+            <% } %>
+        </tr>
+
+        </thead>
+        <tbody>
+        <tr>
+            <td>每日用户流失</td>
+            <% day_lost.forEach(function( a ){%>
+            <td><%= a %></td>
+            <%});%>
+        </tr>
+        <tr>
+            <td>每日用户流失率</td>
+            <% day_lost_.forEach(function( a ){%>
+            <td><%= a %></td>
+            <%});%>
+        </tr>
+        </tbody>
     </table>
     <div class='ichartjs_info'>
         <div class='ichartjs_sm'>说明</div>

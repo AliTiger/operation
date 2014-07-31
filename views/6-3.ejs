@@ -1,23 +1,47 @@
+<!--充值用户统计-->
 <% include nav.ejs %>
 
 <script type="text/javascript" src="/js/ichartjs/ichart.1.2.min.js"></script>
 <link rel="stylesheet" href="/css/ichartjs/demo.css" type="text/css"/>
-<br><br><br>
+<% include select_date.ejs %>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="col-lg-1">
+            <button name="pay_user" id="pay_user">充值用户</button>
+        </div>
+        <div class="col-lg-1">
+            <button name="pay_convert" id="pay_convert">付费转化</button>
+        </div>
+        <div class="col-lg-1">
+            <button name="month" id="month">月均充值</button>
+        </div>
+        <div class="col-lg-1">
+            <button name="loyal_pay" id="loyal_pay">忠实付费</button>
+        </div>
+        <div class="col-lg-1">
+            <button name="eff_user" id="eff_user">高效用户</button>
+        </div>
+        <div class="col-lg-1">
+            <button name="first_pay" id="first_pay">首次付费率</button>
+        </div>
+        <% include save_print.ejs %>
+    </div>
+</div>
 <script type="text/javascript">
     //线型图表
     $(function(){
-        var click    = [90000,90000,98000,90000,97000,99000,90000,90000,98000,92000,97000,99000,90000,90000,98000,90000,97000,99000,90000,97000,98000,92000,97000,99000,92000,93000,96000,91000,94000,94000,92000],
-                register = [70000,78000,90000,87000,89000,78000,78000,90000,87000,76000,78000,90000,70000,78000,90000,87000,89000,78000,78000,90000,87000,76000,78000,90000,70000,78000,90000,87000,89000,78000,78000];
+        var click    = [90000,90000,98000,90000,97000,99000,90000,90000,98000,92000,97000,99000],
+            register = [70000,78000,90000,87000,89000,78000,78000,90000,87000,76000,78000,90000];
 
         var data = [
             {
-                name : '点击次数',
+                name : '付费用户数量',
                 value:click,
                 color:'#0d8ecf',
                 line_width:2
             },
             {
-                name : '注册次数',
+                name : '新增付费数量',
                 value:register,
                 color:'#66FF33',
                 line_width:2
@@ -25,7 +49,7 @@
         ];
 
         var labels = []; //= ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"];
-        for(var i=0;i<31;i++){
+        for(var i=0;i<12;i++){
             labels[i] = i+1;
         }
         var line = new iChart.LineBasic2D({
@@ -34,7 +58,7 @@
             align:'center',
             title : '充值用户统计',
             subtitle : '平均每月的人数(访问量单位：万)',
-            footnote : '数据来源：点击下载安装注册数',
+            footnote : '数据来源：充值用户统计',
             width : 1100,
             height : 400,
             tip:{
@@ -69,7 +93,7 @@
                 grids:{
                     vertical:{
                         way:'share_alike',
-                        value:30//割线
+                        value:11//割线
                     }
                 },
                 scale:[{
@@ -95,9 +119,30 @@
 <div class="col-lg-12">
     <div id='canvasDiv'></div>
     <table class="table table-bordered">
-        <% for(var i=1;i<32;i++){ %>
-        <tr><%=i%></tr>&nbsp;&nbsp;&nbsp;
-        <% } %>
+        <thead>
+        <tr>
+            <th></th>
+            <% for(var i=1;i<13;i++){ %>
+            <th><%=i%></th>
+            <% } %>
+        </tr>
+
+        </thead>
+        <tbody>
+        <tr>
+            <td>付费用户数量</td>
+            <% ARPPU.forEach(function( a ){%>
+            <td><%= a %></td>
+            <%});%>
+        </tr>
+        <tr>
+            <td>新增付费数量</td>
+            <% ARPU.forEach(function( a ){%>
+            <td><%= a %></td>
+            <%});%>
+        </tr>
+
+        </tbody>
     </table>
     <div class='ichartjs_info'>
         <div class='ichartjs_sm'>说明</div>

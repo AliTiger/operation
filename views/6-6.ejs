@@ -1,0 +1,135 @@
+<!--付费用户流失-->
+<% include nav.ejs %>
+
+<% include select_date.ejs %>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="col-lg-1">
+            <button name="first_charge" id="first_charge">首次付费</button>
+        </div>
+        <div class="col-lg-1">
+            <button name="store" id="store">商城</button>
+        </div>
+        <div class="col-lg-1">
+            <button name="ranking" id="ranking">排行榜</button>
+        </div>
+        <div class="col-lg-1">
+            <button name="charge_grade" id="charge_grade">充值等级</button>
+        </div>
+        <div class="col-lg-1">
+            <button name="charge_interval" id="charge_interval">付费区间</button>
+        </div>
+
+        <% include save_print.ejs %>
+    </div>
+</div>
+
+<div class="col-lg-12">
+    <div id='canvasDiv'></div>
+    <table id="table_first_charge" class="table table-bordered">
+        <thead>
+        <tr>
+            <th>编号</th>
+            <th>项目</th>
+            <th>子项目</th>
+            <th>占比</th>
+        </tr>
+
+        </thead>
+        <tbody>
+        <tr>
+            <td>1</td>
+            <td>装备强化</td>
+            <td>100%成功</td>
+            <td>5%</td>
+        </tr>
+        </tbody>
+    </table>
+    <table id="table_store" class="table table-bordered" >
+        <thead>
+        <tr>
+            <th>编号</th>
+            <th>道具名称</th>
+            <th>首次购买次数</th>
+            <th>首次购买金额</th>
+            <th>首次购买金额占比</th>
+            <th>总购买次数</th>
+            <th>总购买总金额</th>
+            <th>总购买次数占比</th>
+            <th>总购买总金额占比</th>
+        </tr>
+
+        </thead>
+        <tbody>
+        <tr>
+            <td>1</td>
+            <td>装备强化</td>
+            <td>99</td>
+            <td>4444</td>
+            <td>5%</td>
+            <td>5%</td>
+            <td>5555</td>
+            <td>5%</td>
+            <td>5%</td>
+        </tr>
+        </tbody>
+    </table>
+    <table id="table_ranking" class="table table-bordered" >
+        <thead>
+        <tr>
+            <th>次数</th>
+            <th>玩家名称</th>
+            <th>充值金额</th>
+
+        </tr>
+
+        </thead>
+        <tbody>
+        <tr>
+            <td>1</td>
+            <td>啦啦啦</td>
+            <td>99</td>
+        </tr>
+        </tbody>
+    </table>
+    <table id="table_charge_grade" class="table table-bordered" >
+        <thead>
+        <tr>
+            <th>等级</th>
+            <th>付费人数</th>
+            <th>占比</th>
+
+        </tr>
+
+        </thead>
+        <tbody>
+        <tr>
+            <td>1</td>
+            <td>2222</td>
+            <td>9%</td>
+        </tr>
+        </tbody>
+    </table>
+    <table id="table_charge_interval" class="table table-bordered" >
+        <thead>
+        <tr>
+            <th>编号</th>
+            <th>区间</th>
+            <th>占比</th>
+
+        </tr>
+
+        </thead>
+        <tbody>
+        <tr>
+            <td>1</td>
+            <td>500</td>
+            <td>50</td>
+        </tr>
+        </tbody>
+    </table>
+
+
+</div>
+
+<% include footer.ejs %>
