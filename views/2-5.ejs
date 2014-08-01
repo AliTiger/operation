@@ -35,15 +35,24 @@
                 color:'#d75a5e'
             }
         ];
-        var labels = [];
+        var day_labels = [];
+        var week_labels = [];
+        var month_labels = [];
         for(var i=0;i<31;i++){
-            labels[i] = i + 1;
+            day_labels[i] = i + 1;
+        }
+        for(var i=0;i<52;i++){
+            week_labels[i] = i + 1;
+        }
+        for(var i=0;i<12;i++){
+            month_labels[i] = i + 1;
         }
 
-        var chart = new iChart.ColumnStacked2D({
-            render : 'columntacked2d',
+
+        var options = {
+            render : 'day_columntacked2d',
             data: data,
-            labels:labels,
+            labels:day_labels,
             title : {
                 text:'日一次用户数及比例',
                 color:'#dcd6cb',
@@ -107,7 +116,8 @@
                 width:'80%',
                 height:'76%'
             }
-        });
+        };
+        var chart = new iChart.ColumnStacked2D( options );
 
         //利用自定义组件构造左上侧单位
         chart.plugin(new iChart.Custom({
@@ -126,40 +136,173 @@
         }));
 
         chart.draw();
+
+        $('#day').on('click',function(){
+            $('.day_columntacked2d').css('display','block');
+            $('.week_columntacked2d').css('display','none');
+            $('.month_columntacked2d').css('display','none');
+        });
+        $('#week').on('click',function(){
+            $('.day_columntacked2d').css('display','none');
+            $('.week_columntacked2d').css('display','block');
+            $('.month_columntacked2d').css('display','none');
+            options.render = 'week_columntacked2d';
+            options.labels = week_labels;
+            options.title.text = '周一次用户数及比例';
+            options.footnote.text = '数据来源：周一次用户数及比例';
+            var chart = new iChart.ColumnStacked2D( options );
+
+            //利用自定义组件构造左上侧单位
+            chart.plugin(new iChart.Custom({
+                drawFn:function(){
+                    //计算位置
+                    var coo = chart.getCoordinate(),
+                            x = coo.get('originx'),
+                            y = coo.get('originy');
+                    //在左上侧的位置，渲染一个单位的文字
+                    chart.target.textAlign('end')
+                            .textBaseline('bottom')
+                            .textFont('600 12px 微软雅黑')
+                            .fillText('单位(个)',x,y-14,false,'#be5863')
+
+                }
+            }));
+
+            chart.draw();
+        });
+        $('#month').on('click',function(){
+            $('.day_columntacked2d').css('display','none');
+            $('.week_columntacked2d').css('display','none');
+            $('.month_columntacked2d').css('display','block');
+            options.render = 'month_columntacked2d';
+            options.labels = month_labels;
+            options.title.text = '月一次用户数及比例';
+            options.footnote.text = '数据来源：月一次用户数及比例';
+
+            var chart = new iChart.ColumnStacked2D( options );
+
+            //利用自定义组件构造左上侧单位
+            chart.plugin(new iChart.Custom({
+                drawFn:function(){
+                    //计算位置
+                    var coo = chart.getCoordinate(),
+                            x = coo.get('originx'),
+                            y = coo.get('originy');
+                    //在左上侧的位置，渲染一个单位的文字
+                    chart.target.textAlign('end')
+                            .textBaseline('bottom')
+                            .textFont('600 12px 微软雅黑')
+                            .fillText('单位(个)',x,y-14,false,'#be5863')
+
+                }
+            }));
+            chart.draw();
+        });
     });
 </script>
 <div class="col-lg-12">
-    <div id='columntacked2d'></div>
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-            <th></th>
-            <% for(var i=1;i<32;i++){ %>
-            <th><%=i%></th>
-            <% } %>
-        </tr>
+    <div class="day_columntacked2d">
+        <div id='day_columntacked2d'></div>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th></th>
+                <% for(var i=1;i<32;i++){ %>
+                <th><%=i%></th>
+                <% } %>
+            </tr>
 
-        </thead>
-        <tbody>
-        <tr>
-            <td>日一次用户比例</td>
-            <% active.forEach(function( a ){%>
+            </thead>
+            <tbody>
+            <tr>
+                <td>日一次用户比例</td>
+                <% active.forEach(function( a ){%>
                 <td><%= a %></td>
-            <%});%>
-        </tr>
-        <tr>
-            <td>日一次用户数</td>
-            <% active.forEach(function( a ){%>
-            <td><%= a %></td>
-            <%});%>
-        </tr>
-        <tr>
-            <td>日新增用户数</td>
-            <% active.forEach(function( a ){%>
-            <td><%= a %></td>
-            <%});%>
-        </tr>
-        </tbody>
-    </table>
+                <%});%>
+            </tr>
+            <tr>
+                <td>日一次用户数</td>
+                <% active.forEach(function( a ){%>
+                <td><%= a %></td>
+                <%});%>
+            </tr>
+            <tr>
+                <td>日新增用户数</td>
+                <% active.forEach(function( a ){%>
+                <td><%= a %></td>
+                <%});%>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="week_columntacked2d" style="display: none">
+        <div id='week_columntacked2d'></div>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th></th>
+                <% for(var i=1;i<32;i++){ %>
+                <th><%=i%></th>
+                <% } %>
+            </tr>
+
+            </thead>
+            <tbody>
+            <tr>
+                <td>周一次用户比例</td>
+                <% active.forEach(function( a ){%>
+                <td><%= a %></td>
+                <%});%>
+            </tr>
+            <tr>
+                <td>周一次用户数</td>
+                <% active.forEach(function( a ){%>
+                <td><%= a %></td>
+                <%});%>
+            </tr>
+            <tr>
+                <td>周新增用户数</td>
+                <% active.forEach(function( a ){%>
+                <td><%= a %></td>
+                <%});%>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="month_columntacked2d" style="display: none">
+        <div id='month_columntacked2d'></div>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th></th>
+                <% for(var i=1;i<32;i++){ %>
+                <th><%=i%></th>
+                <% } %>
+            </tr>
+
+            </thead>
+            <tbody>
+            <tr>
+                <td>月一次用户比例</td>
+                <% active.forEach(function( a ){%>
+                <td><%= a %></td>
+                <%});%>
+            </tr>
+            <tr>
+                <td>月一次用户数</td>
+                <% active.forEach(function( a ){%>
+                <td><%= a %></td>
+                <%});%>
+            </tr>
+            <tr>
+                <td>月新增用户数</td>
+                <% active.forEach(function( a ){%>
+                <td><%= a %></td>
+                <%});%>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
 </div>
 <% include footer.ejs %>

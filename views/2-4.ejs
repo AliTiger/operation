@@ -16,22 +16,22 @@
             <button name="month" id="month">月时长</button>
         </div>
         <div class="col-lg-1">
-            <button name="active_day" id="active_day">活跃日时长</button>
+            <button name="day_active" id="day_active">活跃日时长</button>
         </div>
         <div class="col-lg-1">
-            <button name="active_week" id="active_week">活跃周时长</button>
+            <button name="week_active" id="week_active">活跃周时长</button>
         </div>
         <div class="col-lg-1">
-            <button name="active_month" id="active_month">活跃月时长</button>
+            <button name="month_active" id="month_active">活跃月时长</button>
         </div>
         <div class="col-lg-1">
-            <button name="pay_day" id="pay_day">日付费时长</button>
+            <button name="charge_day" id="charge_day">日付费时长</button>
         </div>
         <div class="col-lg-1">
-            <button name="pay_week" id="pay_week">周付费时长</button>
+            <button name="charge_week" id="charge_week">周付费时长</button>
         </div>
         <div class="col-lg-1">
-            <button name="pay_month" id="pay_month">月付费时长</button>
+            <button name="charge_month" id="charge_month">月付费时长</button>
         </div>
         <% include save_print.ejs %>
     </div>
@@ -40,33 +40,42 @@
     //线型图表
     $(function(){
         var click    = [90000,90000,98000,90000,97000,99000,90000,90000,98000,92000,97000,99000,90000,90000,98000,90000,97000,99000,90000,97000,98000,92000,97000,99000,92000,93000,96000,91000,94000,94000,92000],
-                register = [70000,78000,90000,87000,89000,78000,78000,90000,87000,76000,78000,90000,70000,78000,90000,87000,89000,78000,78000,90000,87000,76000,78000,90000,70000,78000,90000,87000,89000,78000,78000];
+            register = [70000,78000,90000,87000,89000,78000,78000,90000,87000,76000,78000,90000,70000,78000,90000,87000,89000,78000,78000,90000,87000,76000,78000,90000,70000,78000,90000,87000,89000,78000,78000];
 
         var data = [
             {
-                name : '点击次数',
+                name : '每日使用时长',
                 value:click,
                 color:'#0d8ecf',
                 line_width:2
             },
             {
-                name : '注册次数',
+                name : '日均使用时长',
                 value:register,
                 color:'#66FF33',
                 line_width:2
             }
         ];
 
-        var labels = []; //= ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"];
+        var day_labels = [];
+        var week_labels = [];
+        var month_labels = [];
         for(var i=0;i<31;i++){
-            labels[i] = i+1;
+            day_labels[i] = i+1;
         }
-        var line = new iChart.LineBasic2D({
-            render : 'canvasDiv',
+        for(var i=0;i<52;i++){
+            week_labels[i] = i+1;
+        }
+        for(var i=0;i<12;i++){
+            month_labels[i] = i+1;
+        }
+
+        var options = {
+            render : 'day_canvasDiv',
             data: data,
             align:'center',
             title : '每日及日均使用时长',
-            subtitle : '平均每月的人数(访问量单位：万)',
+            subtitle : '平均每日的人数(访问量单位：万)',
             footnote : '数据来源：每日及日均使用时长',
             width : 1100,
             height : 400,
@@ -115,31 +124,219 @@
 
                 },{
                     position:'bottom',
-                    labels:labels
+                    labels:day_labels
                 }]
             }
-        });
+        };
+        var line = new iChart.LineBasic2D( options );
 
         //开始画图
         line.draw();
+
+        $('#day').on('click',function(){
+            $('.day_canvasDiv').css('display','block');
+            $('.week_canvasDiv').css('display','none');
+            $('.month_canvasDiv').css('display','none');
+            $('.day_active_canvasDiv').css('display','none');
+            $('.week_active_canvasDiv').css('display','none');
+            $('.month_active_canvasDiv').css('display','none');
+            $('.charge_day_canvasDiv').css('display','none');
+            $('.charge_week_canvasDiv').css('display','none');
+            $('.charge_month_canvasDiv').css('display','none');
+        });
+        $('#week').on('click',function(){
+            $('.day_canvasDiv').css('display','none');
+            $('.week_canvasDiv').css('display','block');
+            $('.month_canvasDiv').css('display','none');
+            $('.day_active_canvasDiv').css('display','none');
+            $('.week_active_canvasDiv').css('display','none');
+            $('.month_active_canvasDiv').css('display','none');
+            $('.charge_day_canvasDiv').css('display','none');
+            $('.charge_week_canvasDiv').css('display','none');
+            $('.charge_month_canvasDiv').css('display','none');
+            options.render = 'week_canvasDiv';
+            options.title = '每周及周均使用时长';
+            options.coordinate.grids.vertical.value = 51;
+            options.coordinate.scale[1].labels = week_labels;
+            var line = new iChart.LineBasic2D( options );
+
+            //开始画图
+            line.draw();
+
+        });
+        $('#month').on('click',function(){
+            $('.day_canvasDiv').css('display','none');
+            $('.week_canvasDiv').css('display','none');
+            $('.month_canvasDiv').css('display','block');
+            $('.day_active_canvasDiv').css('display','none');
+            $('.week_active_canvasDiv').css('display','none');
+            $('.month_active_canvasDiv').css('display','none');
+            $('.charge_day_canvasDiv').css('display','none');
+            $('.charge_week_canvasDiv').css('display','none');
+            $('.charge_month_canvasDiv').css('display','none');
+            options.render = 'month_canvasDiv';
+            options.title = '每月及月均使用时长';
+            options.coordinate.grids.vertical.value = 11;
+            options.coordinate.scale[1].labels = month_labels;
+            var line = new iChart.LineBasic2D( options );
+
+            //开始画图
+            line.draw();
+        });
+        $('#day_active').on('click',function(){
+            $('.day_canvasDiv').css('display','none');
+            $('.week_canvasDiv').css('display','none');
+            $('.month_canvasDiv').css('display','none');
+            $('.day_active_canvasDiv').css('display','block');
+            $('.week_active_canvasDiv').css('display','none');
+            $('.month_active_canvasDiv').css('display','none');
+            $('.charge_day_canvasDiv').css('display','none');
+            $('.charge_week_canvasDiv').css('display','none');
+            $('.charge_month_canvasDiv').css('display','none');
+            options.render = 'day_active_canvasDiv';
+            options.title = '每日及日均活跃用户使用时长';
+            options.coordinate.grids.vertical.value = 30;
+            options.coordinate.scale[1].labels = day_labels;
+            var line = new iChart.LineBasic2D( options );
+
+            //开始画图
+            line.draw();
+        });
+        $('#week_active').on('click',function(){
+            $('.day_canvasDiv').css('display','none');
+            $('.week_canvasDiv').css('display','none');
+            $('.month_canvasDiv').css('display','none');
+            $('.day_active_canvasDiv').css('display','none');
+            $('.week_active_canvasDiv').css('display','block');
+            $('.month_active_canvasDiv').css('display','none');
+            $('.charge_day_canvasDiv').css('display','none');
+            $('.charge_week_canvasDiv').css('display','none');
+            $('.charge_month_canvasDiv').css('display','none');
+            options.render = 'week_active_canvasDiv';
+            options.title = '每周及周均活跃用户使用时长';
+            options.coordinate.grids.vertical.value = 51;
+            options.coordinate.scale[1].labels = week_labels;
+            var line = new iChart.LineBasic2D( options );
+
+            //开始画图
+            line.draw();
+        });
+        $('#month_active').on('click',function(){
+            $('.day_canvasDiv').css('display','none');
+            $('.week_canvasDiv').css('display','none');
+            $('.month_canvasDiv').css('display','none');
+            $('.day_active_canvasDiv').css('display','none');
+            $('.week_active_canvasDiv').css('display','none');
+            $('.month_active_canvasDiv').css('display','block');
+            $('.charge_day_canvasDiv').css('display','none');
+            $('.charge_week_canvasDiv').css('display','none');
+            $('.charge_month_canvasDiv').css('display','none');
+            options.render = 'month_active_canvasDiv';
+            options.title = '每月及月均活跃用户使用时长';
+            options.coordinate.grids.vertical.value = 11;
+            options.coordinate.scale[1].labels = month_labels;
+            var line = new iChart.LineBasic2D( options );
+
+            //开始画图
+            line.draw();
+        });
+        $('#charge_day').on('click',function(){
+            $('.day_canvasDiv').css('display','none');
+            $('.week_canvasDiv').css('display','none');
+            $('.month_canvasDiv').css('display','none');
+            $('.day_active_canvasDiv').css('display','none');
+            $('.week_active_canvasDiv').css('display','none');
+            $('.month_active_canvasDiv').css('display','none');
+            $('.charge_day_canvasDiv').css('display','block');
+            $('.charge_week_canvasDiv').css('display','none');
+            $('.charge_month_canvasDiv').css('display','none');
+            options.render = 'charge_day_canvasDiv';
+            options.title = '付费活跃用户每日及日均使用时长';
+            options.coordinate.grids.vertical.value = 30;
+            options.coordinate.scale[1].labels = day_labels;
+            var line = new iChart.LineBasic2D( options );
+
+            //开始画图
+            line.draw();
+        });
+        $('#charge_week').on('click',function(){
+            $('.day_canvasDiv').css('display','none');
+            $('.week_canvasDiv').css('display','none');
+            $('.month_canvasDiv').css('display','none');
+            $('.day_active_canvasDiv').css('display','none');
+            $('.week_active_canvasDiv').css('display','none');
+            $('.month_active_canvasDiv').css('display','none');
+            $('.charge_day_canvasDiv').css('display','none');
+            $('.charge_week_canvasDiv').css('display','block');
+            $('.charge_month_canvasDiv').css('display','none');
+            options.render = 'charge_week_canvasDiv';
+            options.title = '付费活跃用户每日及日均使用时长';
+            options.coordinate.grids.vertical.value = 51;
+            options.coordinate.scale[1].labels = week_labels;
+            var line = new iChart.LineBasic2D( options );
+
+            //开始画图
+            line.draw();
+        });
+        $('#charge_month').on('click',function(){
+            $('.day_canvasDiv').css('display','none');
+            $('.week_canvasDiv').css('display','none');
+            $('.month_canvasDiv').css('display','none');
+            $('.day_active_canvasDiv').css('display','none');
+            $('.week_active_canvasDiv').css('display','none');
+            $('.month_active_canvasDiv').css('display','none');
+            $('.charge_day_canvasDiv').css('display','none');
+            $('.charge_week_canvasDiv').css('display','none');
+            $('.charge_month_canvasDiv').css('display','block');
+            options.render = 'charge_month_canvasDiv';
+            options.title = '付费活跃用户每月及月均使用时长';
+            options.coordinate.grids.vertical.value = 11;
+            options.coordinate.scale[1].labels = month_labels;
+            var line = new iChart.LineBasic2D( options );
+
+            //开始画图
+            line.draw();
+        });
     });
 
 </script>
 <div class="col-lg-12">
-    <div id='canvasDiv'></div>
-    <table class="table table-bordered">
-        <% for(var i=1;i<32;i++){ %>
-        <tr><%=i%></tr>&nbsp;&nbsp;&nbsp;
-        <% } %>
-    </table>
-    <div class='ichartjs_info'>
-        <div class='ichartjs_sm'>说明</div>
-        <div class='ichartjs_details'>
-            这是一个很常见的的折线图示例，示例展示了网站最近5天的流量统计。每隔6个小时统计一次。此示例用了平滑曲线代替直线。
-        </div>
-        <span class='ichartjs_sm'>备注：</span>
-        <span class='ichartjs_details'>数据均为模拟。</span>
+    <div class="day_canvasDiv">
+        <div id='day_canvasDiv'></div>
     </div>
+
+    <div class="week_canvasDiv" style="display: none">
+        <div id='week_canvasDiv'></div>
+    </div>
+
+    <div class="month_canvasDiv" style="display: none">
+        <div id='month_canvasDiv'></div>
+    </div>
+
+    <div class="day_active_canvasDiv" style="display: none">
+        <div id='day_active_canvasDiv'></div>
+    </div>
+
+    <div class="week_active_canvasDiv" style="display: none">
+        <div id='week_active_canvasDiv'></div>
+    </div>
+
+    <div class="month_active_canvasDiv" style="display: none">
+        <div id='month_active_canvasDiv'></div>
+    </div>
+
+    <div class="charge_day_canvasDiv" style="display: none">
+        <div id='charge_day_canvasDiv'></div>
+    </div>
+
+    <div class="charge_week_canvasDiv" style="display: none">
+        <div id='charge_week_canvasDiv'></div>
+    </div>
+
+    <div class="charge_month_canvasDiv" style="display: none">
+        <div id='charge_month_canvasDiv'></div>
+    </div>
+
 </div>
 
 <% include footer.ejs %>

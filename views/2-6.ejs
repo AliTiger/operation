@@ -40,11 +40,20 @@
         ];
 
         var labels = []; //= ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"];
+        var day_labels = [];
+        var week_labels = [];
+        var month_labels = [];
         for(var i=0;i<31;i++){
-            labels[i] = i+1;
+            day_labels[i] = i + 1;
         }
-        var line = new iChart.LineBasic2D({
-            render : 'canvasDiv',
+        for(var i=0;i<52;i++){
+            week_labels[i] = i + 1;
+        }
+        for(var i=0;i<12;i++){
+            month_labels[i] = i + 1;
+        }
+        var options = {
+            render : 'day_canvasDiv',
             data: data,
             align:'center',
             title : '高活跃用户数及周新增高活跃用户数',
@@ -97,27 +106,64 @@
 
                 },{
                     position:'bottom',
-                    labels:labels
+                    labels:day_labels
                 }]
             }
-        });
+        };
+        var line = new iChart.LineBasic2D(options);
 
         //开始画图
         line.draw();
+        $('#day').on('click',function(){
+            $('.day_canvasDiv').css('display','block');
+            $('.week_canvasDiv').css('display','none');
+            $('.month_canvasDiv').css('display','none');
+
+        });
+        $('#week').on('click',function(){
+            $('.day_canvasDiv').css('display','none');
+            $('.week_canvasDiv').css('display','block');
+            $('.month_canvasDiv').css('display','none');
+            options.render = 'week_canvasDiv';
+            options.title = '每周及周均使用时长';
+            options.coordinate.grids.vertical.value = 51;
+            options.coordinate.scale[1].labels = week_labels;
+            var line = new iChart.LineBasic2D( options );
+
+            //开始画图
+            line.draw();
+        });
+        $('#month').on('click',function(){
+            $('.day_canvasDiv').css('display','none');
+            $('.week_canvasDiv').css('display','none');
+            $('.month_canvasDiv').css('display','block');
+            options.render = 'month_canvasDiv';
+            options.title = '每月及月均使用时长';
+            options.coordinate.grids.vertical.value = 11;
+            options.coordinate.scale[1].labels = month_labels;
+            var line = new iChart.LineBasic2D( options );
+
+            //开始画图
+            line.draw();
+        });
     });
 
 </script>
 <div class="col-lg-12">
-    <div id='canvasDiv'></div>
-
-    <div class='ichartjs_info'>
-        <div class='ichartjs_sm'>说明</div>
-        <div class='ichartjs_details'>
-            这是一个很常见的的折线图示例，示例展示了网站最近5天的流量统计。每隔6个小时统计一次。此示例用了平滑曲线代替直线。
-        </div>
-        <span class='ichartjs_sm'>备注：</span>
-        <span class='ichartjs_details'>数据均为模拟。</span>
+    <div class="day_canvasDiv">
+        <div id='day_canvasDiv'></div>
     </div>
+
+    <div class="week_canvasDiv">
+        <div id='week_canvasDiv'></div>
+    </div>
+
+    <div class="month_canvasDiv">
+        <div id='month_canvasDiv'></div>
+    </div>
+
+
+
 </div>
 
 <% include footer.ejs %>
