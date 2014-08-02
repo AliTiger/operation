@@ -23,112 +23,162 @@
         <% include save_print.ejs %>
     </div>
 </div>
-
+<script>
+    $(document).ready(function(){
+        $('#first_charge').on('click',function(){
+            $('.table_first_charge').css('display','block');
+            $('.table_store').css('display','none');
+            $('.table_ranking').css('display','none');
+            $('.table_charge_grade').css('display','none');
+            $('.table_charge_interval').css('display','none');
+        });
+        $('#store').on('click',function(){
+            $('.table_first_charge').css('display','none');
+            $('.table_store').css('display','block');
+            $('.table_ranking').css('display','none');
+            $('.table_charge_grade').css('display','none');
+            $('.table_charge_interval').css('display','none');
+        });
+        $('#ranking').on('click',function(){
+            $('.table_first_charge').css('display','none');
+            $('.table_store').css('display','none');
+            $('.table_ranking').css('display','block');
+            $('.table_charge_grade').css('display','none');
+            $('.table_charge_interval').css('display','none');
+        });
+        $('#charge_grade').on('click',function(){
+            $('.table_first_charge').css('display','none');
+            $('.table_store').css('display','none');
+            $('.table_ranking').css('display','none');
+            $('.table_charge_grade').css('display','block');
+            $('.table_charge_interval').css('display','none');
+        });
+        $('#charge_interval').on('click',function(){
+            $('.table_first_charge').css('display','none');
+            $('.table_store').css('display','none');
+            $('.table_ranking').css('display','none');
+            $('.table_charge_grade').css('display','none');
+            $('.table_charge_interval').css('display','block');
+        });
+    });
+</script>
 <div class="col-lg-12">
-    <div id='canvasDiv'></div>
-    <table id="table_first_charge" class="table table-bordered">
-        <thead>
-        <tr>
-            <th>编号</th>
-            <th>项目</th>
-            <th>子项目</th>
-            <th>占比</th>
-        </tr>
+    <div class="table_first_charge">
+        <table id="table_first_charge" class="table table-bordered">
+            <thead>
+            <tr>
+                <th>编号</th>
+                <th>项目</th>
+                <th>子项目</th>
+                <th>占比</th>
+            </tr>
 
-        </thead>
-        <tbody>
-        <tr>
-            <td>1</td>
-            <td>装备强化</td>
-            <td>100%成功</td>
-            <td>5%</td>
-        </tr>
-        </tbody>
-    </table>
-    <table id="table_store" class="table table-bordered" >
-        <thead>
-        <tr>
-            <th>编号</th>
-            <th>道具名称</th>
-            <th>首次购买次数</th>
-            <th>首次购买金额</th>
-            <th>首次购买金额占比</th>
-            <th>总购买次数</th>
-            <th>总购买总金额</th>
-            <th>总购买次数占比</th>
-            <th>总购买总金额占比</th>
-        </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>1</td>
+                <td>装备强化</td>
+                <td>100%成功</td>
+                <td>5%</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
-        </thead>
-        <tbody>
-        <tr>
-            <td>1</td>
-            <td>装备强化</td>
-            <td>99</td>
-            <td>4444</td>
-            <td>5%</td>
-            <td>5%</td>
-            <td>5555</td>
-            <td>5%</td>
-            <td>5%</td>
-        </tr>
-        </tbody>
-    </table>
-    <table id="table_ranking" class="table table-bordered" >
-        <thead>
-        <tr>
-            <th>次数</th>
-            <th>玩家名称</th>
-            <th>充值金额</th>
+    <div class="table_store" style="display: none">
+        <table id="table_store" class="table table-bordered" >
+            <thead>
+            <tr>
+                <th>编号</th>
+                <th>道具名称</th>
+                <th>首次购买次数</th>
+                <th>首次购买金额</th>
+                <th>首次购买金额占比</th>
+                <th>总购买次数</th>
+                <th>总购买总金额</th>
+                <th>总购买次数占比</th>
+                <th>总购买总金额占比</th>
+            </tr>
 
-        </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>1</td>
+                <td>装备强化</td>
+                <td>99</td>
+                <td>4444</td>
+                <td>5%</td>
+                <td>5%</td>
+                <td>5555</td>
+                <td>5%</td>
+                <td>5%</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
-        </thead>
-        <tbody>
-        <tr>
-            <td>1</td>
-            <td>啦啦啦</td>
-            <td>99</td>
-        </tr>
-        </tbody>
-    </table>
-    <table id="table_charge_grade" class="table table-bordered" >
-        <thead>
-        <tr>
-            <th>等级</th>
-            <th>付费人数</th>
-            <th>占比</th>
+    <div class="table_ranking" style="display: none">
+        <table id="table_ranking" class="table table-bordered" >
+            <thead>
+            <tr>
+                <th>次数</th>
+                <th>玩家名称</th>
+                <th>充值金额</th>
 
-        </tr>
+            </tr>
 
-        </thead>
-        <tbody>
-        <tr>
-            <td>1</td>
-            <td>2222</td>
-            <td>9%</td>
-        </tr>
-        </tbody>
-    </table>
-    <table id="table_charge_interval" class="table table-bordered" >
-        <thead>
-        <tr>
-            <th>编号</th>
-            <th>区间</th>
-            <th>占比</th>
+            </thead>
+            <tbody>
+            <tr>
+                <td>1</td>
+                <td>啦啦啦</td>
+                <td>99</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
-        </tr>
+    <div class="table_charge_grade" style="display: none">
+        <table id="table_charge_grade" class="table table-bordered" >
+            <thead>
+            <tr>
+                <th>等级</th>
+                <th>付费人数</th>
+                <th>占比</th>
 
-        </thead>
-        <tbody>
-        <tr>
-            <td>1</td>
-            <td>500</td>
-            <td>50</td>
-        </tr>
-        </tbody>
-    </table>
+            </tr>
 
+            </thead>
+            <tbody>
+            <tr>
+                <td>1</td>
+                <td>2222</td>
+                <td>9%</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="table_charge_interval" style="display: none">
+        <table id="table_charge_interval" class="table table-bordered" >
+            <thead>
+            <tr>
+                <th>编号</th>
+                <th>区间</th>
+                <th>占比</th>
+
+            </tr>
+
+            </thead>
+            <tbody>
+            <tr>
+                <td>1</td>
+                <td>500</td>
+                <td>50</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
 </div>
 

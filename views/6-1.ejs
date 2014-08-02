@@ -41,17 +41,22 @@
                 line_width:2
             }
         ];
+        var day_labels = [];
+        var month_labels = [];
 
-        var labels = []; //= ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"];
         for(var i=0;i<31;i++){
-            labels[i] = i+1;
+            day_labels[i] = i + 1;
         }
-        var line = new iChart.LineBasic2D({
-            render : 'canvasDiv',
+
+        for(var i=0;i<12;i++){
+            month_labels[i] = i + 1;
+        }
+        var options = {
+            render : 'day_canvasDiv',
             data: data,
             align:'center',
-            title : '充值消费金额',
-            subtitle : '平均每月的人数(访问量单位：万)',
+            title : '每日充值消费金额',
+            subtitle : '每日的充值金额(访问量单位：万)',
             footnote : '数据来源：充值消费金额',
             width : 1100,
             height : 400,
@@ -100,27 +105,170 @@
 
                 },{
                     position:'bottom',
-                    labels:labels
+                    labels:day_labels
                 }]
             }
-        });
+        };
+        var line = new iChart.LineBasic2D( options );
+
 
         //开始画图
         line.draw();
+        $('#day_line').on('click',function(){
+            $('.day_line').css('display','block');
+            $('.day_data').css('display','none');
+            $('.month_line').css('display','none');
+            $('.month_data').css('display','none');
+
+        });
+        $('#day_data').on('click',function(){
+            $('.day_line').css('display','none');
+            $('.day_data').css('display','block');
+            $('.month_line').css('display','none');
+            $('.month_data').css('display','none');
+
+        });
+        $('#month_line').on('click',function(){
+            $('.day_line').css('display','none');
+            $('.day_data').css('display','none');
+            $('.month_line').css('display','block');
+            $('.month_data').css('display','none');
+            options.render = 'month_canvasDiv';
+            options.title = '每月充值和消费金额';
+            options.coordinate.grids.vertical.value = 11;
+            options.coordinate.scale[1].labels = month_labels;
+            var line = new iChart.LineBasic2D( options );
+
+            //开始画图
+            line.draw();
+        });
+        $('#month_data').on('click',function(){
+            $('.day_line').css('display','none');
+            $('.day_data').css('display','none');
+            $('.month_line').css('display','none');
+            $('.month_data').css('display','block');
+
+        });
+
+
     });
 
 </script>
 <div class="col-lg-12">
-    <div id='canvasDiv'></div>
-
-    <div class='ichartjs_info'>
-        <div class='ichartjs_sm'>说明</div>
-        <div class='ichartjs_details'>
-            这是一个很常见的的折线图示例，示例展示了网站最近5天的流量统计。每隔6个小时统计一次。此示例用了平滑曲线代替直线。
-        </div>
-        <span class='ichartjs_sm'>备注：</span>
-        <span class='ichartjs_details'>数据均为模拟。</span>
+    <div class="day_line">
+        <div id='day_canvasDiv'></div>
     </div>
+
+    <div class="day_data" style="display: none">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>服务器</th>
+                <th>5.7</th>
+                <th>5.6</th>
+                <th>5.5</th>
+                <th>5.4</th>
+                <th>5.3</th>
+                <th>5.2</th>
+                <th>5.1</th>
+                <th>总计</th>
+            </tr>
+
+            </thead>
+            <tbody>
+            <tr>
+                <td>3区力拔山河</td>
+                <td>1000/900</td>
+                <td>1000/900</td>
+                <td>1000/900</td>
+                <td>1000/900</td>
+                <td>1000/900</td>
+                <td>1000/900</td>
+                <td>1000/900</td>
+                <td>1000/900</td>
+            </tr>
+            <tr>
+                <td>2区横扫千军</td>
+                <td>1000/900</td>
+                <td>1000/900</td>
+                <td>1000/900</td>
+                <td>1000/900</td>
+                <td>1000/900</td>
+                <td>1000/900</td>
+                <td>1000/900</td>
+                <td>1000/900</td>
+            </tr>
+            <tr>
+                <td>1区艾泽拉斯</td>
+                <td>1000/900</td>
+                <td>1000/900</td>
+                <td>1000/900</td>
+                <td>1000/900</td>
+                <td>1000/900</td>
+                <td>1000/900</td>
+                <td>1000/900</td>
+                <td>1000/900</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="month_line" style="display: none">
+        <div id='month_canvasDiv'></div>
+    </div>
+
+    <div class="month_data" style="display: none">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>服务器</th>
+                <th>6月</th>
+                <th>5月</th>
+                <th>4月</th>
+                <th>3月</th>
+                <th>2月</th>
+                <th>1月</th>
+                <th>总计</th>
+            </tr>
+
+            </thead>
+            <tbody>
+            <tr>
+                <td>3区力拔山河</td>
+                <td>1000/900</td>
+                <td>1000/900</td>
+                <td>1000/900</td>
+                <td>1000/900</td>
+                <td>1000/900</td>
+                <td>1000/900</td>
+                <td>1000/900</td>
+            </tr>
+            <tr>
+                <td>2区横扫千军</td>
+                <td>1000/900</td>
+                <td>1000/900</td>
+                <td>1000/900</td>
+                <td>1000/900</td>
+                <td>1000/900</td>
+                <td>1000/900</td>
+                <td>1000/900</td>
+
+            </tr>
+            <tr>
+                <td>1区艾泽拉斯</td>
+                <td>1000/900</td>
+                <td>1000/900</td>
+                <td>1000/900</td>
+                <td>1000/900</td>
+                <td>1000/900</td>
+                <td>1000/900</td>
+                <td>1000/900</td>
+
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
 </div>
 
 <% include footer.ejs %>

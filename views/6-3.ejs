@@ -7,22 +7,22 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="col-lg-1">
-            <button name="pay_user" id="pay_user">充值用户</button>
+            <button name="charge_user" id="charge_user">充值用户</button>
         </div>
         <div class="col-lg-1">
-            <button name="pay_convert" id="pay_convert">付费转化</button>
+            <button name="charge_convert" id="charge_convert">付费转化</button>
         </div>
         <div class="col-lg-1">
-            <button name="month" id="month">月均充值</button>
+            <button name="month_charge" id="month_charge">月均充值</button>
         </div>
         <div class="col-lg-1">
-            <button name="loyal_pay" id="loyal_pay">忠实付费</button>
+            <button name="loyal_charge" id="loyal_charge">忠实付费</button>
         </div>
         <div class="col-lg-1">
             <button name="eff_user" id="eff_user">高效用户</button>
         </div>
         <div class="col-lg-1">
-            <button name="first_pay" id="first_pay">首次付费率</button>
+            <button name="first_charge" id="first_charge">首次付费率</button>
         </div>
         <% include save_print.ejs %>
     </div>
@@ -48,12 +48,12 @@
             }
         ];
 
-        var labels = []; //= ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"];
+        var day_labels = []; //= ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"];
         for(var i=0;i<12;i++){
-            labels[i] = i+1;
+            day_labels[i] = i+1;
         }
-        var line = new iChart.LineBasic2D({
-            render : 'canvasDiv',
+        var options = {
+            render : 'charge_user_canvasDiv',
             data: data,
             align:'center',
             title : '充值用户统计',
@@ -106,52 +106,255 @@
 
                 },{
                     position:'bottom',
-                    labels:labels
+                    labels:day_labels
                 }]
             }
-        });
+        };
+        var line = new iChart.LineBasic2D(options);
 
         //开始画图
         line.draw();
+        $('#charge_user').on('click',function(){
+            $('.charge_user_canvasDiv').css('display','block');
+            $('.charge_convert_canvasDiv').css('display','none');
+            $('.month_charge_canvasDiv').css('display','none');
+            $('.loyal_charge_canvasDiv').css('display','none');
+            $('.eff_user_canvasDiv').css('display','none');
+            $('.first_charge_canvasDiv').css('display','none');
+        });
+        $('#charge_convert').on('click',function(){
+            $('.charge_user_canvasDiv').css('display','none');
+            $('.charge_convert_canvasDiv').css('display','block');
+            $('.month_charge_canvasDiv').css('display','none');
+            $('.loyal_charge_canvasDiv').css('display','none');
+            $('.eff_user_canvasDiv').css('display','none');
+            $('.first_charge_canvasDiv').css('display','none');
+            options.render = 'charge_convert_canvasDiv';
+            options.title = '付费渗透比例';
+            options.coordinate.grids.vertical.value = 11;
+            options.coordinate.scale[1].labels = day_labels;
+            var line = new iChart.LineBasic2D( options );
+
+            //开始画图
+            line.draw();
+        });
+
+        $('#month_charge').on('click',function(){
+            $('.charge_user_canvasDiv').css('display','none');
+            $('.charge_convert_canvasDiv').css('display','none');
+            $('.month_charge_canvasDiv').css('display','block');
+            $('.loyal_charge_canvasDiv').css('display','none');
+            $('.eff_user_canvasDiv').css('display','none');
+            $('.first_charge_canvasDiv').css('display','none');
+            options.render = 'month_charge_canvasDiv';
+            options.title = '付费用户月均充值次数';
+            options.coordinate.grids.vertical.value = 11;
+            options.coordinate.scale[1].labels = day_labels;
+            var line = new iChart.LineBasic2D( options );
+
+            //开始画图
+            line.draw();
+        });
+
+        $('#loyal_charge').on('click',function(){
+            $('.charge_user_canvasDiv').css('display','none');
+            $('.charge_convert_canvasDiv').css('display','none');
+            $('.month_charge_canvasDiv').css('display','none');
+            $('.loyal_charge_canvasDiv').css('display','block');
+            $('.eff_user_canvasDiv').css('display','none');
+            $('.first_charge_canvasDiv').css('display','none');
+            options.render = 'loyal_charge_canvasDiv';
+            options.title = '忠实付费用户数';
+            options.coordinate.grids.vertical.value = 11;
+            options.coordinate.scale[1].labels = day_labels;
+            var line = new iChart.LineBasic2D( options );
+
+            //开始画图
+            line.draw();
+        });
+
+        $('#eff_user').on('click',function(){
+            $('.charge_user_canvasDiv').css('display','none');
+            $('.charge_convert_canvasDiv').css('display','none');
+            $('.month_charge_canvasDiv').css('display','none');
+            $('.loyal_charge_canvasDiv').css('display','none');
+            $('.eff_user_canvasDiv').css('display','block');
+            $('.first_charge_canvasDiv').css('display','none');
+            options.render = 'eff_user_canvasDiv';
+            options.title = '高效付费用户数';
+            options.coordinate.grids.vertical.value = 11;
+            options.coordinate.scale[1].labels = day_labels;
+            var line = new iChart.LineBasic2D( options );
+
+            //开始画图
+            line.draw();
+        });
+
+        $('#first_charge').on('click',function(){
+            $('.charge_user_canvasDiv').css('display','none');
+            $('.charge_convert_canvasDiv').css('display','none');
+            $('.month_charge_canvasDiv').css('display','none');
+            $('.loyal_charge_canvasDiv').css('display','none');
+            $('.eff_user_canvasDiv').css('display','none');
+            $('.first_charge_canvasDiv').css('display','block');
+            options.render = 'first_charge_canvasDiv';
+            options.title = '用户首次付费率';
+            options.coordinate.grids.vertical.value = 11;
+            options.coordinate.scale[1].labels = day_labels;
+            var line = new iChart.LineBasic2D( options );
+
+            //开始画图
+            line.draw();
+        });
     });
 
 </script>
 <div class="col-lg-12">
-    <div id='canvasDiv'></div>
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-            <th></th>
-            <% for(var i=1;i<13;i++){ %>
-            <th><%=i%></th>
-            <% } %>
-        </tr>
+    <div class="charge_user_canvasDiv">
+        <div id='charge_user_canvasDiv'></div>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th></th>
+                <% for(var i=1;i<13;i++){ %>
+                <th><%=i%></th>
+                <% } %>
+            </tr>
 
-        </thead>
-        <tbody>
-        <tr>
-            <td>付费用户数量</td>
-            <% ARPPU.forEach(function( a ){%>
-            <td><%= a %></td>
-            <%});%>
-        </tr>
-        <tr>
-            <td>新增付费数量</td>
-            <% ARPU.forEach(function( a ){%>
-            <td><%= a %></td>
-            <%});%>
-        </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>付费用户数量</td>
+                <% ARPPU.forEach(function( a ){%>
+                <td><%= a %></td>
+                <%});%>
+            </tr>
+            <tr>
+                <td>新增付费数量</td>
+                <% ARPU.forEach(function( a ){%>
+                <td><%= a %></td>
+                <%});%>
+            </tr>
 
-        </tbody>
-    </table>
-    <div class='ichartjs_info'>
-        <div class='ichartjs_sm'>说明</div>
-        <div class='ichartjs_details'>
-            这是一个很常见的的折线图示例，示例展示了网站最近5天的流量统计。每隔6个小时统计一次。此示例用了平滑曲线代替直线。
-        </div>
-        <span class='ichartjs_sm'>备注：</span>
-        <span class='ichartjs_details'>数据均为模拟。</span>
+            </tbody>
+        </table>
     </div>
+    <div class="charge_convert_canvasDiv" style="display: none">
+        <div id='charge_convert_canvasDiv'></div>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th></th>
+                <% for(var i=1;i<13;i++){ %>
+                <th><%=i%></th>
+                <% } %>
+            </tr>
+
+            </thead>
+            <tbody>
+            <tr>
+                <td>付费渗透比例</td>
+                <% ARPPU.forEach(function( a ){%>
+                <td><%= a %></td>
+                <%});%>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="month_charge_canvasDiv" style="display: none">
+        <div id='month_charge_canvasDiv'></div>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th></th>
+                <% for(var i=1;i<13;i++){ %>
+                <th><%=i%></th>
+                <% } %>
+            </tr>
+
+            </thead>
+            <tbody>
+            <tr>
+                <td>付费用户月均充值次数</td>
+                <% ARPPU.forEach(function( a ){%>
+                <td><%= a %></td>
+                <%});%>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="loyal_charge_canvasDiv" style="display: none">
+        <div id='loyal_charge_canvasDiv'></div>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th></th>
+                <% for(var i=1;i<13;i++){ %>
+                <th><%=i%></th>
+                <% } %>
+            </tr>
+
+            </thead>
+            <tbody>
+            <tr>
+                <td>忠实付费用户数</td>
+                <% ARPPU.forEach(function( a ){%>
+                <td><%= a %></td>
+                <%});%>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="eff_user_canvasDiv" style="display: none">
+        <div id='eff_user_canvasDiv'></div>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th></th>
+                <% for(var i=1;i<13;i++){ %>
+                <th><%=i%></th>
+                <% } %>
+            </tr>
+
+            </thead>
+            <tbody>
+            <tr>
+                <td>高效付费用户数</td>
+                <% ARPPU.forEach(function( a ){%>
+                <td><%= a %></td>
+                <%});%>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="first_charge_canvasDiv" style="display: none">
+        <div id='first_charge_canvasDiv'></div>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th></th>
+                <% for(var i=1;i<13;i++){ %>
+                <th><%=i%></th>
+                <% } %>
+            </tr>
+
+            </thead>
+            <tbody>
+            <tr>
+                <td>用户首次付费率</td>
+                <% ARPPU.forEach(function( a ){%>
+                <td><%= a %></td>
+                <%});%>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+
 </div>
 
 <% include footer.ejs %>

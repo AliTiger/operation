@@ -38,16 +38,16 @@
         ];
 
         var labels = []; //= ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"];
-        for(var i=0;i<31;i++){
+        for(var i=0;i<12;i++){
             labels[i] = i+1;
         }
-        var line = new iChart.LineBasic2D({
-            render : 'canvasDiv',
+        var options = {
+            render : 'lost_back_canvasDiv',
             data: data,
             align:'center',
-            title : '充值用户流失',
+            title : '流失回流付费用户数',
             subtitle : '平均每月的人数(访问量单位：万)',
-            footnote : '数据来源：点击下载安装注册数',
+            footnote : '数据来源：流失回流付费用户数',
             width : 1100,
             height : 400,
             tip:{
@@ -82,7 +82,7 @@
                 grids:{
                     vertical:{
                         way:'share_alike',
-                        value:30//割线
+                        value:11//割线
                     }
                 },
                 scale:[{
@@ -98,48 +98,90 @@
                     labels:labels
                 }]
             }
-        });
+        };
+        var line = new iChart.LineBasic2D( options );
 
         //开始画图
         line.draw();
+        $('#lost_back').on('click',function(){
+            $('.lost_back_canvasDiv').css('display','block');
+            $('.lost_per_canvasDiv').css('display','none');
+        });
+        $('#lost_per').on('click',function(){
+            $('.lost_back_canvasDiv').css('display','none');
+            $('.lost_per_canvasDiv').css('display','block');
+            options.render = 'lost_per_canvasDiv';
+            options.title = '付费用户流失比例';
+            options.coordinate.grids.vertical.value = 11;
+            options.coordinate.scale[1].labels = labels;
+            var line = new iChart.LineBasic2D( options );
+
+            //开始画图
+            line.draw();
+        });
     });
 
 </script>
 <div class="col-lg-12">
-    <div id='canvasDiv'></div>
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-            <th></th>
-            <% for(var i=1;i<13;i++){ %>
-            <th><%=i%></th>
-            <% } %>
-        </tr>
+    <div class="lost_back_canvasDiv">
+        <div id='lost_back_canvasDiv'></div>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th></th>
+                <% for(var i=1;i<13;i++){ %>
+                <th><%=i%></th>
+                <% } %>
+            </tr>
 
-        </thead>
-        <tbody>
-        <tr>
-            <td>流失付费用户数</td>
-            <% ARPPU.forEach(function( a ){%>
-            <td><%= a %></td>
-            <%});%>
-        </tr>
-        <tr>
-            <td>回流付费用户数</td>
-            <% ARPU.forEach(function( a ){%>
-            <td><%= a %></td>
-            <%});%>
-        </tr>
-        </tbody>
-    </table>
-    <div class='ichartjs_info'>
-        <div class='ichartjs_sm'>说明</div>
-        <div class='ichartjs_details'>
-            这是一个很常见的的折线图示例，示例展示了网站最近5天的流量统计。每隔6个小时统计一次。此示例用了平滑曲线代替直线。
-        </div>
-        <span class='ichartjs_sm'>备注：</span>
-        <span class='ichartjs_details'>数据均为模拟。</span>
+            </thead>
+            <tbody>
+            <tr>
+                <td>流失付费用户数</td>
+                <% ARPPU.forEach(function( a ){%>
+                <td><%= a %></td>
+                <%});%>
+            </tr>
+            <tr>
+                <td>回流付费用户数</td>
+                <% ARPU.forEach(function( a ){%>
+                <td><%= a %></td>
+                <%});%>
+            </tr>
+            </tbody>
+        </table>
     </div>
+
+    <div class="lost_per_canvasDiv" style="display: none">
+        <div id='lost_per_canvasDiv'></div>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th></th>
+                <% for(var i=1;i<13;i++){ %>
+                <th><%=i%></th>
+                <% } %>
+            </tr>
+
+            </thead>
+            <tbody>
+            <tr>
+                <td>流失付费用户数</td>
+                <% ARPPU.forEach(function( a ){%>
+                <td><%= a %></td>
+                <%});%>
+            </tr>
+            <tr>
+                <td>回流付费用户数</td>
+                <% ARPU.forEach(function( a ){%>
+                <td><%= a %></td>
+                <%});%>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+
 </div>
 
 <% include footer.ejs %>
