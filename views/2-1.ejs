@@ -25,8 +25,6 @@
         var day_active  = [90000,90000,98000,90000,97000,99000,90000,90000,98000,92000,97000,99000,90000,90000,98000,
             90000,97000,99000,90000,97000,98000,92000,97000,99000,92000,93000,96000,91000,94000,94000,92000];
 
-        var day_labels = [];
-
         var data = [
             {
                 name : '活跃用户数量',
@@ -36,12 +34,20 @@
             }
         ];
 
+        var day_labels = [];
+        var week_labels = [];
+        var month_labels = [];
         for(var i=0;i<31;i++){
             day_labels[i] = i+1;
         }
+        for(var i=0;i<52;i++){
+            week_labels[i] = i+1;
+        }
 
-
-        var line = new iChart.LineBasic2D({
+        for(var i=0;i<12;i++){
+            month_labels[i] = i+1;
+        }
+        var options = {
             render : 'day_canvasDiv',
             data: data,
             align:'center',
@@ -98,7 +104,8 @@
                     labels:day_labels
                 }]
             }
-        });
+        };
+        var line = new iChart.LineBasic2D(options);
 
         //开始画图
         line.draw();
@@ -113,80 +120,13 @@
             $('.day_canvasDiv').css('display','none');
             $('.week_canvasDiv').css('display','block');
             $('.month_canvasDiv').css('display','none');
+            options.render = 'week_canvasDiv';
+            options.title = 'WAU';
+            options.coordinate.grids.vertical.value = 51;
+            options.coordinate.scale[1].labels = week_labels;
+            var line = new iChart.LineBasic2D( options );
 
-            //应该是ajax获取数据
-            //table 数据也要更新
-            var week_labels = [];
-            for(var i=0;i<52;i++){
-                week_labels[i] = i+1;
-            }
-            var week_active = [90000,90000,98000,90000,97000,99000,90000,90000,98000,92000,97000,99000];
-            var data = [
-                {
-                    name : '活跃用户数量',
-                    value:week_active,
-                    color:'#0d8ecf',
-                    line_width:2
-                }
-            ];
-            var line = new iChart.LineBasic2D({
-                render : 'week_canvasDiv',
-                data: data,
-                align:'center',
-                title : 'MAU',
-                subtitle : '每周的活跃人数(访问量单位：万)',
-                footnote : '数据来源：WAU',
-                width : 1100,
-                height : 400,
-                tip:{
-                    enable:true,
-                    shadow:true
-                },
-                legend : {
-                    enable : true,
-                    row:1,//设置在一行上显示，与column配合使用
-                    column : 'max',
-                    valign:'top',
-                    sign:'bar',
-                    background_color:null,//设置透明背景
-                    offsetx:-80,//设置x轴偏移，满足位置需要
-                    border : true
-                },
-                crosshair:{
-                    enable:true,
-                    line_color:'#62bce9'
-                },
-                sub_option : {
-                    label:false,
-                    point_hollow : false
-                },
-                coordinate:{
-                    width:900,
-                    height:240,
-                    axis:{
-                        color:'#9f9f9f',
-                        width:[0,0,2,2]
-                    },
-                    grids:{
-                        vertical:{
-                            way:'share_alike',
-                            value:51//割线
-                        }
-                    },
-                    scale:[{
-                        position:'left',
-                        start_scale:0,
-                        end_scale:120000,//设置结束刻度
-                        scale_space:20000,//设置刻度间距
-                        scale_size:2,
-                        scale_color:'#9f9f9f'
-
-                    },{
-                        position:'bottom',
-                        labels:week_labels
-                    }]
-                }
-            });
+            //开始画图
             line.draw();
         });
 
@@ -195,79 +135,13 @@
             $('.month_canvasDiv').css('display','block');
             $('.week_canvasDiv').css('display','none');
             $('.day_canvasDiv').css('display','none');
-            //应该是ajax获取数据
-            //table 数据也要更新
-            var month_labels = [];
-            for(var i=0;i<12;i++){
-                month_labels[i] = i+1;
-            }
-            var month_active = [90000,90000,98000,90000,97000,99000,90000,90000,98000,92000,97000,99000];
-            var data = [
-                {
-                    name : '活跃用户数量',
-                    value:month_active,
-                    color:'#0d8ecf',
-                    line_width:2
-                }
-            ];
-            var line = new iChart.LineBasic2D({
-                render : 'month_canvasDiv',
-                data: data,
-                align:'center',
-                title : 'MAU',
-                subtitle : '每月的活跃人数(访问量单位：万)',
-                footnote : '数据来源：活跃用户数量',
-                width : 1100,
-                height : 400,
-                tip:{
-                    enable:true,
-                    shadow:true
-                },
-                legend : {
-                    enable : true,
-                    row:1,//设置在一行上显示，与column配合使用
-                    column : 'max',
-                    valign:'top',
-                    sign:'bar',
-                    background_color:null,//设置透明背景
-                    offsetx:-80,//设置x轴偏移，满足位置需要
-                    border : true
-                },
-                crosshair:{
-                    enable:true,
-                    line_color:'#62bce9'
-                },
-                sub_option : {
-                    label:false,
-                    point_hollow : false
-                },
-                coordinate:{
-                    width:900,
-                    height:240,
-                    axis:{
-                        color:'#9f9f9f',
-                        width:[0,0,2,2]
-                    },
-                    grids:{
-                        vertical:{
-                            way:'share_alike',
-                            value:12//割线
-                        }
-                    },
-                    scale:[{
-                        position:'left',
-                        start_scale:0,
-                        end_scale:120000,//设置结束刻度
-                        scale_space:20000,//设置刻度间距
-                        scale_size:2,
-                        scale_color:'#9f9f9f'
+            options.render = 'month_canvasDiv';
+            options.title = 'MAU';
+            options.coordinate.grids.vertical.value = 11;
+            options.coordinate.scale[1].labels = month_labels;
+            var line = new iChart.LineBasic2D( options );
 
-                    },{
-                        position:'bottom',
-                        labels:month_labels
-                    }]
-                }
-            });
+            //开始画图
             line.draw();
         });
 
