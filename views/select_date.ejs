@@ -14,8 +14,14 @@
         $( "#datepicker" ).datepicker({
             showWeek: true,
             firstDay: 1,
-            numberOfMonths: 2
+            numberOfMonths: 2,
+            dateFormat:'yy-mm-dd',
+            onClose: function( selectedDate ) {
+                $( "#datepicker" ).datepicker( "option", "minDate", selectedDate );
+                console.log($( "#datepicker").val());
+            }
         });
+        //selectbox 插件
         $("select").multiselect().multiselectfilter();
     });
 </script>

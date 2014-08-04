@@ -15,7 +15,7 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse navbar-ex1-collapse">
         <ul class="nav navbar-nav side-nav">
-            <li class="active"><a href="/home"><i class="fa fa-dashboard"></i> 首页</a></li>
+            <li><a href="/home"><i class="fa fa-dashboard"></i> 首页</a></li>
 			<% user.power.forEach(function( a ){ %>
 				<% if( a & 1 ){ %>
 					<li><a href="/setPower"><i class="fa fa-dashboard"></i> 设置用户权限</a></li>
@@ -81,6 +81,7 @@
 							<li><a href="/gameIncome/6-4">活跃充值比例</a></li>
 							<li><a href="/gameIncome/6-5">充值用户流失</a></li>
 							<li><a href="/gameIncome/6-6">其他相关统计</a></li>
+
 						</ul>
 					</li>
 				<% } %>
@@ -90,6 +91,7 @@
 						<ul class="dropdown-menu">
 							<li><a href="/operationCost/7-1">投入产出比值</a></li>
 							<li><a href="/operationCost/7-2">用户推广成本</a></li>
+
 						</ul>
 					</li>
 				<% } %>
@@ -102,10 +104,11 @@
 							<li><a href="/userInformation/8-3">用户任务分布</a></li>
 							<li><a href="/userInformation/8-4">用户充值排名</a></li>
 							<li><a href="/userInformation/8-5">地图通关分布</a></li>
-							<li><a href="/userInformation/8-6">日均战场次数</a></li>
-						</ul>
+                            <li><a href="/userInformation/8-6">日均战场次数</a></li>
+                        </ul>
 					</li>
 				<% } %>
+
 			<% }); %>
         </ul>
 

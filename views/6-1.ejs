@@ -160,7 +160,7 @@
         <table class="table table-bordered">
             <thead>
             <tr>
-                <th>服务器</th>
+                <th>服务器/日</th>
                 <th>5.7</th>
                 <th>5.6</th>
                 <th>5.5</th>
@@ -218,13 +218,13 @@
         <table class="table table-bordered">
             <thead>
             <tr>
-                <th>服务器</th>
-                <th>6月</th>
-                <th>5月</th>
-                <th>4月</th>
-                <th>3月</th>
-                <th>2月</th>
-                <th>1月</th>
+                <th>服务器/月份</th>
+                <th>6</th>
+                <th>5</th>
+                <th>4</th>
+                <th>3</th>
+                <th>2</th>
+                <th>1</th>
                 <th>总计</th>
             </tr>
 
@@ -267,5 +267,13 @@
     </div>
 
 </div>
+<script>
+    $(document).ready(function(){
+        var date = new Date();
+        console.log('year:',date.getFullYear());
+        console.log('month:',date.getMonth()+1);
+        console.log('day:',date.getDate());
 
+    });
+</script>
 <% include footer.ejs %>

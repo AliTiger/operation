@@ -1,6 +1,6 @@
 /* GET home page. */
 exports.render = function(req, res) {
-  res.render('login', { title: '登陆后台查询系统' });
+  res.render('login', { title: '登陆后台查询系统',curpage:'login' });
 };
 
 exports.login = function(req, res){
@@ -8,7 +8,7 @@ exports.login = function(req, res){
 	var password = req.body.password;
 	console.log(userName,password);
 	if(userName=='example' && password=='example'){
-		return res.render('index',{title:'登陆成功'});
+		return res.render('index',{title:'登陆成功',curpage:'index'});
 	}else{
 		return res.send(400,{msg:'error'});
 	}

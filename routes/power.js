@@ -13,7 +13,7 @@ exports.get = function(req, res){
 	var users = req.session.users;
 	console.log('set power user:',user);
 	console.log('set power users:',users);
-	return res.render('setPower',{title:'设置用户权限',user:user,users:users});
+	return res.render('setPower',{title:'设置用户权限',user:user,users:users,curpage:'set_power'});
 }
 exports.getPower = function(req, res){
 	var user = req.query.user;
