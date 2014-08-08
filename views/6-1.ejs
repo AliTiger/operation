@@ -157,20 +157,19 @@
     </div>
 
     <div class="day_data" style="display: none">
-        <table class="table table-bordered">
+        <table id="day_data_table" class="table table-bordered">
             <thead>
             <tr>
                 <th>服务器/日</th>
-                <th>5.7</th>
-                <th>5.6</th>
-                <th>5.5</th>
-                <th>5.4</th>
-                <th>5.3</th>
-                <th>5.2</th>
                 <th>5.1</th>
+                <th>5.2</th>
+                <th>5.3</th>
+                <th>5.4</th>
+                <th>5.5</th>
+                <th>5.6</th>
+                <th>5.7</th>
                 <th>总计</th>
             </tr>
-
             </thead>
             <tbody>
             <tr>
@@ -215,7 +214,7 @@
     </div>
 
     <div class="month_data" style="display: none">
-        <table class="table table-bordered">
+        <table id="month_data_table" class="table table-bordered">
             <thead>
             <tr>
                 <th>服务器/月份</th>
@@ -239,9 +238,11 @@
                 <td>1000/900</td>
                 <td>1000/900</td>
                 <td>1000/900</td>
+                <td>1000/900</td>
             </tr>
             <tr>
                 <td>2区横扫千军</td>
+                <td>1000/900</td>
                 <td>1000/900</td>
                 <td>1000/900</td>
                 <td>1000/900</td>
@@ -260,7 +261,7 @@
                 <td>1000/900</td>
                 <td>1000/900</td>
                 <td>1000/900</td>
-
+                <td>1000/900</td>
             </tr>
             </tbody>
         </table>
@@ -273,7 +274,46 @@
         console.log('year:',date.getFullYear());
         console.log('month:',date.getMonth()+1);
         console.log('day:',date.getDate());
+        var day_tb = document.getElementById("day_data_table");
+        var month_tb = document.getElementById("month_data_table");
+        var day = date.getDate();
+        var month = date.getMonth()+1;
+        var monthMulti = month / 6;
+        var dayMulti = day / 7;
+        if( dayMulti > 0){
+            day_tb.removeChild(day_tb.children[0]);
+            console.log('8-9-10-11-12-13-14');
+            var html = "<th>服务器/日</th>";
+            html += "<th>"+month+"."+String(day)+"</th>";
+            html += "<th>"+month+"."+String(day-1)+"</th>";
+            html += "<th>"+month+"."+String(day-2)+"</th>";
+            html += "<th>"+month+"."+String(day-3)+"</th>";
+            html += "<th>"+month+"."+String(day-4)+"</th>";
+            html += "<th>"+month+"."+String(day-5)+"</th>";
+            html += "<th>"+month+"."+String(day-6)+"</th>";
+            html += "<th>总计</th>";
+            var th = document.createElement("thead");
+            th.innerHTML = html;
+            day_tb.insertBefore(th, day_tb.children[0]);
 
+        }
+        if( monthMulti > 0){
+            month_tb.removeChild(month_tb.children[0]);
+            console.log('8-9-10-11-12-13-14');
+            var html = "<th>服务器/</th>";
+            html += "<th>"+String(month)+"</th>";
+            html += "<th>"+String(month-1)+"</th>";
+            html += "<th>"+String(month-2)+"</th>";
+            html += "<th>"+String(month-3)+"</th>";
+            html += "<th>"+String(month-4)+"</th>";
+            html += "<th>"+String(month-5)+"</th>";
+            html += "<th>"+String(month-6)+"</th>";
+            html += "<th>总计</th>";
+            var th = document.createElement("thead");
+            th.innerHTML = html;
+            month_tb.insertBefore(th, month_tb.children[0]);
+
+        }
     });
 </script>
 <% include footer.ejs %>

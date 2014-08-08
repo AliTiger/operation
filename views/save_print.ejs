@@ -2,5 +2,21 @@
     <button name="save" id="save">另存</button>
 </div>
 <div class="col-lg-1">
-    <button name="print" id="print">打印</button>
+    <button name="print" id="print" >打印</button>
 </div>
+<script>
+    $(document).ready(function(){
+        $('#print').on('click',function(){
+//            var code="<body onload=window.print()>";
+//            code+=document.getElementById("data").innerHTML;
+//            code+="</body>";
+//            var newwin=window.open('','','');
+//            newwin.opener = null;
+//            newwin.document.write(code);
+//            newwin.document.close();
+//            document.body.innerHTML=document.getElementById('print').innerHTML;
+            window.print();
+
+        });
+    });
+</script>

@@ -1,385 +1,70 @@
-<% include nav.ejs %>
-    <script type="text/javascript" src="js/ichartjs/ichart.1.2.min.js"></script>
-    <link rel="stylesheet" href="css/ichartjs/demo.css" type="text/css"/>
-<style>
-    input.date{border:1px solid #A7A6AA;height:18px;margin:0 5px 0 0;padding:2px 0 2px 5px;border: 1px solid #d0d0d0;font-family: Verdana, Geneva, sans-serif,"宋体";font-size:12px;}
-    input.date{background: #fff url(js/calendar/img/input_date.png) no-repeat right 3px; padding-right:18px;font-size:12px;}
-</style>
-<script type="text/javascript">
-    //线型图表
-    $(function(){
-        var click    = [90000,90000,98000,90000,97000,99000,90000,90000,98000,92000,97000,99000,90000,90000,98000,90000,97000,99000,90000,97000,98000,92000,97000,99000,92000,93000,96000,91000,94000,94000,92000],
-            download = [89000,80000,80000,88000,80000,87000,89000,88000,80000,87000,84000,80000,89000,81000,80000,88000,81000,87000,89000,88000,83000,87000,84000,84000,89000,80000,83000,88000,80000,87000,89000],
-            install  = [78000,70000,77000,79000,78000,70000,77000,79000,70000,73000,70000,70000,78000,70000,77000,79000,78000,70000,77000,89000,80000,83000,80000,70000,78000,90000,87000,89000,78000,90000,87000],
-            register = [70000,78000,90000,87000,89000,78000,78000,90000,87000,76000,78000,90000,70000,78000,90000,87000,89000,78000,78000,90000,87000,76000,78000,90000,70000,78000,90000,87000,89000,78000,78000];
-
-        var data = [
-            {
-                name : '点击次数',
-                value:click,
-                color:'#0d8ecf',
-                line_width:2
-            },
-            {
-                name : '下载次数',
-                value:download,
-                color:'#ef7707',
-                line_width:2
-            },
-            {
-                name : '安装次数',
-                value:install,
-                color:'#660033',
-                line_width:2
-            },
-            {
-                name : '注册次数',
-                value:register,
-                color:'#66FF33',
-                line_width:2
+<!DOCTYPE html>
+<html>
+<head>
+    <meta  charset=utf-8 />
+    <title>test</title>
+    <script>
+        var count = 0;
+        function _test(obj) {
+            var tb = document.getElementById("table1");
+            if (tb.getElementsByTagName("thead").length != 0) {
+                tb.removeChild(tb.children[0]);
+                obj.value = "添加新表头";
             }
-        ];
-
-        var labels = []; //= ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"];
-        for(var i=0;i<31;i++){
-            labels[i] = i+1;
+            else {
+                var th = document.createElement("thead");
+                th.innerHTML = "我是新表头" + ++count;
+                tb.insertBefore(th, tb.children[0]);
+                tb.insertBefore(th, tb.children[1]);
+                obj.value = "移除旧表头";
+            }
         }
-        var line = new iChart.LineBasic2D({
-            render : 'canvasDiv',
-            data: data,
-            align:'center',
-            title : '2014年12个月点击下载安装注册人数',
-            subtitle : '平均每月的人数(访问量单位：万)',
-            footnote : '数据来源：点击下载安装注册数',
-            width : 1100,
-            height : 400,
-            tip:{
-                enable:true,
-                shadow:true
-            },
-            legend : {
-                enable : true,
-                row:1,//设置在一行上显示，与column配合使用
-                column : 'max',
-                valign:'top',
-                sign:'bar',
-                background_color:null,//设置透明背景
-                offsetx:-80,//设置x轴偏移，满足位置需要
-                border : true
-            },
-            crosshair:{
-                enable:true,
-                line_color:'#62bce9'
-            },
-            sub_option : {
-                label:false,
-                point_hollow : false
-            },
-            coordinate:{
-                width:900,
-                height:240,
-                axis:{
-                    color:'#9f9f9f',
-                    width:[0,0,2,2]
-                },
-                grids:{
-                    vertical:{
-                        way:'share_alike',
-                        value:30//割线
-                    }
-                },
-                scale:[{
-                    position:'left',
-                    start_scale:0,
-                    end_scale:100000,//设置结束刻度
-                    scale_space:10000,//设置刻度间距
-                    scale_size:2,
-                    scale_color:'#9f9f9f'
-
-                },{
-                    position:'bottom',
-                    labels:labels
-                }]
-            }
-        });
-
-        //开始画图
-        line.draw();
-    });
-
-</script>
-<script type="text/javascript">
-    //柱状图表 两段数据 上下
-    $(function(){
-        var new_user = [54841,72400,76776,83361,54841,72400,76776,83361,54841,72400,76776,83361,54841,72400,76776,83361,54841,72400,76776,83361,54841,72400,76776,83361,54841,72400,76776,83361,54841,72400,76776],
-            real_new = [22790,33284,52148,68333,22790,33284,52148,68333,22790,33284,52148,68333,22790,33284,52148,68333,22790,33284,52148,68333,22790,33284,52148,68333,22790,33284,52148,68333,22790,33284,52148];
-        var data = [
-            {
-                name : '新增用户',
-                value:new_user,
-                color:'#32bdbc'
-            },
-            {
-                name : '实际新增',
-                value:real_new,
-                color:'#d75a5e'
-            }
-        ];
-        var labels = [];
-        for(var i=0;i<31;i++){
-            labels[i] = i + 1;
-        }
-
-        var chart = new iChart.ColumnStacked2D({
-            render : 'columntacked2d',
-            data: data,
-            labels:labels,
-            title : {
-                text:'全国限额以上连锁零售业情况',
-                color:'#dcd6cb',
-                textAlign:'left',
-                padding:'0 40',
-                font:'微软雅黑',
-                border:{
-                    enable:true,
-                    width:[0,0,4,0],
-                    color:'#698389'
-                },
-                height:40
-            },
-            footnote : {
-                text:'数据来源：新增实增数及转化率',
-                font:'微软雅黑',
-                padding:'0 8',
-                color:'#dcd6cb'
-            },
-            padding:'8 0',
-            width : 1200,
-            height : 400,
-            column_width:120,
-            gradient : true,//应用背景渐变
-            gradient_mode:'LinearGradientDownUp',//渐变类型
-            color_factor : 0.1,//渐变因子
-            background_color : '#425154',
-            sub_option:{
-                label:{color:'#f9f9f9',fontsize:12,fontweight:600},
-                border : false
-            },
-            label:{color:'#dcd6cb',font:'微软雅黑',fontsize:12,fontweight:600},
-            legend:{
-                enable:true,
-                background_color : null,
-                line_height:25,
-                color:'#dcd6cb',
-                fontsize:12,
-                font:'微软雅黑',
-                fontweight:600,
-                border : {
-                    enable : false
-                }
-            },
-            column_width:120,
-            coordinate:{
-                background_color : 0,
-                grid_color:'#888888',
-                axis : {
-                    color : '#c0d0e0',
-                    width : 0
-                },
-                scale:[{
-                    position:'left',
-                    scale_enable : false,
-                    start_scale:0,
-                    scale_space:20000,
-                    end_scale:160000,
-                    label:{color:'#dcd6cb',fontsize:11,fontweight:600}
-                }],
-                width:'80%',
-                height:'76%'
-            }
-        });
-
-        //利用自定义组件构造左上侧单位
-        chart.plugin(new iChart.Custom({
-            drawFn:function(){
-                //计算位置
-                var coo = chart.getCoordinate(),
-                        x = coo.get('originx'),
-                        y = coo.get('originy');
-                //在左上侧的位置，渲染一个单位的文字
-                chart.target.textAlign('end')
-                        .textBaseline('bottom')
-                        .textFont('600 12px 微软雅黑')
-                        .fillText('单位(个)',x,y-14,false,'#be5863')
-
-            }
-        }));
-
-        chart.draw();
-    });
-</script>
-<script type="text/javascript">
-    //周回流用户数据
-    $(function(){
-        var data = [
-            {
-                name : '回流活跃用户',
-                value:[45,52,54,74,90,84],
-                color:'#1385a5'
-            },
-            {
-                name : '回流高活用户',
-                value:[60,80,105,125,108,120],
-                color:'#c56966'
-            }
-        ];
-        var labels = [];
-        for(var i=0;i<52;i++){
-            labels[i] = i + 1;
-        }
-        var chart = new iChart.ColumnMulti2D({
-            render : 'columnmulti2d',
-            data: data,
-            labels:labels,
-            title : '周用户回流数据',
-            subtitle : '单位:千',
-            footnote : '数据来源：周用户回流数据',
-            width : 1200,
-            height : 400,
-            background_color : '#ffffff',
-            legend:{
-                enable:true,
-                background_color : null,
-                border : {
-                    enable : false
-                }
-            },
-            coordinate:{
-                background_color : '#f1f1f1',
-                scale:[{
-                    position:'left',
-                    start_scale:0,
-                    end_scale:300,
-                    scale_space:50
-                }],
-                width:1100,
-                height:260
-            }
-        });
-        chart.draw();
-    });
-</script>
-<script type="text/javascript">
-    $(function(){
-        var data = [
-            {
-                name : '日均战场次数',
-                value:[4500,5200,5400,7400,9000,8400,7300,6800,8700,3900,4500,6500,9000,8400,7300,6800,8700,3900,4500,6500],
-                color:'#47b2c8'
-            }
-        ];
-        var labels = [];
-        for(var i=0;i<20;i++){
-            labels[i] = i + 1;
-        }
-        var chart = new iChart.BarMulti2D({
-            render : 'barmulti2d',
-            data: data,
-            labels:labels,
-            title : {
-                text:'日均战场次数',
-                color:'#585757'
-            },
-            subtitle : {
-                text:'2012上半年DPS01A型号与DPS01B型号的鼠标销售比较,单位:万台',
-                color:'#797373'
-            },
-            footnote : '数据来源：日均战场次数',
-            width : 1200,
-            height : 600,
-            background_color : '#ffffff',
-            legend:{
-                enable:true,
-                background_color : null,
-                border : {
-                    enable : false
-                }
-            },
-            coordinate:{
-                scale:[{
-                    position:'bottom',
-                    start_scale:0,
-                    end_scale:12000,
-                    scale_space:2000
-                }],
-                background_color : null,
-                axis : {
-                    width : 0
-                },
-                width:1000,
-                height:400
-            }
-        });
-        chart.draw();
-    });
-</script>
-<br/><br/><br/><br/>
-
-<div class="col-lg-12">
-
-
-    <link rel="stylesheet" type="text/css" href="/js/calendar/jscal2.css"/>
-    <link rel="stylesheet" type="text/css" href="/js/calendar/border-radius.css"/>
-    <link rel="stylesheet" type="text/css" href="/js/calendar/win2k.css"/>
-    <script type="text/javascript" src="/js/calendar/calendar.js"></script>
-    <script type="text/javascript" src="/js/calendar/lang/en.js"></script><input type="text" name="start_time" id="start_time" value="" size="10" class="date" readonly>&nbsp;<script type="text/javascript">
-        Calendar.setup({
-            weekNumbers: true,
-            inputField : "start_time",
-            trigger    : "start_time",
-            dateFormat: "%Y-%m-%d",
-            showTime: false,
-            minuteStep: 1,
-            onSelect   : function() {this.hide();}
-        });
-    </script>--
-    <input type="text" name="end_time" id="end_time" value="" size="10" class="date" readonly>&nbsp;<script type="text/javascript">
-        Calendar.setup({
-            weekNumbers: true,
-            inputField : "end_time",
-            trigger    : "end_time",
-            dateFormat: "%Y-%m-%d",
-            showTime: false,
-            minuteStep: 1,
-            onSelect   : function() {this.hide();}
-        });
     </script>
-
-</div>
-<br><br>
-
-
-<div class="col-lg-12">
-    <div id='canvasDiv'></div>
-    <div class='ichartjs_info'>
-        <div class='ichartjs_sm'>说明</div>
-        <div class='ichartjs_details'>
-            这是一个很常见的的折线图示例，示例展示了网站最近5天的流量统计。每隔6个小时统计一次。此示例用了平滑曲线代替直线。
-        </div>
-        <span class='ichartjs_sm'>备注：</span>
-        <span class='ichartjs_details'>数据均为模拟。</span>
-    </div>
-</div>
-
-<div class="col-lg-12">
-    <div id='columntacked2d'></div>
-</div>
-<div class="col-lg-12">
-    <div id='columnmulti2d'></div>
-</div>
-<div class="col-lg-12">
-    <div id='barmulti2d'></div>
-</div>
-
-<% include footer.ejs %>
-
+</head>
+<body>
+<input type="button" value="移除旧表头" onclick="_test(this);" />
+<table id="table1">
+    <thead>
+    <tr>
+        <th><span title="星期日">星期日</span></th>
+        <th><span title="星期一">星期一</span></th>
+        <th><span title="星期二">星期二</span></th>
+        <th><span title="星期三">星期三</span></th>
+        <th><span title="星期四">星期四</span></th>
+        <th><span title="星期五">星期五</span></th>
+        <th><span title="星期六">星期六</span></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>
+            <span class="ui-state-default">23</span>
+        </td>
+        <td>
+            <span class="ui-state-default">23</span>
+        </td>
+        <td>
+            <span class="ui-state-default">23</span>
+        </td>
+        <td>
+            <span class="ui-state-default">23</span>
+        </td>
+        <td>
+            <span class="ui-state-default">23</span>
+        </td>
+        <td>
+            <span class="ui-state-default">23</span>
+        </td>
+        <td>
+            <span class="ui-state-default">23</span>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <span class="ui-state-default">23</span>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

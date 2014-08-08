@@ -1,7 +1,3 @@
-//var mongo = require('../lib/MyMongo.js').MyMongo;
-
-//var db = new mongo('localhost',27017,'operation'); 
-
 var config = require('../config.js');
 
 var db = config.db;
