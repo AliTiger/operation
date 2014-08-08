@@ -73,7 +73,7 @@
             align:'center',
             title : '每日及日均使用时长',
             subtitle : '平均每日的人数(访问量单位：万)',
-            footnote : '数据来源：每日及日均使用时长',
+            footnote : '数据来源：用户使用时长',
             width : 1100,
             height : 400,
             tip:{
@@ -267,7 +267,7 @@
             $('.charge_week_canvasDiv').css('display','block');
             $('.charge_month_canvasDiv').css('display','none');
             options.render = 'charge_week_canvasDiv';
-            options.title = '付费活跃用户每日及日均使用时长';
+            options.title = '付费活跃用户每周及周均使用时长';
             options.coordinate.grids.vertical.value = 51;
             options.coordinate.scale[1].labels = week_labels;
             var line = new iChart.LineBasic2D( options );

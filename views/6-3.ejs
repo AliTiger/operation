@@ -46,8 +46,12 @@
         ];
 
         var day_labels = []; //= ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"];
-        for(var i=0;i<12;i++){
+        for(var i=0;i<31;i++){
             day_labels[i] = i+1;
+        }
+        var month_labels = [];
+        for(var i=0;i<12;i++){
+            month_labels[i] = i+1;
         }
         var options = {
             render : 'charge_user_canvasDiv',
@@ -103,7 +107,7 @@
 
                 },{
                     position:'bottom',
-                    labels:day_labels
+                    labels:month_labels
                 }]
             }
         };
@@ -129,7 +133,7 @@
             options.render = 'charge_convert_canvasDiv';
             options.title = '付费渗透比例';
             options.coordinate.grids.vertical.value = 11;
-            options.coordinate.scale[1].labels = day_labels;
+            options.coordinate.scale[1].labels = month_labels;
             var line = new iChart.LineBasic2D( options );
 
             //开始画图
@@ -146,7 +150,7 @@
             options.render = 'month_charge_canvasDiv';
             options.title = '付费用户月均充值次数';
             options.coordinate.grids.vertical.value = 11;
-            options.coordinate.scale[1].labels = day_labels;
+            options.coordinate.scale[1].labels = month_labels;
             var line = new iChart.LineBasic2D( options );
 
             //开始画图
@@ -163,7 +167,7 @@
             options.render = 'loyal_charge_canvasDiv';
             options.title = '忠实付费用户数';
             options.coordinate.grids.vertical.value = 11;
-            options.coordinate.scale[1].labels = day_labels;
+            options.coordinate.scale[1].labels = month_labels;
             var line = new iChart.LineBasic2D( options );
 
             //开始画图
@@ -180,7 +184,7 @@
             options.render = 'eff_user_canvasDiv';
             options.title = '高效付费用户数';
             options.coordinate.grids.vertical.value = 11;
-            options.coordinate.scale[1].labels = day_labels;
+            options.coordinate.scale[1].labels = month_labels;
             var line = new iChart.LineBasic2D( options );
 
             //开始画图
@@ -196,7 +200,7 @@
             $('.first_charge_canvasDiv').css('display','block');
             options.render = 'first_charge_canvasDiv';
             options.title = '用户首次付费率';
-            options.coordinate.grids.vertical.value = 11;
+            options.coordinate.grids.vertical.value = 30;
             options.coordinate.scale[1].labels = day_labels;
             var line = new iChart.LineBasic2D( options );
 
@@ -334,7 +338,7 @@
             <thead>
             <tr>
                 <th></th>
-                <% for(var i=1;i<13;i++){ %>
+                <% for(var i=1;i<32;i++){ %>
                 <th><%=i%></th>
                 <% } %>
             </tr>

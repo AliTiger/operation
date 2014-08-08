@@ -16,11 +16,9 @@
                 line_width:2
             }
         ];
+        var labels = ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30',
+            '31/35','36/40','41/45','46/50','51/55','56/60','61/65','66/70','71/75','76/80','81/85','86/90'];
 
-        var labels = [];
-        for(var i=0;i<31;i++){
-            labels[i] = i+1;
-        }
         var line = new iChart.LineBasic2D({
             render : 'canvasDiv',
             data: data,
@@ -28,7 +26,7 @@
             title : '用户等级分布',
             subtitle : '平均每月的人数(访问量单位：万)',
             footnote : '数据来源：用户等级分布',
-            width : 1100,
+            width : 1800,
             height : 400,
             tip:{
                 enable:true,
@@ -53,7 +51,7 @@
                 point_hollow : false
             },
             coordinate:{
-                width:900,
+                width:1600,
                 height:240,
                 axis:{
                     color:'#9f9f9f',
@@ -62,7 +60,7 @@
                 grids:{
                     vertical:{
                         way:'share_alike',
-                        value:30//割线
+                        value:41//割线
                     }
                 },
                 scale:[{

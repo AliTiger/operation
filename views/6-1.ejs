@@ -281,6 +281,7 @@
         var monthMulti = month / 6;
         var dayMulti = day / 7;
         if( dayMulti > 0){
+            //每天更新数据
             day_tb.removeChild(day_tb.children[0]);
             console.log('8-9-10-11-12-13-14');
             var html = "<th>服务器/日</th>";
@@ -298,6 +299,7 @@
 
         }
         if( monthMulti > 0){
+            //每月更新数据
             month_tb.removeChild(month_tb.children[0]);
             console.log('8-9-10-11-12-13-14');
             var html = "<th>服务器/</th>";

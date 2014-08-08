@@ -12,6 +12,9 @@
         <div class="col-lg-1">
             <button name="month" id="month">月一次</button>
         </div>
+        <div class="col-lg-1">
+            <button name="active" id="active">活跃度</button>
+        </div>
         <% include save_print.ejs %>
     </div>
 </div>
@@ -111,12 +114,14 @@
             $('.day_canvasDiv').css('display','block');
             $('.week_canvasDiv').css('display','none');
             $('.month_canvasDiv').css('display','none');
+            $('.active_canvasDiv').css('display','none');
         });
 
         $('#week').on('click',function(){
             $('.day_canvasDiv').css('display','none');
             $('.week_canvasDiv').css('display','block');
             $('.month_canvasDiv').css('display','none');
+            $('.active_canvasDiv').css('display','none');
             options.render = 'week_canvasDiv';
             options.title = 'WAU';
             options.coordinate.grids.vertical.value = 51;
@@ -132,10 +137,25 @@
             $('.month_canvasDiv').css('display','block');
             $('.week_canvasDiv').css('display','none');
             $('.day_canvasDiv').css('display','none');
+            $('.active_canvasDiv').css('display','none');
             options.render = 'month_canvasDiv';
             options.title = 'MAU';
             options.coordinate.grids.vertical.value = 11;
             options.coordinate.scale[1].labels = month_labels;
+            var line = new iChart.LineBasic2D( options );
+
+            //开始画图
+            line.draw();
+        });
+        $('#active').on('click',function(){
+            $('.active_canvasDiv').css('display','block');
+            $('.month_canvasDiv').css('display','none');
+            $('.week_canvasDiv').css('display','none');
+            $('.day_canvasDiv').css('display','none');
+            options.render = 'active_canvasDiv';
+            options.title = 'DAU/MAU';
+            options.coordinate.grids.vertical.value = 11;
+            options.coordinate.scale[1].labels = day_labels;
             var line = new iChart.LineBasic2D( options );
 
             //开始画图
@@ -215,14 +235,29 @@
         </table>
     </div>
 
-    <!--<div class='ichartjs_info'>-->
-        <!--<div class='ichartjs_sm'>说明</div>-->
-        <!--<div class='ichartjs_details'>-->
-            <!--这是一个很常见的的折线图示例，示例展示了网站最近5天的流量统计。每隔6个小时统计一次。此示例用了平滑曲线代替直线。-->
-        <!--</div>-->
-        <!--<span class='ichartjs_sm'>备注：</span>-->
-        <!--<span class='ichartjs_details'>数据均为模拟。</span>-->
-    <!--</div>-->
+    <div class="active_canvasDiv"  style="display: none">
+        <div id='active_canvasDiv'></div>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th></th>
+                <% for(var i=1;i<32;i++){ %>
+                <th><%=i%></th>
+                <% } %>
+            </tr>
+
+            </thead>
+            <tbody>
+            <tr>
+                <td>活跃度</td>
+                <% active.forEach(function( a ){%>
+                <td><%= a %></td>
+                <%});%>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
 </div>
 
 <% include footer.ejs %>
