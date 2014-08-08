@@ -19,9 +19,9 @@
   $.widget('ech.multiselectfilter', {
 
     options: {
-      label: '关键词:',
+      label: '查询:',
       width: null, /* override default width set in css file (px). null will inherit */
-      placeholder: '输入关键字',
+      placeholder: '输入关键词',
       autoReset: false
     },
 
