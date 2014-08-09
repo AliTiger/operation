@@ -33,15 +33,18 @@ app.use(session({secret:'operation',resave:true,saveUninitialized:true}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', routes.index);
+//登陆后台
 app.get('/login', routes.login);
 app.post('/login', routes.login_check);
 app.get('/logout', routes.logout);
 
 app.get('/home', routes.homePage);
+//设置权限
 app.get('/getPower', power.getPower);
 app.get('/setPower', power.get);
 app.post('/setPower', power.setPower);
 
+//渲染页面
 app.get('/getUsers/:page_id',getUsers.get);
 app.get('/activeUsers/:page_id',activeUsers.get);
 app.get('/onlineUsers/:page_id',onlineUsers.get);
@@ -50,6 +53,9 @@ app.get('/lostUsers/:page_id',lostUsers.get);
 app.get('/gameIncome/:page_id',gameIncome.get);
 app.get('/operationCost/:page_id',operationCost.get);
 app.get('/userInformation/:page_id',userInformation.get);
+
+//获取活跃用户数据
+app.get('/activeUserData',activeUsers.getData);
 
 app.get('/test',routes.test);
 

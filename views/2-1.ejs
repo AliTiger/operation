@@ -122,14 +122,34 @@
             $('.week_canvasDiv').css('display','block');
             $('.month_canvasDiv').css('display','none');
             $('.active_canvasDiv').css('display','none');
-            options.render = 'week_canvasDiv';
-            options.title = 'WAU';
-            options.coordinate.grids.vertical.value = 51;
-            options.coordinate.scale[1].labels = week_labels;
-            var line = new iChart.LineBasic2D( options );
+            //动态调用数据
+            $.ajax({
+                url:'/activeUserData?option=week',
+                type:'get',
+                dataType:'json',
+                async:false,
+                success:function( result ){
+                    console.log('============result:',result.data);
+                    var data = [
+                        {
+                            name : '活跃用户数量',
+                            value:result.data,
+                            color:'#0d8ecf',
+                            line_width:2
+                        }
+                    ];
+                    //alert('设置权限成功');
+                    options.data = data;
+                    options.render = 'week_canvasDiv';
+                    options.title = 'WAU';
+                    options.coordinate.grids.vertical.value = 51;
+                    options.coordinate.scale[1].labels = week_labels;
+                    var line = new iChart.LineBasic2D( options );
 
-            //开始画图
-            line.draw();
+                    //开始画图
+                    line.draw();
+                }
+            });
         });
 
 
@@ -138,14 +158,32 @@
             $('.week_canvasDiv').css('display','none');
             $('.day_canvasDiv').css('display','none');
             $('.active_canvasDiv').css('display','none');
-            options.render = 'month_canvasDiv';
-            options.title = 'MAU';
-            options.coordinate.grids.vertical.value = 11;
-            options.coordinate.scale[1].labels = month_labels;
-            var line = new iChart.LineBasic2D( options );
-
-            //开始画图
-            line.draw();
+            //动态调用数据
+            $.ajax({
+                url:'/activeUserData?option=month',
+                type:'get',
+                dataType:'json',
+                async:false,
+                success:function( result ){
+                    console.log('============result:',result.data);
+                    var data = [
+                        {
+                            name : 'MAU',
+                            value:result.data,
+                            color:'#0d8ecf',
+                            line_width:2
+                        }
+                    ];
+                    options.data = data;
+                    options.render = 'month_canvasDiv';
+                    options.title = 'MAU';
+                    options.coordinate.grids.vertical.value = 11;
+                    options.coordinate.scale[1].labels = month_labels;
+                    var line = new iChart.LineBasic2D( options );
+                    //开始画图
+                    line.draw();
+                }
+            });
         });
         $('#active').on('click',function(){
             $('.active_canvasDiv').css('display','block');

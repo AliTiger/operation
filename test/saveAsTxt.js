@@ -36,8 +36,10 @@ exports.job = new nodeio.Job({
 		},
 	    output: function(data){
 			console.log('data:',data);
+			var f = fs.createWriteStream('message.txt');
 			fs.writeFile('message.txt', data, encoding='utf8', function(){
 				console.log('saved');
+				f.end();
 			});
 		}
 });
