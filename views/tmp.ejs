@@ -1,70 +1,18 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta  charset=utf-8 />
-    <title>test</title>
-    <script>
-        var count = 0;
-        function _test(obj) {
-            var tb = document.getElementById("table1");
-            if (tb.getElementsByTagName("thead").length != 0) {
-                tb.removeChild(tb.children[0]);
-                obj.value = "添加新表头";
-            }
-            else {
-                var th = document.createElement("thead");
-                th.innerHTML = "我是新表头" + ++count;
-                tb.insertBefore(th, tb.children[0]);
-                tb.insertBefore(th, tb.children[1]);
-                obj.value = "移除旧表头";
-            }
-        }
-    </script>
-</head>
-<body>
-<input type="button" value="移除旧表头" onclick="_test(this);" />
-<table id="table1">
-    <thead>
-    <tr>
-        <th><span title="星期日">星期日</span></th>
-        <th><span title="星期一">星期一</span></th>
-        <th><span title="星期二">星期二</span></th>
-        <th><span title="星期三">星期三</span></th>
-        <th><span title="星期四">星期四</span></th>
-        <th><span title="星期五">星期五</span></th>
-        <th><span title="星期六">星期六</span></th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td>
-            <span class="ui-state-default">23</span>
-        </td>
-        <td>
-            <span class="ui-state-default">23</span>
-        </td>
-        <td>
-            <span class="ui-state-default">23</span>
-        </td>
-        <td>
-            <span class="ui-state-default">23</span>
-        </td>
-        <td>
-            <span class="ui-state-default">23</span>
-        </td>
-        <td>
-            <span class="ui-state-default">23</span>
-        </td>
-        <td>
-            <span class="ui-state-default">23</span>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <span class="ui-state-default">23</span>
-        </td>
-    </tr>
-    </tbody>
-</table>
-</body>
-</html>
+<% include nav.ejs %>
+<br><br><br>
+<div id="addnew">
+    <input type="text" id="id">
+    <input type="text" id="content">
+    <input type="button" value="Add" id="submit">
+</div>
+
+<div id="check">
+    <input type="text" id="input">
+    <input type="button" value="Search" id="search">
+</div>
+<script>
+    $(document).ready(function(){
+
+    });
+</script>
+<% include footer.ejs%>
