@@ -130,10 +130,11 @@
                 async:false,
                 success:function( result ){
                     console.log('============result:',result.data);
+                    result = result.data;
                     var data = [
                         {
                             name : '活跃用户数量',
-                            value:result.data,
+                            value:result,
                             color:'#0d8ecf',
                             line_width:2
                         }
@@ -148,6 +149,16 @@
 
                     //开始画图
                     line.draw();
+                    var html = "";
+                    html += "<tr>";
+                    html+="<td>活跃用户</td>";
+                    if(result.length){
+                        result.forEach(function(a){
+                            html += "<td>"+ a +"</td>";
+                        });
+                    }
+                    html += "</tr>";
+                    $('tbody').empty().html(html);
                 }
             });
         });
@@ -166,10 +177,11 @@
                 async:false,
                 success:function( result ){
                     console.log('============result:',result.data);
+                    result = result.data;
                     var data = [
                         {
                             name : 'MAU',
-                            value:result.data,
+                            value:result,
                             color:'#0d8ecf',
                             line_width:2
                         }
@@ -182,6 +194,16 @@
                     var line = new iChart.LineBasic2D( options );
                     //开始画图
                     line.draw();
+                    var html = "";
+                    html += "<tr>";
+                    html+="<td>活跃用户</td>";
+                    if(result.length){
+                        result.forEach(function(a){
+                            html += "<td>"+ a +"</td>";
+                        });
+                    }
+                    html += "</tr>";
+                    $('tbody').empty().html(html);
                 }
             });
         });
