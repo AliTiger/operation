@@ -1,0 +1,43 @@
+var nodeio = require('node.io');
+var xlsx = require('node-xlsx');
+var fs = require('fs');                                                                                                                                                        
+var jsonData = [{name:'lixiaodong',age:24,gender:'m'},{name:'zhaoge',age:24,gender:'m'}];
+
+exports.job = new nodeio.Job({
+	    input: false,//从服务器获取数据
+	    run: function (row) {
+			var keyNames = [];
+			keyNames[0] = [];
+			var value = [];
+			if(jsonData.length){
+				for(var key in jsonData[0]){
+					keyNames[0].push(key);
+				}	
+				for(var i=0;i<jsonData.length;i++){
+					value[i] = [];
+					for(var key in jsonData[i]){
+						value[i].push(jsonData[i][key]);
+					}	
+				}
+			}
+			for(var i=0;i<value.length;i++){
+				keyNames[keyNames.length] = value[i];
+			}
+			console.log('value:',value);
+			console.log('keyNames:',keyNames);
+			var string = '';
+			for(var i=0;i<keyNames.length;i++){
+				for(var j=0;j<keyNames[i].length;j++){
+					string += keyNames[i][j]+'\t\t\t';
+				}
+				string += '\n';
+			}
+			this.emit(string);
+		},
+	    output: function(data){
+			console.log('data:',data);
+			fs.writeFile('message.txt', data, encoding='utf8', function(){
+				console.log('saved');
+			});
+		}
+});
