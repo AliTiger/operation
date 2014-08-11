@@ -67,6 +67,10 @@ app.get('/onceUsers',activeUsers.onceUsers);
 //活跃用户高活跃用户数
 app.get('/highActiveUsers',activeUsers.highActiveUsers);
 
+//用户次日留存率
+app.get('/remainUsers',remainUsers.remain);
+
+
 app.get('/test',routes.test);
 
 /// catch 404 and forward to error handler

@@ -18,12 +18,13 @@
         <% include save_print.ejs %>
     </div>
 </div>
+<% include labels.ejs %>
 <script type="text/javascript">
     //线型图表
     $(function(){
+        labels();//调用labels day_labels week_labels month_labels
+
         var active = [90000,90000,98000,90000,97000,99000,90000,90000,98000,92000,97000,99000,90000,90000,98000,90000,97000,99000,90000,97000,98000,92000,97000,99000,92000,93000,96000,91000,94000,94000,92000];
-
-
         var data = [
             {
                 name : '活跃用户数量',
@@ -33,23 +34,14 @@
             }
         ];
 
-        var tomorrow_labels = [];
+        var tomorrow_labels = day_labels;
         var three_labels = [];
-        var seven_labels = [];
-        var thirty_labels = [];
-
-        for(var i=0;i<31;i++){
-            tomorrow_labels[i] = i + 1;
-        }
+        var seven_labels = week_labels;
+        var thirty_labels = month_labels;
         for(var i=0;i<10;i++){
             three_labels[i] = i + 1;
         }
-        for(var i=0;i<52;i++){
-            seven_labels[i] = i + 1;
-        }
-        for(var i=0;i<12;i++){
-            thirty_labels[i] = i + 1;
-        }
+
         var options = {
             render : 'tomorrow_canvasDiv',
             data: data,
@@ -117,14 +109,42 @@
             $('.three_canvasDiv').css('display','none');
             $('.seven_canvasDiv').css('display','none');
             $('.thirty_canvasDiv').css('display','none');
-            options.render = 'tomorrow_canvasDiv';
-            options.title = '次日留存';
-            options.coordinate.grids.vertical.value = 30;
-            options.coordinate.scale[1].labels = tomorrow_labels;
-            var line = new iChart.LineBasic2D( options );
 
-            //开始画图
-            line.draw();
+            //动态调用数据
+            $.ajax({
+                url:'/remainUsers?option=day',
+                type:'get',
+                dataType:'json',
+                async:false,
+                success:function( result ){
+                    var data = [
+                        {
+                            name : '次日留存',
+                            value:result.day,
+                            color:'#0d8ecf',
+                            line_width:2
+                        }
+                    ];
+                    options.data = data;
+                    options.render = 'tomorrow_canvasDiv';
+                    options.title = '次日留存';
+                    options.coordinate.grids.vertical.value = 30;
+                    options.coordinate.scale[1].labels = tomorrow_labels;
+                    var line = new iChart.LineBasic2D( options );
+                    //开始画图
+                    line.draw();
+                    var html = "";
+                    html += "<tr>";
+                    html += "<td>次日留存率</td>";
+                    if(result.day.length){
+                        result.day.forEach(function(a){
+                            html += "<td>"+ a +"</td>";
+                        });
+                    }
+                    html += "</tr>";
+                    $('tbody').empty().html(html);
+                }
+            });
         });
 
         $('#three').on('click',function(){
@@ -132,14 +152,41 @@
             $('.three_canvasDiv').css('display','block');
             $('.seven_canvasDiv').css('display','none');
             $('.thirty_canvasDiv').css('display','none');
-            options.render = 'three_canvasDiv';
-            options.title = '3日留存';
-            options.coordinate.grids.vertical.value = 9;
-            options.coordinate.scale[1].labels = three_labels;
-            var line = new iChart.LineBasic2D( options );
-
-            //开始画图
-            line.draw();
+            //动态调用数据
+            $.ajax({
+                url:'/remainUsers?option=three',
+                type:'get',
+                dataType:'json',
+                async:false,
+                success:function( result ){
+                    var data = [
+                        {
+                            name : '3日留存',
+                            value:result.three,
+                            color:'#0d8ecf',
+                            line_width:2
+                        }
+                    ];
+                    options.data = data;
+                    options.render = 'three_canvasDiv';
+                    options.title = '3日留存';
+                    options.coordinate.grids.vertical.value = 9;
+                    options.coordinate.scale[1].labels = three_labels;
+                    var line = new iChart.LineBasic2D( options );
+                    //开始画图
+                    line.draw();
+                    var html = "";
+                    html += "<tr>";
+                    html += "<td>3日留存率</td>";
+                    if(result.three.length){
+                        result.three.forEach(function(a){
+                            html += "<td>"+ a +"</td>";
+                        });
+                    }
+                    html += "</tr>";
+                    $('tbody').empty().html(html);
+                }
+            });
         });
 
         $('#seven').on('click',function(){
@@ -147,14 +194,41 @@
             $('.three_canvasDiv').css('display','none');
             $('.seven_canvasDiv').css('display','block');
             $('.thirty_canvasDiv').css('display','none');
-            options.render = 'seven_canvasDiv';
-            options.title = '7日留存';
-            options.coordinate.grids.vertical.value = 51;
-            options.coordinate.scale[1].labels = seven_labels;
-            var line = new iChart.LineBasic2D( options );
 
-            //开始画图
-            line.draw();
+            //动态调用数据
+            $.ajax({
+                url:'/remainUsers?option=week',
+                type:'get',
+                dataType:'json',
+                async:false,
+                success:function( result ){
+                    var data = [
+                        {
+                            name : '7日留存',
+                            value:result.week,
+                            color:'#0d8ecf',
+                            line_width:2
+                        }
+                    ];
+                    options.data = data;
+                    options.render = 'seven_canvasDiv';
+                    options.title = '7日留存';
+                    options.coordinate.grids.vertical.value = 51;
+                    options.coordinate.scale[1].labels = seven_labels;
+                    var line = new iChart.LineBasic2D( options );
+                    line.draw();
+                    var html = "";
+                    html += "<tr>";
+                    html += "<td>7日留存率</td>";
+                    if(result.week.length){
+                        result.week.forEach(function(a){
+                            html += "<td>"+ a +"</td>";
+                        });
+                    }
+                    html += "</tr>";
+                    $('tbody').empty().html(html);
+                }
+            });
         });
 
         $('#thirty').on('click',function(){
@@ -162,14 +236,40 @@
             $('.three_canvasDiv').css('display','none');
             $('.seven_canvasDiv').css('display','none');
             $('.thirty_canvasDiv').css('display','block');
-            options.render = 'thirty_canvasDiv';
-            options.title = '30日留存';
-            options.coordinate.grids.vertical.value = 11;
-            options.coordinate.scale[1].labels = thirty_labels;
-            var line = new iChart.LineBasic2D( options );
-
-            //开始画图
-            line.draw();
+            //动态调用数据
+            $.ajax({
+                url:'/remainUsers?option=month',
+                type:'get',
+                dataType:'json',
+                async:false,
+                success:function( result ){
+                    var data = [
+                        {
+                            name : '30日留存',
+                            value:result.month,
+                            color:'#0d8ecf',
+                            line_width:2
+                        }
+                    ];
+                    options.data = data;
+                    options.render = 'thirty_canvasDiv';
+                    options.title = '30日留存';
+                    options.coordinate.grids.vertical.value = 11;
+                    options.coordinate.scale[1].labels = thirty_labels;
+                    var line = new iChart.LineBasic2D( options );
+                    line.draw();
+                    var html = "";
+                    html += "<tr>";
+                    html += "<td>30日留存率</td>";
+                    if(result.month.length){
+                        result.month.forEach(function(a){
+                            html += "<td>"+ a +"</td>";
+                        });
+                    }
+                    html += "</tr>";
+                    $('tbody').empty().html(html);
+                }
+            });
         });
     });
 
@@ -190,7 +290,7 @@
             <tbody>
             <tr>
                 <td>次日留存率</td>
-                <% active.forEach(function( a ){%>
+                <% day.forEach(function( a ){%>
                     <td><%= a %></td>
                 <%});%>
             </tr>
@@ -209,14 +309,7 @@
             </tr>
 
             </thead>
-            <tbody>
-            <tr>
-                <td>3日留存率</td>
-                <% active.forEach(function( a ){%>
-                <td><%= a %></td>
-                <%});%>
-            </tr>
-            </tbody>
+            <tbody></tbody>
         </table>
     </div>
     <div class="seven_canvasDiv" style="display: none">
@@ -229,16 +322,8 @@
                 <th><%=i%></th>
                 <% } %>
             </tr>
-
             </thead>
-            <tbody>
-            <tr>
-                <td>7日留存率</td>
-                <% active.forEach(function( a ){%>
-                <td><%= a %></td>
-                <%});%>
-            </tr>
-            </tbody>
+            <tbody></tbody>
         </table>
     </div>
     <div class="thirty_canvasDiv" style="display: none">
@@ -251,21 +336,10 @@
                 <th><%=i%></th>
                 <% } %>
             </tr>
-
             </thead>
-            <tbody>
-            <tr>
-                <td>30日留存率</td>
-                <% active.forEach(function( a ){%>
-                <td><%= a %></td>
-                <%});%>
-            </tr>
-            </tbody>
+            <tbody></tbody>
         </table>
     </div>
-
-
-
 </div>
 
 <% include footer.ejs %>
