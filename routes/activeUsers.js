@@ -1,4 +1,11 @@
 //用户
+var config = require('../config.js');
+var day = config.day;
+var week = config.week;
+var month = config.month;
+var dayAver = config.dayAver;
+var weekAver = config.weekAver;
+var monthAver = config.monthAver;
 
 exports.get = function(req, res){
 	var page_id = req.params.page_id;
@@ -9,26 +16,120 @@ exports.get = function(req, res){
 	params.title = '活跃用户数量';
 	params.user = req.session.user;
 	params.users = req.session.users;
-	active  = [90000,90000,98000,90000,97000,99000,90000,90000,98000,92000,97000,99000,90000,90000,98000,90000,97000,99000,90000,97000,98000,92000,97000,99000,92000,93000,96000,91000,94000,94000,92000];
-	params.active = active;
+	params.day = day;
+	params.dayAver = dayAver;
 
 	return res.render(page_id+'.ejs',params);
 }
 
-exports.getData = function(req, res){
+exports.activeUsers = function(req, res){
 	var option = req.query.option;//日 周 月
 	console.log('option--------:',option);
 
-	week = [80000,70000,68000,50000,47000,39000,20000,10000,28000,32000,47000,59000,60000,70000,88000,90000,87000,79000,60000,57000,48000,32000,27000,19000,22000,33000,46000,51000,64000,74000,82000];
-	month = [80000,70000,68000,50000,47000,39000,20000,10000,28000,32000,47000,59000,60000,70000,88000,90000,87000,79000,60000,57000,48000,32000,27000,19000,22000,33000,46000,51000,64000,74000,82000];
-	for(var i=0;i<month.length;i++){
-		month[i] += 10000;
-	}
+	active = week;
 
 	if( option == 'week' ){
 		return res.send(200,{data:week});
 	}
 	if( option == 'month' ){
 		return res.send(200,{data:month});
+	}
+	if( option == 'active' ){
+		return res.send(200,{data:active});
+	}
+}
+
+//新增活跃用户
+exports.newActiveUsers = function(req, res){
+	var option = req.query.option;//日 周 月
+	console.log('option--------:',option);
+
+	if( option == 'week' ){
+		return res.send(200,{data:week});
+	}
+	if( option == 'month' ){
+		return res.send(200,{data:month});
+	}
+}
+
+//登录游戏次数
+exports.loginCount = function(req, res){
+	var option = req.query.option;//日 周 月
+	console.log('option--------:',option);
+
+	if( option == 'week' ){
+		return res.send(200,{week:week,weekAver:weekAver});
+	}
+	if( option == 'month' ){
+		return res.send(200,{month:month,monthAver:monthAver});
+	}
+}
+
+
+//使用时长
+exports.useLength = function(req, res){
+	var option = req.query.option;//日 周 月
+	console.log('option--------:',option);
+
+	var dayActive = day;
+	var weekActive = week;
+	var monthActive = month;
+	var dayCharge = day;
+	var weekCharge = week;
+	var monthCharge = month;
+
+	if( option == 'day' ){
+		return res.send(200,{day:day,dayAver:dayAver});
+	}
+	if( option == 'dayActive' ){
+		return res.send(200,{day:day,dayAver:dayAver});
+	}
+	if( option == 'dayCharge' ){
+		return res.send(200,{day:day,dayAver:dayAver});
+	}
+	if( option == 'week' ){
+		return res.send(200,{week:week,weekAver:weekAver});
+	}
+	if( option == 'weekActive' ){
+		return res.send(200,{week:week,weekAver:weekAver});
+	}
+	if( option == 'weekCharge' ){
+		return res.send(200,{week:week,weekAver:weekAver});
+	}
+	if( option == 'month' ){
+		return res.send(200,{month:month,monthAver:monthAver});
+	}
+	if( option == 'monthActive' ){
+		return res.send(200,{month:month,monthAver:monthAver});
+	}
+	if( option == 'monthCharge' ){
+		return res.send(200,{month:month,monthAver:monthAver});
+	}
+}
+
+
+//登录游戏次数
+exports.onceUsers = function(req, res){
+	var option = req.query.option;//日 周 月
+	console.log('option--------:',option);
+
+	if( option == 'week' ){
+		return res.send(200,{week:week,weekAver:weekAver});
+	}
+	if( option == 'month' ){
+		return res.send(200,{month:month,monthAver:monthAver});
+	}
+}
+
+//高活跃用户数量
+exports.highActiveUsers = function(req, res){
+	var option = req.query.option;//日 周 月
+	console.log('option--------:',option);
+
+	if( option == 'week' ){
+		return res.send(200,{week:week,weekAver:weekAver});
+	}
+	if( option == 'month' ){
+		return res.send(200,{month:month,monthAver:monthAver});
 	}
 }

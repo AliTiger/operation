@@ -71,11 +71,8 @@
 				$('#userList').on('change',function(){
 					var user = $('#userList').val();
 					initNodes();
-					console.log('===========',user);
 					$.get('/getPower',{user:user},function(result,status ){
-							console.log('getPersonalPower--------------:',result);
 							var power = result.data.power;
-							console.log('=====power:',power);
 							for(var i=0;i<power.length;i++){
 								var index = Math.log(power[i])/Math.log(2);
 								zNodes[index].checked = true;
@@ -88,13 +85,10 @@
 					var zTree = $.fn.zTree.getZTreeObj("treeDemo");
 					var checkCount = zTree.getCheckedNodes(true);
 					var power = [];
-					console.log('================checkCount:',checkCount);
 					for(var i=0;i<checkCount.length;i++){
 						power.push( Math.pow(2,checkCount[i].id - 1));
 					}
-					console.log('==========power:',power);
 					var user = $('#userList').val();
-					console.log('============selectedUser:',$('#userList').val());
 					$.ajax({
 						url:'/setPower',
 						type:'post',
@@ -102,7 +96,6 @@
 						dataType:'json',
 						async:false,
 						success:function( result ){
-							console.log('============result:',result);
 							alert('设置权限成功');
 						}
 					});

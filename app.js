@@ -54,8 +54,18 @@ app.get('/gameIncome/:page_id',gameIncome.get);
 app.get('/operationCost/:page_id',operationCost.get);
 app.get('/userInformation/:page_id',userInformation.get);
 
-//获取活跃用户数据
-app.get('/activeUserData',activeUsers.getData);
+//活跃用户数量
+app.get('/activeUsers',activeUsers.activeUsers);
+//新增活跃用户数据
+app.get('/newActiveUsers',activeUsers.newActiveUsers);
+//活跃用户登录次数
+app.get('/loginCount',activeUsers.loginCount);
+//活跃用户使用时长
+app.get('/useLength',activeUsers.useLength);
+//活跃用户一次用户数量
+app.get('/onceUsers',activeUsers.onceUsers);
+//活跃用户高活跃用户数
+app.get('/highActiveUsers',activeUsers.highActiveUsers);
 
 app.get('/test',routes.test);
 

@@ -18,10 +18,11 @@
         <% include save_print.ejs %>
     </div>
 </div>
-
+<% include labels.ejs %>
 <script type="text/javascript">
     //线型图表
     $(function(){
+        labels();//调用labels day_labels week_labels month_labels
         var day_active  = [90000,90000,98000,90000,97000,99000,90000,90000,98000,92000,97000,99000,90000,90000,98000,
             90000,97000,99000,90000,97000,98000,92000,97000,99000,92000,93000,96000,91000,94000,94000,92000];
 
@@ -34,19 +35,6 @@
             }
         ];
 
-        var day_labels = [];
-        var week_labels = [];
-        var month_labels = [];
-        for(var i=0;i<31;i++){
-            day_labels[i] = i+1;
-        }
-        for(var i=0;i<52;i++){
-            week_labels[i] = i+1;
-        }
-
-        for(var i=0;i<12;i++){
-            month_labels[i] = i+1;
-        }
         var options = {
             render : 'day_canvasDiv',
             data: data,
@@ -110,11 +98,7 @@
         //开始画图
         line.draw();
         $('#day').on('click',function(){
-            //line.draw();
-            $('.day_canvasDiv').css('display','block');
-            $('.week_canvasDiv').css('display','none');
-            $('.month_canvasDiv').css('display','none');
-            $('.active_canvasDiv').css('display','none');
+            window.location.href = '/activeUsers/2-1';
         });
 
         $('#week').on('click',function(){
@@ -124,12 +108,11 @@
             $('.active_canvasDiv').css('display','none');
             //动态调用数据
             $.ajax({
-                url:'/activeUserData?option=week',
+                url:'/activeUsers?option=week',
                 type:'get',
                 dataType:'json',
                 async:false,
                 success:function( result ){
-                    console.log('============result:',result.data);
                     result = result.data;
                     var data = [
                         {
@@ -151,7 +134,7 @@
                     line.draw();
                     var html = "";
                     html += "<tr>";
-                    html+="<td>活跃用户</td>";
+                    html+="<td>WAU</td>";
                     if(result.length){
                         result.forEach(function(a){
                             html += "<td>"+ a +"</td>";
@@ -171,12 +154,11 @@
             $('.active_canvasDiv').css('display','none');
             //动态调用数据
             $.ajax({
-                url:'/activeUserData?option=month',
+                url:'/activeUsers?option=month',
                 type:'get',
                 dataType:'json',
                 async:false,
                 success:function( result ){
-                    console.log('============result:',result.data);
                     result = result.data;
                     var data = [
                         {
@@ -196,7 +178,7 @@
                     line.draw();
                     var html = "";
                     html += "<tr>";
-                    html+="<td>活跃用户</td>";
+                    html+="<td>MAU</td>";
                     if(result.length){
                         result.forEach(function(a){
                             html += "<td>"+ a +"</td>";
@@ -212,14 +194,46 @@
             $('.month_canvasDiv').css('display','none');
             $('.week_canvasDiv').css('display','none');
             $('.day_canvasDiv').css('display','none');
-            options.render = 'active_canvasDiv';
-            options.title = 'DAU/MAU';
-            options.coordinate.grids.vertical.value = 11;
-            options.coordinate.scale[1].labels = day_labels;
-            var line = new iChart.LineBasic2D( options );
 
-            //开始画图
-            line.draw();
+            $.ajax({
+                url:'/activeUsers?option=active',
+                type:'get',
+                dataType:'json',
+                async:false,
+                success:function( result ){
+                    result = result.data;
+                    var data = [
+                        {
+                            name : 'DAU/MAU',
+                            value:result,
+                            color:'#0d8ecf',
+                            line_width:2
+                        }
+                    ];
+                    options.data = data;
+                    options.render = 'active_canvasDiv';
+                    options.title = 'DAU/MAU';
+                    options.coordinate.grids.vertical.value = 30;
+                    options.coordinate.scale[1].labels = day_labels;
+                    var line = new iChart.LineBasic2D( options );
+
+                    //开始画图
+                    line.draw();
+
+                    var html = "";
+                    html += "<tr>";
+                    html+="<td>DAU/MAU</td>";
+                    if(result.length){
+                        result.forEach(function(a){
+                            html += "<td>"+ a +"</td>";
+                        });
+                    }
+                    html += "</tr>";
+                    $('tbody').empty().html(html);
+                }
+            });
+
+
         });
 
     });
@@ -241,7 +255,7 @@
             <tbody>
             <tr>
                 <td>活跃用户</td>
-                <% active.forEach(function( a ){%>
+                <% day.forEach(function( a ){%>
                 <td><%= a %></td>
                 <%});%>
             </tr>
@@ -262,12 +276,7 @@
 
             </thead>
             <tbody>
-            <tr>
-                <td>活跃用户</td>
-                <% active.forEach(function( a ){%>
-                <td><%= a %></td>
-                <%});%>
-            </tr>
+
             </tbody>
         </table>
     </div>
@@ -285,12 +294,7 @@
 
             </thead>
             <tbody>
-            <tr>
-                <td>活跃用户</td>
-                <% active.forEach(function( a ){%>
-                <td><%= a %></td>
-                <%});%>
-            </tr>
+
             </tbody>
         </table>
     </div>
@@ -308,12 +312,7 @@
 
             </thead>
             <tbody>
-            <tr>
-                <td>活跃度</td>
-                <% active.forEach(function( a ){%>
-                <td><%= a %></td>
-                <%});%>
-            </tr>
+
             </tbody>
         </table>
     </div>

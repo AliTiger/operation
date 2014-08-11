@@ -33,43 +33,14 @@
         <% include save_print.ejs %>
     </div>
 </div>
+<% include labels.ejs %>
 <script type="text/javascript">
     //线型图表
     $(function(){
-        var click    = [90000,90000,98000,90000,97000,99000,90000,90000,98000,92000,97000,99000,90000,90000,98000,90000,97000,99000,90000,97000,98000,92000,97000,99000,92000,93000,96000,91000,94000,94000,92000],
-            register = [70000,78000,90000,87000,89000,78000,78000,90000,87000,76000,78000,90000,70000,78000,90000,87000,89000,78000,78000,90000,87000,76000,78000,90000,70000,78000,90000,87000,89000,78000,78000];
-
-        var data = [
-            {
-                name : '每日使用时长',
-                value:click,
-                color:'#0d8ecf',
-                line_width:2
-            },
-            {
-                name : '日均使用时长',
-                value:register,
-                color:'#66FF33',
-                line_width:2
-            }
-        ];
-
-        var day_labels = [];
-        var week_labels = [];
-        var month_labels = [];
-        for(var i=0;i<31;i++){
-            day_labels[i] = i+1;
-        }
-        for(var i=0;i<52;i++){
-            week_labels[i] = i+1;
-        }
-        for(var i=0;i<12;i++){
-            month_labels[i] = i+1;
-        }
-
+        labels();//调用labels day_labels week_labels month_labels
         var options = {
             render : 'day_canvasDiv',
-            data: data,
+            data: '',
             align:'center',
             title : '每日及日均使用时长',
             subtitle : '平均每日的人数(访问量单位：万)',
@@ -125,10 +96,40 @@
                 }]
             }
         };
-        var line = new iChart.LineBasic2D( options );
+        //动态调用数据
+        $.ajax({
+            url:'/useLength?option=day',
+            type:'get',
+            dataType:'json',
+            async:false,
+            success:function( result ){
+                console.log('result:',result);
+                var data = [
+                    {
+                        name : '每日使用时长',
+                        value:result.day,
+                        color:'#0d8ecf',
+                        line_width:2
+                    },
+                    {
+                        name : '日均使用时长',
+                        value:result.dayAver,
+                        color:'#66FF33',
+                        line_width:2
+                    }
+                ];
+                //alert('设置权限成功');
+                options.data = data;
+                options.render = 'day_canvasDiv';
+                options.title = '每周及周均使用时长';
+                options.coordinate.grids.vertical.value = 30;
+                options.coordinate.scale[1].labels = day_labels;
+                var line = new iChart.LineBasic2D( options );
 
-        //开始画图
-        line.draw();
+                //开始画图
+                line.draw();
+            }
+        });
 
         $('#day').on('click',function(){
             $('.day_canvasDiv').css('display','block');
@@ -151,14 +152,41 @@
             $('.charge_day_canvasDiv').css('display','none');
             $('.charge_week_canvasDiv').css('display','none');
             $('.charge_month_canvasDiv').css('display','none');
-            options.render = 'week_canvasDiv';
-            options.title = '每周及周均使用时长';
-            options.coordinate.grids.vertical.value = 51;
-            options.coordinate.scale[1].labels = week_labels;
-            var line = new iChart.LineBasic2D( options );
 
-            //开始画图
-            line.draw();
+            //动态调用数据
+            $.ajax({
+                url:'/useLength?option=week',
+                type:'get',
+                dataType:'json',
+                async:false,
+                success:function( result ){
+                    console.log('result:',result);
+                    var data = [
+                        {
+                            name : '每周使用时长',
+                            value:result.week,
+                            color:'#0d8ecf',
+                            line_width:2
+                        },
+                        {
+                            name : '周均使用时长',
+                            value:result.weekAver,
+                            color:'#66FF33',
+                            line_width:2
+                        }
+                    ];
+                    //alert('设置权限成功');
+                    options.data = data;
+                    options.render = 'week_canvasDiv';
+                    options.title = '每周及周均使用时长';
+                    options.coordinate.grids.vertical.value = 51;
+                    options.coordinate.scale[1].labels = week_labels;
+                    var line = new iChart.LineBasic2D( options );
+
+                    //开始画图
+                    line.draw();
+                }
+            });
 
         });
         $('#month').on('click',function(){
@@ -171,14 +199,41 @@
             $('.charge_day_canvasDiv').css('display','none');
             $('.charge_week_canvasDiv').css('display','none');
             $('.charge_month_canvasDiv').css('display','none');
-            options.render = 'month_canvasDiv';
-            options.title = '每月及月均使用时长';
-            options.coordinate.grids.vertical.value = 11;
-            options.coordinate.scale[1].labels = month_labels;
-            var line = new iChart.LineBasic2D( options );
 
-            //开始画图
-            line.draw();
+            //动态调用数据
+            $.ajax({
+                url:'/useLength?option=month',
+                type:'get',
+                dataType:'json',
+                async:false,
+                success:function( result ){
+                    console.log('result:',result);
+                    var data = [
+                        {
+                            name : '每月使用时长',
+                            value:result.month,
+                            color:'#0d8ecf',
+                            line_width:2
+                        },
+                        {
+                            name : '月均使用时长',
+                            value:result.monthAver,
+                            color:'#66FF33',
+                            line_width:2
+                        }
+                    ];
+                    //alert('设置权限成功');
+                    options.data = data;
+                    options.render = 'month_canvasDiv';
+                    options.title = '每月及月均使用时长';
+                    options.coordinate.grids.vertical.value = 11;
+                    options.coordinate.scale[1].labels = month_labels;
+                    var line = new iChart.LineBasic2D( options );
+
+                    //开始画图
+                    line.draw();
+                }
+            });
         });
         $('#day_active').on('click',function(){
             $('.day_canvasDiv').css('display','none');
@@ -190,14 +245,40 @@
             $('.charge_day_canvasDiv').css('display','none');
             $('.charge_week_canvasDiv').css('display','none');
             $('.charge_month_canvasDiv').css('display','none');
-            options.render = 'day_active_canvasDiv';
-            options.title = '每日及日均活跃用户使用时长';
-            options.coordinate.grids.vertical.value = 30;
-            options.coordinate.scale[1].labels = day_labels;
-            var line = new iChart.LineBasic2D( options );
+            //动态调用数据
+            $.ajax({
+                url:'/useLength?option=dayActive',
+                type:'get',
+                dataType:'json',
+                async:false,
+                success:function( result ){
+                    console.log('result:',result);
+                    var data = [
+                        {
+                            name : '每日活跃用户使用时长',
+                            value:result.day,
+                            color:'#0d8ecf',
+                            line_width:2
+                        },
+                        {
+                            name : '日均活跃用户使用时长',
+                            value:result.dayAver,
+                            color:'#66FF33',
+                            line_width:2
+                        }
+                    ];
+                    //alert('设置权限成功');
+                    options.data = data;
+                    options.render = 'day_active_canvasDiv';
+                    options.title = '每日及日均活跃用户使用时长';
+                    options.coordinate.grids.vertical.value = 30;
+                    options.coordinate.scale[1].labels = day_labels;
+                    var line = new iChart.LineBasic2D( options );
 
-            //开始画图
-            line.draw();
+                    //开始画图
+                    line.draw();
+                }
+            });
         });
         $('#week_active').on('click',function(){
             $('.day_canvasDiv').css('display','none');
@@ -209,14 +290,40 @@
             $('.charge_day_canvasDiv').css('display','none');
             $('.charge_week_canvasDiv').css('display','none');
             $('.charge_month_canvasDiv').css('display','none');
-            options.render = 'week_active_canvasDiv';
-            options.title = '每周及周均活跃用户使用时长';
-            options.coordinate.grids.vertical.value = 51;
-            options.coordinate.scale[1].labels = week_labels;
-            var line = new iChart.LineBasic2D( options );
 
-            //开始画图
-            line.draw();
+            //动态调用数据
+            $.ajax({
+                url:'/useLength?option=weekActive',
+                type:'get',
+                dataType:'json',
+                async:false,
+                success:function( result ){
+                    console.log('result:',result);
+                    var data = [
+                        {
+                            name : '每周活跃用户使用时长',
+                            value:result.week,
+                            color:'#0d8ecf',
+                            line_width:2
+                        },
+                        {
+                            name : '周均活跃用户使用时长',
+                            value:result.weekAver,
+                            color:'#66FF33',
+                            line_width:2
+                        }
+                    ];
+                    options.data = data;
+                    options.render = 'week_active_canvasDiv';
+                    options.title = '每周及周均活跃用户使用时长';
+                    options.coordinate.grids.vertical.value = 51;
+                    options.coordinate.scale[1].labels = week_labels;
+                    var line = new iChart.LineBasic2D( options );
+
+                    //开始画图
+                    line.draw();
+                }
+            });
         });
         $('#month_active').on('click',function(){
             $('.day_canvasDiv').css('display','none');
@@ -228,14 +335,40 @@
             $('.charge_day_canvasDiv').css('display','none');
             $('.charge_week_canvasDiv').css('display','none');
             $('.charge_month_canvasDiv').css('display','none');
-            options.render = 'month_active_canvasDiv';
-            options.title = '每月及月均活跃用户使用时长';
-            options.coordinate.grids.vertical.value = 11;
-            options.coordinate.scale[1].labels = month_labels;
-            var line = new iChart.LineBasic2D( options );
 
-            //开始画图
-            line.draw();
+            //动态调用数据
+            $.ajax({
+                url:'/useLength?option=monthActive',
+                type:'get',
+                dataType:'json',
+                async:false,
+                success:function( result ){
+                    console.log('result:',result);
+                    var data = [
+                        {
+                            name : '每月活跃用户使用时长',
+                            value:result.month,
+                            color:'#0d8ecf',
+                            line_width:2
+                        },
+                        {
+                            name : '月均活跃用户使用时长',
+                            value:result.monthAver,
+                            color:'#66FF33',
+                            line_width:2
+                        }
+                    ];
+                    options.data = data;
+                    options.render = 'month_active_canvasDiv';
+                    options.title = '每月及月均活跃用户使用时长';
+                    options.coordinate.grids.vertical.value = 11;
+                    options.coordinate.scale[1].labels = month_labels;
+                    var line = new iChart.LineBasic2D( options );
+
+                    //开始画图
+                    line.draw();
+                }
+            });
         });
         $('#charge_day').on('click',function(){
             $('.day_canvasDiv').css('display','none');
@@ -247,14 +380,40 @@
             $('.charge_day_canvasDiv').css('display','block');
             $('.charge_week_canvasDiv').css('display','none');
             $('.charge_month_canvasDiv').css('display','none');
-            options.render = 'charge_day_canvasDiv';
-            options.title = '付费活跃用户每日及日均使用时长';
-            options.coordinate.grids.vertical.value = 30;
-            options.coordinate.scale[1].labels = day_labels;
-            var line = new iChart.LineBasic2D( options );
 
-            //开始画图
-            line.draw();
+            //动态调用数据
+            $.ajax({
+                url:'/useLength?option=dayCharge',
+                type:'get',
+                dataType:'json',
+                async:false,
+                success:function( result ){
+                    console.log('result:',result);
+                    var data = [
+                        {
+                            name : '付费活跃用户每日使用时长',
+                            value:result.day,
+                            color:'#0d8ecf',
+                            line_width:2
+                        },
+                        {
+                            name : '付费活跃用户日均使用时长',
+                            value:result.dayAver,
+                            color:'#66FF33',
+                            line_width:2
+                        }
+                    ];
+                    options.data = data;
+                    options.render = 'charge_day_canvasDiv';
+                    options.title = '付费活跃用户每日及日均使用时长';
+                    options.coordinate.grids.vertical.value = 30;
+                    options.coordinate.scale[1].labels = day_labels;
+                    var line = new iChart.LineBasic2D( options );
+
+                    //开始画图
+                    line.draw();
+                }
+            });
         });
         $('#charge_week').on('click',function(){
             $('.day_canvasDiv').css('display','none');
@@ -266,14 +425,39 @@
             $('.charge_day_canvasDiv').css('display','none');
             $('.charge_week_canvasDiv').css('display','block');
             $('.charge_month_canvasDiv').css('display','none');
-            options.render = 'charge_week_canvasDiv';
-            options.title = '付费活跃用户每周及周均使用时长';
-            options.coordinate.grids.vertical.value = 51;
-            options.coordinate.scale[1].labels = week_labels;
-            var line = new iChart.LineBasic2D( options );
 
-            //开始画图
-            line.draw();
+            //动态调用数据
+            $.ajax({
+                url:'/useLength?option=weekCharge',
+                type:'get',
+                dataType:'json',
+                async:false,
+                success:function( result ){
+                    console.log('result:',result);
+                    var data = [
+                        {
+                            name : '付费活跃用户每周使用时长',
+                            value:result.week,
+                            color:'#0d8ecf',
+                            line_width:2
+                        },
+                        {
+                            name : '付费活跃用户周均使用时长',
+                            value:result.weekAver,
+                            color:'#66FF33',
+                            line_width:2
+                        }
+                    ];
+                    options.data = data;
+                    options.render = 'charge_week_canvasDiv';
+                    options.title = '付费活跃用户每周及周均使用时长';
+                    options.coordinate.grids.vertical.value = 51;
+                    options.coordinate.scale[1].labels = week_labels;
+                    var line = new iChart.LineBasic2D( options );
+                    //开始画图
+                    line.draw();
+                }
+            });
         });
         $('#charge_month').on('click',function(){
             $('.day_canvasDiv').css('display','none');
@@ -285,14 +469,39 @@
             $('.charge_day_canvasDiv').css('display','none');
             $('.charge_week_canvasDiv').css('display','none');
             $('.charge_month_canvasDiv').css('display','block');
-            options.render = 'charge_month_canvasDiv';
-            options.title = '付费活跃用户每月及月均使用时长';
-            options.coordinate.grids.vertical.value = 11;
-            options.coordinate.scale[1].labels = month_labels;
-            var line = new iChart.LineBasic2D( options );
 
-            //开始画图
-            line.draw();
+            //动态调用数据
+            $.ajax({
+                url:'/useLength?option=monthCharge',
+                type:'get',
+                dataType:'json',
+                async:false,
+                success:function( result ){
+                    var data = [
+                        {
+                            name : '付费活跃用户每月使用时长',
+                            value:result.month,
+                            color:'#0d8ecf',
+                            line_width:2
+                        },
+                        {
+                            name : '付费活跃用户月均使用时长',
+                            value:result.monthAver,
+                            color:'#66FF33',
+                            line_width:2
+                        }
+                    ];
+                    options.data = data;
+                    options.render = 'charge_month_canvasDiv';
+                    options.title = '付费活跃用户每月及月均使用时长';
+                    options.coordinate.grids.vertical.value = 11;
+                    options.coordinate.scale[1].labels = month_labels;
+                    var line = new iChart.LineBasic2D( options );
+
+                    //开始画图
+                    line.draw();
+                }
+            });
         });
     });
 
