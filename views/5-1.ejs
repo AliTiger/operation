@@ -16,23 +16,13 @@
         <% include save_print.ejs %>
     </div>
 </div>
+<% include labels.ejs %>
 <script type="text/javascript">
     //线型图表
     $(function(){
+        labels();//调用labels day_labels week_labels month_labels
         var active = [90000,90000,98000,90000,97000,99000,90000,90000,98000,92000,97000,99000,90000,90000,98000,90000,97000,99000,90000,97000,98000,92000,97000,99000,92000,93000,96000,91000,94000,94000,92000];
 
-        var day_labels = [];
-        var week_labels = [];
-        var month_labels = [];
-        for(var i=0;i<31;i++){
-            day_labels[i] = i + 1;
-        }
-        for(var i=0;i<52;i++){
-            week_labels[i] = i + 1;
-        }
-        for(var i=0;i<12;i++){
-            month_labels[i] = i + 1;
-        }
         var data = [
             {
                 name : '每日用户流失率',
@@ -47,7 +37,7 @@
             data: data,
             align:'center',
             title : '每日用户流失率',
-            subtitle : '平均每月的人数(访问量单位：万)',
+            subtitle : '',
             footnote : '数据来源：用户流失',
             width : 1100,
             height : 400,
@@ -105,23 +95,59 @@
         //开始画图
         line.draw();
         $('#day').on('click',function(){
-            $('.day_canvasDiv').css('display','block');
-            $('.week_canvasDiv').css('display','none');
-            $('.month_canvasDiv').css('display','none');
+            window.location.href = '/lostUsers/5-1';
+//            $('.day_canvasDiv').css('display','block');
+//            $('.week_canvasDiv').css('display','none');
+//            $('.month_canvasDiv').css('display','none');
         });
 
         $('#week').on('click',function(){
             $('.day_canvasDiv').css('display','none');
             $('.week_canvasDiv').css('display','block');
             $('.month_canvasDiv').css('display','none');
-            options.render = 'week_canvasDiv';
-            options.title = '高活跃用户流失率';
-            options.coordinate.grids.vertical.value = 51;
-            options.coordinate.scale[1].labels = week_labels;
-            var line = new iChart.LineBasic2D( options );
+            //动态调用数据
+            $.ajax({
+                url:'/lostUser?option=week',
+                type:'get',
+                dataType:'json',
+                async:false,
+                success:function( result ){
+                    var data = [
+                        {
+                            name : '高活跃用户流失',
+                            value:result.week,
+                            color:'#0d8ecf',
+                            line_width:2
+                        }
+                    ];
+                    options.data = data;
+                    options.render = 'week_canvasDiv';
+                    options.title = '高活跃用户流失率';
+                    options.coordinate.grids.vertical.value = 51;
+                    options.coordinate.scale[1].labels = week_labels;
+                    var line = new iChart.LineBasic2D( options );
+                    line.draw();
 
-            //开始画图
-            line.draw();
+                    var html = "";
+                    html += "<tr>";
+                    html += "<td>高活跃用户流失</td>";
+                    if(result.week.length){
+                        result.week.forEach(function(a){
+                            html += "<td>"+ a +"</td>";
+                        });
+                    }
+                    html += "</tr>";
+                    html += "<tr>";
+                    html += "<td>高活跃用户流失率</td>";
+                    if(result.weekAver.length){
+                        result.weekAver.forEach(function(a){
+                            html += "<td>"+ a +"</td>";
+                        });
+                    }
+                    html += "</tr>";
+                    $('tbody').empty().html(html);
+                }
+            });
 
         });
 
@@ -129,14 +155,48 @@
             $('.day_canvasDiv').css('display','none');
             $('.week_canvasDiv').css('display','none');
             $('.month_canvasDiv').css('display','block');
-            options.render = 'month_canvasDiv';
-            options.title = '每月用户流失率';
-            options.coordinate.grids.vertical.value = 11;
-            options.coordinate.scale[1].labels = month_labels;
-            var line = new iChart.LineBasic2D( options );
+            $.ajax({
+                url:'/lostUser?option=month',
+                type:'get',
+                dataType:'json',
+                async:false,
+                success:function( result ){
+                    var data = [
+                        {
+                            name : '每月用户流失',
+                            value:result.month,
+                            color:'#0d8ecf',
+                            line_width:2
+                        }
+                    ];
+                    options.data = data;
+                    options.render = 'month_canvasDiv';
+                    options.title = '每月用户流失';
+                    options.coordinate.grids.vertical.value = 11;
+                    options.coordinate.scale[1].labels = month_labels;
+                    var line = new iChart.LineBasic2D( options );
+                    line.draw();
 
-            //开始画图
-            line.draw();
+                    var html = "";
+                    html += "<tr>";
+                    html += "<td>每月用户流失</td>";
+                    if(result.month.length){
+                        result.month.forEach(function(a){
+                            html += "<td>"+ a +"</td>";
+                        });
+                    }
+                    html += "</tr>";
+                    html += "<tr>";
+                    html += "<td>每月用户流失率</td>";
+                    if(result.monthAver.length){
+                        result.monthAver.forEach(function(a){
+                            html += "<td>"+ a +"</td>";
+                        });
+                    }
+                    html += "</tr>";
+                    $('tbody').empty().html(html);
+                }
+            });
         });
     });
 
@@ -157,13 +217,13 @@
             <tbody>
             <tr>
                 <td>每日用户流失</td>
-                <% day_lost.forEach(function( a ){%>
+                <% day.forEach(function( a ){%>
                 <td><%= a %></td>
                 <%});%>
             </tr>
             <tr>
                 <td>每日用户流失率</td>
-                <% day_lost_.forEach(function( a ){%>
+                <% dayAver.forEach(function( a ){%>
                 <td><%= a %></td>
                 <%});%>
             </tr>
@@ -183,20 +243,7 @@
             </tr>
 
             </thead>
-            <tbody>
-            <tr>
-                <td>每月用户流失</td>
-                <% day_lost.forEach(function( a ){%>
-                <td><%= a %></td>
-                <%});%>
-            </tr>
-            <tr>
-                <td>每月用户流失率</td>
-                <% day_lost_.forEach(function( a ){%>
-                <td><%= a %></td>
-                <%});%>
-            </tr>
-            </tbody>
+            <tbody></tbody>
         </table>
     </div>
 
@@ -212,20 +259,7 @@
             </tr>
 
             </thead>
-            <tbody>
-            <tr>
-                <td>高活跃用户流失</td>
-                <% day_lost.forEach(function( a ){%>
-                <td><%= a %></td>
-                <%});%>
-            </tr>
-            <tr>
-                <td>高活跃用户流失率</td>
-                <% day_lost_.forEach(function( a ){%>
-                <td><%= a %></td>
-                <%});%>
-            </tr>
-            </tbody>
+            <tbody></tbody>
         </table>
     </div>
 </div>

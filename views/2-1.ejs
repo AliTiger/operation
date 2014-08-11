@@ -108,7 +108,7 @@
             $('.active_canvasDiv').css('display','none');
             //动态调用数据
             $.ajax({
-                url:'/activeUsers?option=week',
+                url:'/activeUser?option=week',
                 type:'get',
                 dataType:'json',
                 async:false,
@@ -153,7 +153,7 @@
             $('.active_canvasDiv').css('display','none');
             //动态调用数据
             $.ajax({
-                url:'/activeUsers?option=month',
+                url:'/activeUser?option=month',
                 type:'get',
                 dataType:'json',
                 async:false,
@@ -195,7 +195,7 @@
             $('.day_canvasDiv').css('display','none');
 
             $.ajax({
-                url:'/activeUsers?option=active',
+                url:'/activeUser?option=active',
                 type:'get',
                 dataType:'json',
                 async:false,

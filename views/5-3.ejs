@@ -17,22 +17,35 @@
         </tr>
 
         </thead>
-        <tbody>
-        <tr>
-
-            <!--<% day_lost.forEach(function( a ){%>-->
-            <!--<td><%= a %></td>-->
-            <!--<%});%>-->
-            <td>1</td>
-            <td>200001</td>
-            <td></td>
-            <td>100000</td>
-            <td>10%</td>
-        </tr>
-
-        </tbody>
+        <tbody></tbody>
     </table>
 
 </div>
 </div>
+<script>
+    $(document).ready(function(){
+        $.ajax({
+            url: '/taskRank',
+            type: 'get',
+            dataType: 'json',
+            async: false,
+            success: function (result) {
+                var html = "";
+
+                if(result.task.length){
+                    result.task.forEach(function(a){
+                        html += "<tr>";
+                        html += "<td>"+ a.id +"</td>";
+                        html += "<td>"+ a.taskId +"</td>";
+                        html += "<td>"+ a.taskName +"</td>";
+                        html += "<td>"+ a.personCount +"</td>";
+                        html += "<td>"+ a.percent +"</td>";
+                        html += "</tr>";
+                    });
+                }
+                $('tbody').empty().html(html);
+            }
+        });
+    });
+</script>
 <% include footer.ejs %>

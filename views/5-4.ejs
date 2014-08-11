@@ -5,83 +5,96 @@
 <script type="text/javascript">
     //线型图表
     $(function(){
-        var active    = [90000,90000,98000,90000,97000,99000,90000,90000,98000,92000,97000,99000,90000,90000,98000,90000,97000,99000,90000,97000,98000,92000,97000,99000,92000,93000,96000,91000,94000,94000,92000];
-
-
-        var data = [
-            {
-                name : '用户的平均生命周期',
-                value:active,
-                color:'#0d8ecf',
-                line_width:2
-            }
-        ];
-
         var labels = []; //= ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"];
         for(var i=0;i<31;i++){
             labels[i] = i+1;
         }
-        var line = new iChart.LineBasic2D({
-            render : 'canvasDiv',
-            data: data,
-            align:'center',
-            title : '用户的平均生命周期',
-            subtitle : '平均每月的人数(访问量单位：万)',
-            footnote : '数据来源：用户的平均生命周期',
-            width : 1100,
-            height : 400,
-            tip:{
-                enable:true,
-                shadow:true
-            },
-            legend : {
-                enable : true,
-                row:1,//设置在一行上显示，与column配合使用
-                column : 'max',
-                valign:'top',
-                sign:'bar',
-                background_color:null,//设置透明背景
-                offsetx:-80,//设置x轴偏移，满足位置需要
-                border : true
-            },
-            crosshair:{
-                enable:true,
-                line_color:'#62bce9'
-            },
-            sub_option : {
-                label:false,
-                point_hollow : false
-            },
-            coordinate:{
-                width:900,
-                height:240,
-                axis:{
-                    color:'#9f9f9f',
-                    width:[0,0,2,2]
-                },
-                grids:{
-                    vertical:{
-                        way:'share_alike',
-                        value:30//割线
+        $.ajax({
+            url: '/lifeCycle',
+            type: 'get',
+            dataType: 'json',
+            async: false,
+            success: function (result) {
+                var data = [
+                    {
+                        name : '用户的平均生命周期',
+                        value:result.lifeCycle,
+                        color:'#0d8ecf',
+                        line_width:2
                     }
-                },
-                scale:[{
-                    position:'left',
-                    start_scale:0,
-                    end_scale:120000,//设置结束刻度
-                    scale_space:20000,//设置刻度间距
-                    scale_size:2,
-                    scale_color:'#9f9f9f'
+                ];
+                var line = new iChart.LineBasic2D({
+                    render : 'canvasDiv',
+                    data: data,
+                    align:'center',
+                    title : '用户的平均生命周期',
+                    subtitle : '',
+                    footnote : '数据来源：用户的平均生命周期',
+                    width : 1100,
+                    height : 400,
+                    tip:{
+                        enable:true,
+                        shadow:true
+                    },
+                    legend : {
+                        enable : true,
+                        row:1,//设置在一行上显示，与column配合使用
+                        column : 'max',
+                        valign:'top',
+                        sign:'bar',
+                        background_color:null,//设置透明背景
+                        offsetx:-80,//设置x轴偏移，满足位置需要
+                        border : true
+                    },
+                    crosshair:{
+                        enable:true,
+                        line_color:'#62bce9'
+                    },
+                    sub_option : {
+                        label:false,
+                        point_hollow : false
+                    },
+                    coordinate:{
+                        width:900,
+                        height:240,
+                        axis:{
+                            color:'#9f9f9f',
+                            width:[0,0,2,2]
+                        },
+                        grids:{
+                            vertical:{
+                                way:'share_alike',
+                                value:30//割线
+                            }
+                        },
+                        scale:[{
+                            position:'left',
+                            start_scale:0,
+                            end_scale:120000,//设置结束刻度
+                            scale_space:20000,//设置刻度间距
+                            scale_size:2,
+                            scale_color:'#9f9f9f'
 
-                },{
-                    position:'bottom',
-                    labels:labels
-                }]
+                        },{
+                            position:'bottom',
+                            labels:labels
+                        }]
+                    }
+                });
+                //开始画图
+                line.draw();
+                var html = "";
+                html += "<tr>";
+                html += "<td>平均生命周期</td>";
+                if(result.lifeCycle.length){
+                    result.lifeCycle.forEach(function(a){
+                        html += "<td>"+ a +"</td>";
+                    });
+                }
+                html += "</tr>";
+                $('tbody').empty().html(html);
             }
         });
-
-        //开始画图
-        line.draw();
     });
 
 </script>
@@ -100,7 +113,7 @@
         <tbody>
         <tr>
             <td>平均生命周期</td>
-            <% day_lost.forEach(function( a ){%>
+            <% day.forEach(function( a ){%>
             <td><%= a %></td>
             <%});%>
         </tr>

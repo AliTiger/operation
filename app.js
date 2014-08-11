@@ -55,7 +55,7 @@ app.get('/operationCost/:page_id',operationCost.get);
 app.get('/userInformation/:page_id',userInformation.get);
 
 //活跃用户数量
-app.get('/activeUsers',activeUsers.activeUsers);
+app.get('/activeUser',activeUsers.activeUsers);
 //新增活跃用户数据
 app.get('/newActiveUsers',activeUsers.newActiveUsers);
 //活跃用户登录次数
@@ -67,8 +67,14 @@ app.get('/onceUsers',activeUsers.onceUsers);
 //活跃用户高活跃用户数
 app.get('/highActiveUsers',activeUsers.highActiveUsers);
 
-//用户次日留存率
+//用户留存率
 app.get('/remainUsers',remainUsers.remain);
+
+//用户流失
+app.get('/lostUser',lostUsers.lost);
+app.get('/levelRank',lostUsers.levelRank);
+app.get('/taskRank',lostUsers.taskRank);
+app.get('/lifeCycle',lostUsers.lifeCycle);
 
 
 app.get('/test',routes.test);
