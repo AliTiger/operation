@@ -3,8 +3,8 @@
 <% include select_date.ejs %>
 <% include save_print.ejs %>
 <div class="col-lg-12">
-    <div id='canvasDiv'></div>
-    <table id="table_first_charge" class="table table-bordered">
+    <h3 align="center">用户等级排名</h3>
+    <table class="table table-bordered">
         <thead>
         <tr>
             <th>排名</th>
@@ -13,19 +13,33 @@
         </tr>
 
         </thead>
-        <tbody>
-        <tr>
-            <td>1</td>
-            <td>轩辕射手</td>
-            <td>100</td>
-        </tr>
-        <tr>
-            <td>2</td>
-            <td>轩辕射手</td>
-            <td>100</td>
-        </tr>
-        </tbody>
+        <tbody></tbody>
     </table>
 </div>
+<script type="text/javascript">
+    $(function(){
+        $.ajax({
+            url: '/gradeRank',
+            type: 'get',
+            dataType: 'json',
+            async: false,
+            success: function (result) {
+                var rank = result.data;
+                var html = "";
+                if(rank.length){
+                    rank.forEach(function(a){
+                        html += "<tr>";
+                        html += "<td>"+ a.rank +"</td>";
+                        html += "<td>"+ a.name +"</td>";
+                        html += "<td>"+ a.grade +"</td>";
+                        html += "</tr>";
+                    });
+                }
+                $('tbody').empty().html(html);
+            }
+        });
+    });
+
+</script>
 
 <% include footer.ejs %>

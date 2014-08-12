@@ -4,27 +4,20 @@
 <% include save_print.ejs %>
 <script type="text/javascript">
     $(function(){
-        var data = [
-            {
-                name : '日均战场次数',
-                value:[4500,5200,5400,7400,9000,8400,7300,6800,8700,3900,4500,6500,9000,8400,7300,6800,8700,3900,4500,6500],
-                color:'#47b2c8'
-            }
-        ];
         var labels = [];
         for(var i=0;i<20;i++){
             labels[i] = i + 1;
         }
-        var chart = new iChart.BarMulti2D({
+        var options = {
             render : 'barmulti2d',
-            data: data,
+            data: '',
             labels:labels,
             title : {
                 text:'日均战场次数',
                 color:'#585757'
             },
             subtitle : {
-                text:'2012上半年DPS01A型号与DPS01B型号的鼠标销售比较,单位:万台',
+                text:'',
                 color:'#797373'
             },
             footnote : '数据来源：日均战场次数',
@@ -42,8 +35,8 @@
                 scale:[{
                     position:'bottom',
                     start_scale:0,
-                    end_scale:12000,
-                    scale_space:2000
+                    end_scale:0,
+                    scale_space:0
                 }],
                 background_color : null,
                 axis : {
@@ -52,8 +45,28 @@
                 width:1000,
                 height:400
             }
+        };
+        $.ajax({
+            url: '/battlefield',
+            type: 'get',
+            dataType: 'json',
+            async: false,
+            success: function (result) {
+                console.log('==========result',result);
+                var data = [
+                    {
+                        name : '日均战场次数',
+                        value:result.data,
+                        color:'#47b2c8'
+                    }
+                ];
+                options.data = data;
+                var chart = new iChart.BarMulti2D(options);
+                chart.draw();
+            }
         });
-        chart.draw();
+
+
     });
 </script>
 <div class="col-lg-12">

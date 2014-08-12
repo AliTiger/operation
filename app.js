@@ -98,6 +98,20 @@ app.get('/inputOutput',operationCost.inputOutput);
 //推广成本
 app.get('/popularize',operationCost.popularize);
 
+//用户信息
+//用户等级分布
+app.get('/gradeDistribute',userInformation.gradeDistribute);
+//用户等级排名
+app.get('/gradeRank',userInformation.gradeRank);
+//用户任务分布
+app.get('/taskDistribute',userInformation.taskDistribute);
+//用户充值排名
+app.get('/chargeRank',userInformation.chargeRank);
+//用户地图分布
+app.get('/map',userInformation.map);
+//用户战场次数
+app.get('/battlefield',userInformation.battlefield);
+
 app.get('/test',routes.test);
 
 /// catch 404 and forward to error handler
