@@ -84,6 +84,8 @@ app.get('/lifeCycle',lostUsers.lifeCycle);
 app.get('/chargeConsume',gameIncome.chargeConsume);
 //用户平均收益
 app.get('/averIncome',gameIncome.averIncome);
+//充值用户统计
+app.get('/chargeCount',gameIncome.chargeCount);
 //活跃充值比例
 app.get('/activeCharge',gameIncome.activeCharge);
 //充值用户流失

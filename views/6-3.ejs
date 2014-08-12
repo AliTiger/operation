@@ -24,38 +24,15 @@
         <% include save_print.ejs %>
     </div>
 </div>
+<% include labels.ejs %>
 <script type="text/javascript">
     //线型图表
     $(function(){
-        var click    = [90000,90000,98000,90000,97000,99000,90000,90000,98000,92000,97000,99000],
-                register = [70000,78000,90000,87000,89000,78000,78000,90000,87000,76000,78000,90000];
+        labels();//调用labels day_labels week_labels month_labels
 
-        var data = [
-            {
-                name : '付费用户数量',
-                value:click,
-                color:'#0d8ecf',
-                line_width:2
-            },
-            {
-                name : '新增付费数量',
-                value:register,
-                color:'#66FF33',
-                line_width:2
-            }
-        ];
-
-        var day_labels = []; //= ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"];
-        for(var i=0;i<31;i++){
-            day_labels[i] = i+1;
-        }
-        var month_labels = [];
-        for(var i=0;i<12;i++){
-            month_labels[i] = i+1;
-        }
         var options = {
             render : 'charge_user_canvasDiv',
-            data: data,
+            data:'',
             align:'center',
             title : '付费用户数量 新增付费数量',
             subtitle : '',
@@ -111,10 +88,55 @@
                 }]
             }
         };
-        var line = new iChart.LineBasic2D(options);
+        $.ajax({
+            url: '/chargeCount?option=chargeUser',
+            type: 'get',
+            dataType: 'json',
+            async: false,
+            success: function (result) {
+                var data = [
+                    {
+                        name : '付费用户数量',
+                        value:result.data1,
+                        color:'#0d8ecf',
+                        line_width:2
+                    },
+                    {
+                        name : '新增付费数量',
+                        value:result.data2,
+                        color:'#66FF33',
+                        line_width:2
+                    }
+                ];
+                options.data = data;
+                options.render = 'charge_user_canvasDiv';
+                options.title = '付费用户数量/新增付费数量';
+                options.coordinate.grids.vertical.value = 11;
+                options.coordinate.scale[1].labels = month_labels;
+                var line = new iChart.LineBasic2D(options);
+                //开始画图
+                line.draw();
+                var html = "";
 
-        //开始画图
-        line.draw();
+                if(result.data1.length){
+                    html += "<tr>";
+                    html += "<td>付费用户数量</td>";
+                    result.data1.forEach(function(a){
+                        html += "<td>"+ a +"</td>";
+                    });
+                    html += "</tr>";
+                }
+                if(result.data2.length){
+                    html += "<tr>";
+                    html += "<td>新增付费数量</td>";
+                    result.data2.forEach(function(a){
+                        html += "<td>"+ a +"</td>";
+                    });
+                    html += "</tr>";
+                }
+                $('tbody').empty().html(html);
+            }
+        });
         $('#charge_user').on('click',function(){
             $('.charge_user_canvasDiv').css('display','block');
             $('.charge_convert_canvasDiv').css('display','none');
@@ -130,14 +152,40 @@
             $('.loyal_charge_canvasDiv').css('display','none');
             $('.eff_user_canvasDiv').css('display','none');
             $('.first_charge_canvasDiv').css('display','none');
-            options.render = 'charge_convert_canvasDiv';
-            options.title = '付费渗透比例';
-            options.coordinate.grids.vertical.value = 11;
-            options.coordinate.scale[1].labels = month_labels;
-            var line = new iChart.LineBasic2D( options );
+            $.ajax({
+                url: '/chargeCount?option=convert',
+                type: 'get',
+                dataType: 'json',
+                async: false,
+                success: function (result) {
+                    var data = [
+                        {
+                            name : '付费渗透比例',
+                            value:result.data1,
+                            color:'#0d8ecf',
+                            line_width:2
+                        }
+                    ];
+                    options.data = data;
+                    options.render = 'charge_convert_canvasDiv';
+                    options.title = '付费渗透比例';
+                    options.coordinate.grids.vertical.value = 11;
+                    options.coordinate.scale[1].labels = month_labels;
+                    var line = new iChart.LineBasic2D( options );
+                    line.draw();
+                    var html = "";
 
-            //开始画图
-            line.draw();
+                    if(result.data1.length){
+                        html += "<tr>";
+                        html += "<td>付费渗透比例</td>";
+                        result.data1.forEach(function(a){
+                            html += "<td>"+ a +"</td>";
+                        });
+                        html += "</tr>";
+                    }
+                    $('tbody').empty().html(html);
+                }
+            });
 
         });
 
@@ -148,14 +196,39 @@
             $('.loyal_charge_canvasDiv').css('display','none');
             $('.eff_user_canvasDiv').css('display','none');
             $('.first_charge_canvasDiv').css('display','none');
-            options.render = 'month_charge_canvasDiv';
-            options.title = '付费用户月均充值次数';
-            options.coordinate.grids.vertical.value = 11;
-            options.coordinate.scale[1].labels = month_labels;
-            var line = new iChart.LineBasic2D( options );
-
-            //开始画图
-            line.draw();
+            $.ajax({
+                url: '/chargeCount?option=monthCharge',
+                type: 'get',
+                dataType: 'json',
+                async: false,
+                success: function (result) {
+                    var data = [
+                        {
+                            name : '付费用户月均充值次数',
+                            value:result.data1,
+                            color:'#0d8ecf',
+                            line_width:2
+                        }
+                    ];
+                    options.data = data;
+                    options.render = 'month_charge_canvasDiv';
+                    options.title = '付费用户月均充值次数';
+                    options.coordinate.grids.vertical.value = 11;
+                    options.coordinate.scale[1].labels = month_labels;
+                    var line = new iChart.LineBasic2D( options );
+                    line.draw();
+                    var html = "";
+                    if(result.data1.length){
+                        html += "<tr>";
+                        html += "<td>付费用户月均充值次数</td>";
+                        result.data1.forEach(function(a){
+                            html += "<td>"+ a +"</td>";
+                        });
+                        html += "</tr>";
+                    }
+                    $('tbody').empty().html(html);
+                }
+            });
         });
 
         $('#loyal_charge').on('click',function(){
@@ -165,14 +238,39 @@
             $('.loyal_charge_canvasDiv').css('display','block');
             $('.eff_user_canvasDiv').css('display','none');
             $('.first_charge_canvasDiv').css('display','none');
-            options.render = 'loyal_charge_canvasDiv';
-            options.title = '忠实付费用户数';
-            options.coordinate.grids.vertical.value = 11;
-            options.coordinate.scale[1].labels = month_labels;
-            var line = new iChart.LineBasic2D( options );
-
-            //开始画图
-            line.draw();
+            $.ajax({
+                url: '/chargeCount?option=loyal',
+                type: 'get',
+                dataType: 'json',
+                async: false,
+                success: function (result) {
+                    var data = [
+                        {
+                            name : '忠实付费用户数',
+                            value:result.data1,
+                            color:'#0d8ecf',
+                            line_width:2
+                        }
+                    ];
+                    options.data = data;
+                    options.render = 'loyal_charge_canvasDiv';
+                    options.title = '忠实付费用户数';
+                    options.coordinate.grids.vertical.value = 11;
+                    options.coordinate.scale[1].labels = month_labels;
+                    var line = new iChart.LineBasic2D( options );
+                    line.draw();
+                    var html = "";
+                    if(result.data1.length){
+                        html += "<tr>";
+                        html += "<td>忠实付费用户数</td>";
+                        result.data1.forEach(function(a){
+                            html += "<td>"+ a +"</td>";
+                        });
+                        html += "</tr>";
+                    }
+                    $('tbody').empty().html(html);
+                }
+            });
         });
 
         $('#eff_user').on('click',function(){
@@ -182,14 +280,39 @@
             $('.loyal_charge_canvasDiv').css('display','none');
             $('.eff_user_canvasDiv').css('display','block');
             $('.first_charge_canvasDiv').css('display','none');
-            options.render = 'eff_user_canvasDiv';
-            options.title = '高效付费用户数';
-            options.coordinate.grids.vertical.value = 11;
-            options.coordinate.scale[1].labels = month_labels;
-            var line = new iChart.LineBasic2D( options );
-
-            //开始画图
-            line.draw();
+            $.ajax({
+                url: '/chargeCount?option=effective',
+                type: 'get',
+                dataType: 'json',
+                async: false,
+                success: function (result) {
+                    var data = [
+                        {
+                            name : '高效付费用户数',
+                            value:result.data1,
+                            color:'#0d8ecf',
+                            line_width:2
+                        }
+                    ];
+                    options.data = data;
+                    options.render = 'eff_user_canvasDiv';
+                    options.title = '高效付费用户数';
+                    options.coordinate.grids.vertical.value = 11;
+                    options.coordinate.scale[1].labels = month_labels;
+                    var line = new iChart.LineBasic2D( options );
+                    line.draw();
+                    var html = "";
+                    if(result.data1.length){
+                        html += "<tr>";
+                        html += "<td>高效付费用户数</td>";
+                        result.data1.forEach(function(a){
+                            html += "<td>"+ a +"</td>";
+                        });
+                        html += "</tr>";
+                    }
+                    $('tbody').empty().html(html);
+                }
+            });
         });
 
         $('#first_charge').on('click',function(){
@@ -199,14 +322,39 @@
             $('.loyal_charge_canvasDiv').css('display','none');
             $('.eff_user_canvasDiv').css('display','none');
             $('.first_charge_canvasDiv').css('display','block');
-            options.render = 'first_charge_canvasDiv';
-            options.title = '用户首次付费率';
-            options.coordinate.grids.vertical.value = 30;
-            options.coordinate.scale[1].labels = day_labels;
-            var line = new iChart.LineBasic2D( options );
-
-            //开始画图
-            line.draw();
+            $.ajax({
+                url: '/chargeCount?option=first',
+                type: 'get',
+                dataType: 'json',
+                async: false,
+                success: function (result) {
+                    var data = [
+                        {
+                            name : '用户首次付费率',
+                            value:result.data1,
+                            color:'#0d8ecf',
+                            line_width:2
+                        }
+                    ];
+                    options.data = data;
+                    options.render = 'first_charge_canvasDiv';
+                    options.title = '用户首次付费率';
+                    options.coordinate.grids.vertical.value = 30;
+                    options.coordinate.scale[1].labels = day_labels;
+                    var line = new iChart.LineBasic2D( options );
+                    line.draw();
+                    var html = "";
+                    if(result.data1.length){
+                        html += "<tr>";
+                        html += "<td>用户首次付费率</td>";
+                        result.data1.forEach(function(a){
+                            html += "<td>"+ a +"</td>";
+                        });
+                        html += "</tr>";
+                    }
+                    $('tbody').empty().html(html);
+                }
+            });
         });
     });
 

@@ -65,6 +65,38 @@ exports.chargeConsume = function(req, res){
 		return res.send(200,{data:data});
 	}
 }
+//充值用户统计
+exports.chargeCount = function(req, res){
+	var option = req.query.option;
+	var data1 = month;
+	var data2 = monthAver;
+	//充值用户
+	if(option == 'chargeUser'){
+		return res.send(200,{data1:data1,data2:data2});
+	}
+	//付费转化
+	if(option == 'convert'){
+		return res.send(200,{data1:data1});
+	}
+	//月均充值
+	if(option == 'monthCharge'){
+		return res.send(200,{data1:data1});
+	}
+	//忠实付费
+	if(option == 'loyal'){
+		return res.send(200,{data1:data1});
+	}
+	//高效用户
+	if(option == 'effective'){
+		return res.send(200,{data1:data1});
+	}
+	//首次付费率
+	if(option == 'first'){
+		data1 = day;
+		return res.send(200,{data1:data1});
+	}
+
+}
 
 //用户平均收益
 exports.averIncome = function(req, res){
