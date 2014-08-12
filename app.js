@@ -93,6 +93,10 @@ app.get('/chargeUserLost',gameIncome.userLost);
 //其他相关统计
 app.get('/otherCount',gameIncome.otherCount);
 
+//投入产出比
+app.get('/inputOutput',operationCost.inputOutput);
+//推广成本
+app.get('/popularize',operationCost.popularize);
 
 app.get('/test',routes.test);
 

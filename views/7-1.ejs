@@ -4,31 +4,16 @@
 <% include save_print.ejs %>
 
 <script type="text/javascript">
-    //
     $(function(){
-        var cost = [45,52,54,74,90,84,45,52,54,74,90,84,45,52,54,74,90,84,45,52,54,74,90,84,84,45,52,54,74,90,84];
-        var output = [60,80,105,125,108,120,60,80,105,125,108,120,60,80,105,125,108,120,60,80,105,125,108,120,120,60,80,105,125,108,120];
-        var data = [
-            {
-                name : '成本',
-                value:cost,
-                color:'#1385a5'
-            },
-            {
-                name : '产出',
-                value:output,
-                color:'#c56966'
-            }
-        ];
         var labels = [];
         for(var i=0;i<31;i++){
             labels[i] = i + 1;
         }
-        var chart = new iChart.ColumnMulti2D({
+        var options = {
             render : 'columnmulti2d',
-            data: data,
+            data: '',
             labels:labels,
-            title : '投入产出表',
+            title : '投入产出',
             subtitle : '单位:千',
             footnote : '数据来源：运营成本',
             width : 1200,
@@ -52,8 +37,57 @@
                 width:1100,
                 height:260
             }
+        };
+        $.ajax({
+            url: '/inputOutput',
+            type: 'get',
+            dataType: 'json',
+            async: false,
+            success: function (result) {
+                var data = [
+                    {
+                        name : '成本',
+                        value:result.input,
+                        color:'#1385a5'
+                    },
+                    {
+                        name : '产出',
+                        value:result.output,
+                        color:'#c56966'
+                    }
+                ];
+                options.data = data;
+                var chart = new iChart.ColumnMulti2D(options);
+                chart.draw();
+
+                var html = "";
+                if(result.input.length){
+                    html += "<tr>";
+                    html += "<td>成本</td>";
+                    result.input.forEach(function(a){
+                        html += "<td>"+ a +"</td>";
+                    });
+                    html += "</tr>";
+                }
+                if(result.output.length){
+                    html += "<tr>";
+                    html += "<td>产出</td>";
+                    result.output.forEach(function(a){
+                        html += "<td>"+ a +"</td>";
+                    });
+                    html += "</tr>";
+                }
+                if(result.output.length){
+                    html += "<tr>";
+                    html += "<td>投入产出比值</td>";
+                    result.output.forEach(function(a){
+                        html += "<td>"+ a +"</td>";
+                    });
+                    html += "</tr>";
+                }
+                $('tbody').empty().html(html);
+            }
         });
-        chart.draw();
     });
 </script>
 <div class="col-lg-12">
@@ -68,26 +102,7 @@
         </tr>
 
         </thead>
-        <tbody>
-        <tr>
-            <td>成本</td>
-            <% cost.forEach(function( a ){%>
-            <td><%= a %></td>
-            <%});%>
-        </tr>
-        <tr>
-            <td>产出</td>
-            <% output.forEach(function( a ){%>
-            <td><%= a %></td>
-            <%});%>
-        </tr>
-        <tr>
-            <td>投入产出比</td>
-            <% output.forEach(function( a ){%>
-            <td><%= a %></td>
-            <%});%>
-        </tr>
-        </tbody>
+        <tbody></tbody>
     </table>
 
 </div>
