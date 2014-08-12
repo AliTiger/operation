@@ -5,89 +5,111 @@
 <script type="text/javascript">
     //线型图表
     $(function(){
-        var ARPPU    = [90000,90000,98000,90000,97000,99000,90000,90000,98000,92000,97000,99000],
-            ARPU = [70000,78000,90000,87000,89000,78000,78000,90000,87000,76000,78000,90000];
-
-        var data = [
-            {
-                name : 'ARPPU',
-                value:ARPPU,
-                color:'#0d8ecf',
-                line_width:2
-            },
-            {
-                name : 'ARPU',
-                value:ARPU,
-                color:'#66FF33',
-                line_width:2
-            }
-        ];
-
         var labels = []; //= ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"];
         for(var i=0;i<12;i++){
             labels[i] = i+1;
         }
-        var line = new iChart.LineBasic2D({
-            render : 'canvasDiv',
-            data: data,
-            align:'center',
-            title : 'ARPPU和ARPU',
-            subtitle : '',
-            footnote : '数据来源：用户平均收益',
-            width : 1100,
-            height : 400,
-            tip:{
-                enable:true,
-                shadow:true
-            },
-            legend : {
-                enable : true,
-                row:1,//设置在一行上显示，与column配合使用
-                column : 'max',
-                valign:'top',
-                sign:'bar',
-                background_color:null,//设置透明背景
-                offsetx:-80,//设置x轴偏移，满足位置需要
-                border : true
-            },
-            crosshair:{
-                enable:true,
-                line_color:'#62bce9'
-            },
-            sub_option : {
-                label:false,
-                point_hollow : false
-            },
-            coordinate:{
-                width:900,
-                height:240,
-                axis:{
-                    color:'#9f9f9f',
-                    width:[0,0,2,2]
-                },
-                grids:{
-                    vertical:{
-                        way:'share_alike',
-                        value:11//割线
+        $.ajax({
+            url: '/averIncome',
+            type: 'get',
+            dataType: 'json',
+            async: false,
+            success: function (result) {
+                var data = [
+                    {
+                        name : 'ARPPU',
+                        value:result.ARPPU,
+                        color:'#0d8ecf',
+                        line_width:2
+                    },
+                    {
+                        name : 'ARPU',
+                        value:result.ARPU,
+                        color:'#66FF33',
+                        line_width:2
                     }
-                },
-                scale:[{
-                    position:'left',
-                    start_scale:0,
-                    end_scale:120000,//设置结束刻度
-                    scale_space:20000,//设置刻度间距
-                    scale_size:2,
-                    scale_color:'#9f9f9f'
+                ];
+                var line = new iChart.LineBasic2D({
+                    render : 'canvasDiv',
+                    data: data,
+                    align:'center',
+                    title : 'ARPPU和ARPU',
+                    subtitle : '',
+                    footnote : '数据来源：用户平均收益',
+                    width : 1100,
+                    height : 400,
+                    tip:{
+                        enable:true,
+                        shadow:true
+                    },
+                    legend : {
+                        enable : true,
+                        row:1,//设置在一行上显示，与column配合使用
+                        column : 'max',
+                        valign:'top',
+                        sign:'bar',
+                        background_color:null,//设置透明背景
+                        offsetx:-80,//设置x轴偏移，满足位置需要
+                        border : true
+                    },
+                    crosshair:{
+                        enable:true,
+                        line_color:'#62bce9'
+                    },
+                    sub_option : {
+                        label:false,
+                        point_hollow : false
+                    },
+                    coordinate:{
+                        width:900,
+                        height:240,
+                        axis:{
+                            color:'#9f9f9f',
+                            width:[0,0,2,2]
+                        },
+                        grids:{
+                            vertical:{
+                                way:'share_alike',
+                                value:11//割线
+                            }
+                        },
+                        scale:[{
+                            position:'left',
+                            start_scale:0,
+                            end_scale:120000,//设置结束刻度
+                            scale_space:20000,//设置刻度间距
+                            scale_size:2,
+                            scale_color:'#9f9f9f'
 
-                },{
-                    position:'bottom',
-                    labels:labels
-                }]
+                        },{
+                            position:'bottom',
+                            labels:labels
+                        }]
+                    }
+                });
+                line.draw();
+                var html = "";
+
+                if(result.ARPPU.length){
+                    html += "<tr>";
+                    html += "<td>ARPPU</td>";
+                    result.ARPPU.forEach(function(a){
+                        html += "<td>"+ a +"</td>";
+                    });
+                    html += "</tr>";
+                }
+                if(result.ARPU.length){
+                    html += "<tr>";
+                    html += "<td>ARPU</td>";
+                    result.ARPU.forEach(function(a){
+                        html += "<td>"+ a +"</td>";
+                    });
+                    html += "</tr>";
+                }
+                $('tbody').empty().html(html);
             }
         });
 
-        //开始画图
-        line.draw();
     });
 
 </script>
@@ -96,28 +118,14 @@
     <table class="table table-bordered">
         <thead>
         <tr>
-            <th></th>
+            <th>收益</th>
             <% for(var i=1;i<13;i++){ %>
             <th><%=i%></th>
             <% } %>
         </tr>
 
         </thead>
-        <tbody>
-        <tr>
-            <td>ARPPU</td>
-            <% ARPPU.forEach(function( a ){%>
-            <td><%= a %></td>
-            <%});%>
-        </tr>
-        <tr>
-            <td>ARPU</td>
-            <% ARPU.forEach(function( a ){%>
-            <td><%= a %></td>
-            <%});%>
-        </tr>
-
-        </tbody>
+        <tbody></tbody>
     </table>
     <div class='ichartjs_info'>
         <div class='ichartjs_sm'>说明</div>

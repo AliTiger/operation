@@ -18,42 +18,35 @@
         <% include save_print.ejs %>
     </div>
 </div>
+<% include labels.ejs %>
 <script type="text/javascript">
     //线型图表
     $(function(){
+        labels();//调用labels day_labels week_labels month_labels
         var click    = [90000,90000,98000,90000,97000,99000,90000,90000,98000,92000,97000,99000,90000,90000,98000,90000,97000,99000,90000,97000,98000,92000,97000,99000,92000,93000,96000,91000,94000,94000,92000],
-                register = [70000,78000,90000,87000,89000,78000,78000,90000,87000,76000,78000,90000,70000,78000,90000,87000,89000,78000,78000,90000,87000,76000,78000,90000,70000,78000,90000,87000,89000,78000,78000];
+            register = [70000,78000,90000,87000,89000,78000,78000,90000,87000,76000,78000,90000,70000,78000,90000,87000,89000,78000,78000,90000,87000,76000,78000,90000,70000,78000,90000,87000,89000,78000,78000];
 
         var data = [
             {
-                name : '用户充值金额',
+                name : '每日用户充值金额',
                 value:click,
                 color:'#0d8ecf',
                 line_width:2
             },
             {
-                name : '用户消费金额',
+                name : '每日用户消费金额',
                 value:register,
                 color:'#66FF33',
                 line_width:2
             }
         ];
-        var day_labels = [];
-        var month_labels = [];
 
-        for(var i=0;i<31;i++){
-            day_labels[i] = i + 1;
-        }
-
-        for(var i=0;i<12;i++){
-            month_labels[i] = i + 1;
-        }
         var options = {
             render : 'day_canvasDiv',
             data: data,
             align:'center',
             title : '每日充值消费金额',
-            subtitle : '每日的充值金额(访问量单位：万)',
+            subtitle : '',
             footnote : '数据来源：充值消费金额',
             width : 1100,
             height : 400,
@@ -106,23 +99,76 @@
                 }]
             }
         };
-        var line = new iChart.LineBasic2D( options );
+        $.ajax({
+            url: '/chargeConsume?option=day_line',
+            type: 'get',
+            dataType: 'json',
+            async: false,
+            success: function (result) {
+                var data = [
+                    {
+                        name : '每日用户充值金额',
+                        value:result.charge,
+                        color:'#0d8ecf',
+                        line_width:2
+                    },
+                    {
+                        name : '每日用户消费金额',
+                        value:result.consume,
+                        color:'#66FF33',
+                        line_width:2
+                    }
+                ];
+                options.data = data;
+                options.render = 'day_canvasDiv';
+                options.title = '每日充值和消费金额';
+                options.coordinate.grids.vertical.value = 30;
+                options.coordinate.scale[1].labels = day_labels;
+                var line = new iChart.LineBasic2D( options );
 
+                //开始画图
+                line.draw();
+            }
+        });
 
-        //开始画图
-        line.draw();
         $('#day_line').on('click',function(){
             $('.day_line').css('display','block');
             $('.day_data').css('display','none');
             $('.month_line').css('display','none');
             $('.month_data').css('display','none');
-
         });
         $('#day_data').on('click',function(){
             $('.day_line').css('display','none');
             $('.day_data').css('display','block');
             $('.month_line').css('display','none');
             $('.month_data').css('display','none');
+            $.ajax({
+                url: '/chargeConsume?option=day_data',
+                type: 'get',
+                dataType: 'json',
+                async: false,
+                success: function (result) {
+                    console.log('result:',result);
+                    var html = "";
+
+                    if(result.data.length){
+                        result.data.forEach(function( data ){
+                            html += "<tr>";
+                            html += "<td>"+ data.server +"</td>";
+                            html += "<td>"+ data.a +"</td>";
+                            html += "<td>"+ data.b +"</td>";
+                            html += "<td>"+ data.c +"</td>";
+                            html += "<td>"+ data.d +"</td>";
+                            html += "<td>"+ data.e +"</td>";
+                            html += "<td>"+ data.f +"</td>";
+                            html += "<td>"+ data.g +"</td>";
+                            html += "<td>"+ data.total +"</td>";
+                            html += "</tr>";
+                        });
+                    }
+                    $('tbody').empty().html(html);
+                }
+            });
 
         });
         $('#month_line').on('click',function(){
@@ -130,21 +176,70 @@
             $('.day_data').css('display','none');
             $('.month_line').css('display','block');
             $('.month_data').css('display','none');
-            options.render = 'month_canvasDiv';
-            options.title = '每月充值和消费金额';
-            options.coordinate.grids.vertical.value = 11;
-            options.coordinate.scale[1].labels = month_labels;
-            var line = new iChart.LineBasic2D( options );
 
-            //开始画图
-            line.draw();
+            $.ajax({
+                url: '/chargeConsume?option=month_line',
+                type: 'get',
+                dataType: 'json',
+                async: false,
+                success: function (result) {
+                    var data = [
+                        {
+                            name : '每月用户充值金额',
+                            value:result.charge,
+                            color:'#0d8ecf',
+                            line_width:2
+                        },
+                        {
+                            name : '每月用户消费金额',
+                            value:result.consume,
+                            color:'#66FF33',
+                            line_width:2
+                        }
+                    ];
+                    options.data = data;
+                    options.render = 'month_canvasDiv';
+                    options.title = '每月充值和消费金额';
+                    options.coordinate.grids.vertical.value = 11;
+                    options.coordinate.scale[1].labels = month_labels;
+                    var line = new iChart.LineBasic2D( options );
+
+                    //开始画图
+                    line.draw();
+                }
+            });
         });
         $('#month_data').on('click',function(){
             $('.day_line').css('display','none');
             $('.day_data').css('display','none');
             $('.month_line').css('display','none');
             $('.month_data').css('display','block');
+            $.ajax({
+                url: '/chargeConsume?option=month_data',
+                type: 'get',
+                dataType: 'json',
+                async: false,
+                success: function (result) {
+                    console.log('result:',result);
+                    var html = "";
 
+                    if(result.data.length){
+                        result.data.forEach(function( data ){
+                            html += "<tr>";
+                            html += "<td>"+ data.server +"</td>";
+                            html += "<td>"+ data.a +"</td>";
+                            html += "<td>"+ data.b +"</td>";
+                            html += "<td>"+ data.c +"</td>";
+                            html += "<td>"+ data.d +"</td>";
+                            html += "<td>"+ data.e +"</td>";
+                            html += "<td>"+ data.f +"</td>";
+                            html += "<td>"+ data.total +"</td>";
+                            html += "</tr>";
+                        });
+                    }
+                    $('tbody').empty().html(html);
+                }
+            });
         });
 
 
@@ -171,41 +266,7 @@
                 <th>总计</th>
             </tr>
             </thead>
-            <tbody>
-            <tr>
-                <td>3区力拔山河</td>
-                <td>1000/900</td>
-                <td>1000/900</td>
-                <td>1000/900</td>
-                <td>1000/900</td>
-                <td>1000/900</td>
-                <td>1000/900</td>
-                <td>1000/900</td>
-                <td>1000/900</td>
-            </tr>
-            <tr>
-                <td>2区横扫千军</td>
-                <td>1000/900</td>
-                <td>1000/900</td>
-                <td>1000/900</td>
-                <td>1000/900</td>
-                <td>1000/900</td>
-                <td>1000/900</td>
-                <td>1000/900</td>
-                <td>1000/900</td>
-            </tr>
-            <tr>
-                <td>1区艾泽拉斯</td>
-                <td>1000/900</td>
-                <td>1000/900</td>
-                <td>1000/900</td>
-                <td>1000/900</td>
-                <td>1000/900</td>
-                <td>1000/900</td>
-                <td>1000/900</td>
-                <td>1000/900</td>
-            </tr>
-            </tbody>
+            <tbody></tbody>
         </table>
     </div>
 
@@ -309,7 +370,6 @@
             html += "<th>"+String(month-3)+"</th>";
             html += "<th>"+String(month-4)+"</th>";
             html += "<th>"+String(month-5)+"</th>";
-            html += "<th>"+String(month-6)+"</th>";
             html += "<th>总计</th>";
             var th = document.createElement("thead");
             th.innerHTML = html;

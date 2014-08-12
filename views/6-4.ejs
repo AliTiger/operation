@@ -24,39 +24,16 @@
         <% include save_print.ejs %>
     </div>
 </div>
+<% include labels.ejs %>
 <script type="text/javascript">
+    labels();//调用labels day_labels week_labels month_labels
     //线型图表
     $(function(){
-        var active = [90000,90000,98000,90000,97000,99000,90000,90000,98000,92000,97000,99000,90000,90000,98000,90000,97000,99000,90000,97000,98000,92000,97000,99000,92000,93000,96000,91000,94000,94000,92000];
-
-
-        var data = [
-            {
-                name : '日活跃用户充值比例',
-                value:active,
-                color:'#0d8ecf',
-                line_width:2
-            }
-        ];
-
-        var day_labels = [];
-        var week_labels = [];
-        var month_labels = [];
-        for(var i=0;i<31;i++){
-            day_labels[i] = i+1;
-        }
-        for(var i=0;i<52;i++){
-            week_labels[i] = i+1;
-        }
-        for(var i=0;i<12;i++){
-            month_labels[i] = i+1;
-        }
         var options = {
             render : 'day_active_canvasDiv',
-            data: data,
             align:'center',
             title : '日活跃用户活跃充值比例',
-            subtitle : '平均每月的人数(访问量单位：万)',
+            subtitle : '',
             footnote : '数据来源：活跃充值比例',
             width : 1100,
             height : 400,
@@ -109,10 +86,41 @@
                 }]
             }
         };
-        var line = new iChart.LineBasic2D( options );
+        $.ajax({
+            url: '/activeCharge?option=day',
+            type: 'get',
+            dataType: 'json',
+            async: false,
+            success: function (result) {
+                var data = [
+                    {
+                        name : '日活跃用户充值比例',
+                        value:result.data,
+                        color:'#0d8ecf',
+                        line_width:2
+                    }
+                ];
+                options.data = data;
+                options.render = 'day_active_canvasDiv';
+                options.title = '日活跃用户充值比例';
+                options.coordinate.grids.vertical.value = 30;
+                options.coordinate.scale[1].labels = day_labels;
+                var line = new iChart.LineBasic2D( options );
+                line.draw();
+                var html = "";
 
-        //开始画图
-        line.draw();
+                if(result.data.length){
+                    html += "<tr>";
+                    html += "<td>日活跃用户充值比例</td>";
+                    result.data.forEach(function(a){
+                        html += "<td>"+ a +"</td>";
+                    });
+                    html += "</tr>";
+                }
+                $('tbody').empty().html(html);
+            }
+        });
+
         $('#day_active').on('click',function(){
             $('.day_active_canvasDiv').css('display','block');
             $('.day_active_new_canvasDiv').css('display','none');
@@ -129,14 +137,40 @@
             $('.week_active_new_canvasDiv').css('display','none');
             $('.month_active_canvasDiv').css('display','none');
             $('.month_active_new_canvasDiv').css('display','none');
-            options.render = 'day_active_new_canvasDiv';
-            options.title = '日新增活跃用户充值比例';
-            options.coordinate.grids.vertical.value = 30;
-            options.coordinate.scale[1].labels = day_labels;
-            var line = new iChart.LineBasic2D( options );
+            $.ajax({
+                url: '/activeCharge?option=dayNew',
+                type: 'get',
+                dataType: 'json',
+                async: false,
+                success: function (result) {
+                    var data = [
+                        {
+                            name : '日新增活跃用户充值比例',
+                            value:result.data,
+                            color:'#0d8ecf',
+                            line_width:2
+                        }
+                    ];
+                    options.data = data;
+                    options.render = 'day_active_new_canvasDiv';
+                    options.title = '日新增活跃用户充值比例';
+                    options.coordinate.grids.vertical.value = 30;
+                    options.coordinate.scale[1].labels = day_labels;
+                    var line = new iChart.LineBasic2D( options );
+                    line.draw();
+                    var html = "";
 
-            //开始画图
-            line.draw();
+                    if(result.data.length){
+                        html += "<tr>";
+                        html += "<td>日新增活跃用户充值比例</td>";
+                        result.data.forEach(function(a){
+                            html += "<td>"+ a +"</td>";
+                        });
+                        html += "</tr>";
+                    }
+                    $('tbody').empty().html(html);
+                }
+            });
         });
 
         $('#week_active').on('click',function(){
@@ -146,14 +180,40 @@
             $('.week_active_new_canvasDiv').css('display','none');
             $('.month_active_canvasDiv').css('display','none');
             $('.month_active_new_canvasDiv').css('display','none');
-            options.render = 'week_active_canvasDiv';
-            options.title = '高活跃用户充值比例';
-            options.coordinate.grids.vertical.value = 51;
-            options.coordinate.scale[1].labels = week_labels;
-            var line = new iChart.LineBasic2D( options );
+            $.ajax({
+                url: '/activeCharge?option=week',
+                type: 'get',
+                dataType: 'json',
+                async: false,
+                success: function (result) {
+                    var data = [
+                        {
+                            name : '高活跃用户充值比例',
+                            value:result.data,
+                            color:'#0d8ecf',
+                            line_width:2
+                        }
+                    ];
+                    options.data = data;
+                    options.render = 'week_active_canvasDiv';
+                    options.title = '高活跃用户充值比例';
+                    options.coordinate.grids.vertical.value = 51;
+                    options.coordinate.scale[1].labels = week_labels;
+                    var line = new iChart.LineBasic2D( options );
+                    line.draw();
+                    var html = "";
 
-            //开始画图
-            line.draw();
+                    if(result.data.length){
+                        html += "<tr>";
+                        html += "<td>高活跃用户充值比例</td>";
+                        result.data.forEach(function(a){
+                            html += "<td>"+ a +"</td>";
+                        });
+                        html += "</tr>";
+                    }
+                    $('tbody').empty().html(html);
+                }
+            });
         });
 
         $('#week_active_new').on('click',function(){
@@ -163,14 +223,40 @@
             $('.week_active_new_canvasDiv').css('display','block');
             $('.month_active_canvasDiv').css('display','none');
             $('.month_active_new_canvasDiv').css('display','none');
-            options.render = 'week_active_new_canvasDiv';
-            options.title = '新增高活跃用户充值比例';
-            options.coordinate.grids.vertical.value = 51;
-            options.coordinate.scale[1].labels = week_labels;
-            var line = new iChart.LineBasic2D( options );
+            $.ajax({
+                url: '/activeCharge?option=weekNew',
+                type: 'get',
+                dataType: 'json',
+                async: false,
+                success: function (result) {
+                    var data = [
+                        {
+                            name : '新增高活跃用户充值比例',
+                            value:result.data,
+                            color:'#0d8ecf',
+                            line_width:2
+                        }
+                    ];
+                    options.data = data;
+                    options.render = 'week_active_new_canvasDiv';
+                    options.title = '新增高活跃用户充值比例';
+                    options.coordinate.grids.vertical.value = 51;
+                    options.coordinate.scale[1].labels = week_labels;
+                    var line = new iChart.LineBasic2D( options );
+                    line.draw();
+                    var html = "";
 
-            //开始画图
-            line.draw();
+                    if(result.data.length){
+                        html += "<tr>";
+                        html += "<td>新增高活跃用户充值比例</td>";
+                        result.data.forEach(function(a){
+                            html += "<td>"+ a +"</td>";
+                        });
+                        html += "</tr>";
+                    }
+                    $('tbody').empty().html(html);
+                }
+            });
         });
 
         $('#month_active').on('click',function(){
@@ -180,14 +266,40 @@
             $('.week_active_new_canvasDiv').css('display','none');
             $('.month_active_canvasDiv').css('display','block');
             $('.month_active_new_canvasDiv').css('display','none');
-            options.render = 'month_active_canvasDiv';
-            options.title = '月活跃用户充值比例';
-            options.coordinate.grids.vertical.value = 11;
-            options.coordinate.scale[1].labels = month_labels;
-            var line = new iChart.LineBasic2D( options );
+            $.ajax({
+                url: '/activeCharge?option=month',
+                type: 'get',
+                dataType: 'json',
+                async: false,
+                success: function (result) {
+                    var data = [
+                        {
+                            name : '月活跃用户充值比例',
+                            value:result.data,
+                            color:'#0d8ecf',
+                            line_width:2
+                        }
+                    ];
+                    options.data = data;
+                    options.render = 'month_active_canvasDiv';
+                    options.title = '月活跃用户充值比例';
+                    options.coordinate.grids.vertical.value = 11;
+                    options.coordinate.scale[1].labels = month_labels;
+                    var line = new iChart.LineBasic2D( options );
+                    line.draw();
+                    var html = "";
 
-            //开始画图
-            line.draw();
+                    if(result.data.length){
+                        html += "<tr>";
+                        html += "<td>月活跃用户充值比例</td>";
+                        result.data.forEach(function(a){
+                            html += "<td>"+ a +"</td>";
+                        });
+                        html += "</tr>";
+                    }
+                    $('tbody').empty().html(html);
+                }
+            });
         });
 
         $('#month_active_new').on('click',function(){
@@ -197,14 +309,40 @@
             $('.week_active_new_canvasDiv').css('display','none');
             $('.month_active_canvasDiv').css('display','none');
             $('.month_active_new_canvasDiv').css('display','block');
-            options.render = 'month_active_new_canvasDiv';
-            options.title = '月新增活跃用户充值比例';
-            options.coordinate.grids.vertical.value = 11;
-            options.coordinate.scale[1].labels = month_labels;
-            var line = new iChart.LineBasic2D( options );
+            $.ajax({
+                url: '/activeCharge?option=monthNew',
+                type: 'get',
+                dataType: 'json',
+                async: false,
+                success: function (result) {
+                    var data = [
+                        {
+                            name : '月新增活跃用户充值比例',
+                            value:result.data,
+                            color:'#0d8ecf',
+                            line_width:2
+                        }
+                    ];
+                    options.data = data;
+                    options.render = 'month_active_new_canvasDiv';
+                    options.title = '月新增活跃用户充值比例';
+                    options.coordinate.grids.vertical.value = 11;
+                    options.coordinate.scale[1].labels = month_labels;
+                    var line = new iChart.LineBasic2D( options );
+                    line.draw();
+                    var html = "";
 
-            //开始画图
-            line.draw();
+                    if(result.data.length){
+                        html += "<tr>";
+                        html += "<td>月新增活跃用户充值比例</td>";
+                        result.data.forEach(function(a){
+                            html += "<td>"+ a +"</td>";
+                        });
+                        html += "</tr>";
+                    }
+                    $('tbody').empty().html(html);
+                }
+            });
         });
     });
 

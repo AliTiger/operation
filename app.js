@@ -72,9 +72,24 @@ app.get('/remainUsers',remainUsers.remain);
 
 //用户流失
 app.get('/lostUser',lostUsers.lost);
+//用户流失等级分布
 app.get('/levelRank',lostUsers.levelRank);
+//用户流失任务分布
 app.get('/taskRank',lostUsers.taskRank);
+//平均生命周期
 app.get('/lifeCycle',lostUsers.lifeCycle);
+
+//游戏收入
+//充值消费金额
+app.get('/chargeConsume',gameIncome.chargeConsume);
+//用户平均收益
+app.get('/averIncome',gameIncome.averIncome);
+//活跃充值比例
+app.get('/activeCharge',gameIncome.activeCharge);
+//充值用户流失
+app.get('/chargeUserLost',gameIncome.userLost);
+//其他相关统计
+app.get('/otherCount',gameIncome.otherCount);
 
 
 app.get('/test',routes.test);

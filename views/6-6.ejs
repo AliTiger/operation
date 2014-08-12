@@ -25,6 +25,27 @@
 <br><br>
 <script>
     $(document).ready(function(){
+        $.ajax({
+            url: '/otherCount?option=firstCharge',
+            type: 'get',
+            dataType: 'json',
+            async: false,
+            success: function (result) {
+                var data = result.data;
+                var html = "";
+                if(data.length){
+                    data.forEach(function(a){
+                        html += "<tr>";
+                        html += "<td>"+ a.id +"</td>";
+                        html += "<td>"+ a.pro +"</td>";
+                        html += "<td>"+ a.subPro +"</td>";
+                        html += "<td>"+ a.per +"</td>";
+                        html += "</tr>";
+                    });
+                }
+                $('tbody').empty().html(html);
+            }
+        });
         $('#first_charge').on('click',function(){
             $('.table_first_charge').css('display','block');
             $('.table_store').css('display','none');
@@ -38,6 +59,32 @@
             $('.table_ranking').css('display','none');
             $('.table_charge_grade').css('display','none');
             $('.table_charge_interval').css('display','none');
+            $.ajax({
+                url: '/otherCount?option=store',
+                type: 'get',
+                dataType: 'json',
+                async: false,
+                success: function (result) {
+                    var data = result.data;
+                    var html = "";
+                    if(data.length){
+                        data.forEach(function(a){
+                            html += "<tr>";
+                            html += "<td>"+ a.id +"</td>";
+                            html += "<td>"+ a.propName +"</td>";
+                            html += "<td>"+ a.firstBuyCount +"</td>";
+                            html += "<td>"+ a.firstBuyValue +"</td>";
+                            html += "<td>"+ a.firstBuyPer +"</td>";
+                            html += "<td>"+ a.totalBuyCount +"</td>";
+                            html += "<td>"+ a.totalBuyValue +"</td>";
+                            html += "<td>"+ a.totalBuyPer +"</td>";
+                            html += "<td>"+ a.totalBuyValuePer +"</td>";
+                            html += "</tr>";
+                        });
+                    }
+                    $('tbody').empty().html(html);
+                }
+            });
         });
         $('#ranking').on('click',function(){
             $('.table_first_charge').css('display','none');
@@ -45,6 +92,26 @@
             $('.table_ranking').css('display','block');
             $('.table_charge_grade').css('display','none');
             $('.table_charge_interval').css('display','none');
+            $.ajax({
+                url: '/otherCount?option=ranking',
+                type: 'get',
+                dataType: 'json',
+                async: false,
+                success: function (result) {
+                    var data = result.data;
+                    var html = "";
+                    if(data.length){
+                        data.forEach(function(a){
+                            html += "<tr>";
+                            html += "<td>"+ a.rank +"</td>";
+                            html += "<td>"+ a.playerName +"</td>";
+                            html += "<td>"+ a.chargeValue +"</td>";
+                            html += "</tr>";
+                        });
+                    }
+                    $('tbody').empty().html(html);
+                }
+            });
         });
         $('#charge_grade').on('click',function(){
             $('.table_first_charge').css('display','none');
@@ -52,6 +119,26 @@
             $('.table_ranking').css('display','none');
             $('.table_charge_grade').css('display','block');
             $('.table_charge_interval').css('display','none');
+            $.ajax({
+                url: '/otherCount?option=chargeGrade',
+                type: 'get',
+                dataType: 'json',
+                async: false,
+                success: function (result) {
+                    var data = result.data;
+                    var html = "";
+                    if(data.length){
+                        data.forEach(function(a){
+                            html += "<tr>";
+                            html += "<td>"+ a.grade +"</td>";
+                            html += "<td>"+ a.chargeCount +"</td>";
+                            html += "<td>"+ a.per +"</td>";
+                            html += "</tr>";
+                        });
+                    }
+                    $('tbody').empty().html(html);
+                }
+            });
         });
         $('#charge_interval').on('click',function(){
             $('.table_first_charge').css('display','none');
@@ -59,6 +146,26 @@
             $('.table_ranking').css('display','none');
             $('.table_charge_grade').css('display','none');
             $('.table_charge_interval').css('display','block');
+            $.ajax({
+                url: '/otherCount?option=chargeInterval',
+                type: 'get',
+                dataType: 'json',
+                async: false,
+                success: function (result) {
+                    var data = result.data;
+                    var html = "";
+                    if(data.length){
+                        data.forEach(function(a){
+                            html += "<tr>";
+                            html += "<td>"+ a.id +"</td>";
+                            html += "<td>"+ a.interval +"</td>";
+                            html += "<td>"+ a.per +"</td>";
+                            html += "</tr>";
+                        });
+                    }
+                    $('tbody').empty().html(html);
+                }
+            });
         });
     });
 </script>
@@ -75,14 +182,7 @@
             </tr>
 
             </thead>
-            <tbody>
-            <tr>
-                <td>1</td>
-                <td>装备强化</td>
-                <td>100%成功</td>
-                <td>5%</td>
-            </tr>
-            </tbody>
+            <tbody></tbody>
         </table>
     </div>
 
@@ -101,21 +201,8 @@
                 <th>总购买次数占比</th>
                 <th>总购买总金额占比</th>
             </tr>
-
             </thead>
-            <tbody>
-            <tr>
-                <td>1</td>
-                <td>装备强化</td>
-                <td>99</td>
-                <td>4444</td>
-                <td>5%</td>
-                <td>5%</td>
-                <td>5555</td>
-                <td>5%</td>
-                <td>5%</td>
-            </tr>
-            </tbody>
+            <tbody></tbody>
         </table>
     </div>
 
@@ -131,13 +218,7 @@
             </tr>
 
             </thead>
-            <tbody>
-            <tr>
-                <td>1</td>
-                <td>啦啦啦</td>
-                <td>99</td>
-            </tr>
-            </tbody>
+            <tbody></tbody>
         </table>
     </div>
 
@@ -153,13 +234,7 @@
             </tr>
 
             </thead>
-            <tbody>
-            <tr>
-                <td>1</td>
-                <td>2222</td>
-                <td>9%</td>
-            </tr>
-            </tbody>
+            <tbody></tbody>
         </table>
     </div>
 
@@ -175,13 +250,7 @@
             </tr>
 
             </thead>
-            <tbody>
-            <tr>
-                <td>1</td>
-                <td>500</td>
-                <td>50</td>
-            </tr>
-            </tbody>
+            <tbody></tbody>
         </table>
     </div>
 

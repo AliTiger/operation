@@ -16,31 +16,12 @@
 <script type="text/javascript">
     //线型图表
     $(function(){
-        var click    = [90000,90000,98000,90000,97000,99000,90000,90000,98000,92000,97000,99000,90000,90000,98000,90000,97000,99000,90000,97000,98000,92000,97000,99000,92000,93000,96000,91000,94000,94000,92000],
-                register = [70000,78000,90000,87000,89000,78000,78000,90000,87000,76000,78000,90000,70000,78000,90000,87000,89000,78000,78000,90000,87000,76000,78000,90000,70000,78000,90000,87000,89000,78000,78000];
-
-        var data = [
-            {
-                name : '点击次数',
-                value:click,
-                color:'#0d8ecf',
-                line_width:2
-            },
-            {
-                name : '注册次数',
-                value:register,
-                color:'#66FF33',
-                line_width:2
-            }
-        ];
-
         var labels = []; //= ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"];
         for(var i=0;i<12;i++){
             labels[i] = i+1;
         }
         var options = {
             render : 'lost_back_canvasDiv',
-            data: data,
             align:'center',
             title : '流失回流付费用户数',
             subtitle : '平均每月的人数(访问量单位：万)',
@@ -96,10 +77,55 @@
                 }]
             }
         };
-        var line = new iChart.LineBasic2D( options );
+        $.ajax({
+            url: '/chargeUserLost?option=lostBack',
+            type: 'get',
+            dataType: 'json',
+            async: false,
+            success: function (result) {
+                var data = [
+                    {
+                        name : '流失人数',
+                        value:result.data1,
+                        color:'#0d8ecf',
+                        line_width:2
+                    },
+                    {
+                        name : '回流人数',
+                        value:result.data2,
+                        color:'#66FF33',
+                        line_width:2
+                    }
+                ];
+                options.data = data;
+                options.render = 'lost_back_canvasDiv';
+                options.title = '流失回流付费用户数';
+                options.coordinate.grids.vertical.value = 11;
+                options.coordinate.scale[1].labels = labels;
+                var line = new iChart.LineBasic2D( options );
+                line.draw();
+                var html = "";
 
-        //开始画图
-        line.draw();
+                if(result.data1.length){
+                    html += "<tr>";
+                    html += "<td>流失人数</td>";
+                    result.data1.forEach(function(a){
+                        html += "<td>"+ a +"</td>";
+                    });
+                    html += "</tr>";
+                }
+                if(result.data2.length){
+                    html += "<tr>";
+                    html += "<td>回流人数</td>";
+                    result.data2.forEach(function(a){
+                        html += "<td>"+ a +"</td>";
+                    });
+                    html += "</tr>";
+                }
+                $('tbody').empty().html(html);
+            }
+        });
+
         $('#lost_back').on('click',function(){
             $('.lost_back_canvasDiv').css('display','block');
             $('.lost_per_canvasDiv').css('display','none');
@@ -107,14 +133,42 @@
         $('#lost_per').on('click',function(){
             $('.lost_back_canvasDiv').css('display','none');
             $('.lost_per_canvasDiv').css('display','block');
-            options.render = 'lost_per_canvasDiv';
-            options.title = '付费用户流失比例';
-            options.coordinate.grids.vertical.value = 11;
-            options.coordinate.scale[1].labels = labels;
-            var line = new iChart.LineBasic2D( options );
+            $.ajax({
+                url: '/chargeUserLost?option=lostPercent',
+                type: 'get',
+                dataType: 'json',
+                async: false,
+                success: function (result) {
+                    var data = [
+                        {
+                            name : '付费用户流失比例',
+                            value:result.data,
+                            color:'#0d8ecf',
+                            line_width:2
+                        }
+                    ];
+                    options.data = data;
+                    options.render = 'lost_per_canvasDiv';
+                    options.title = '付费用户流失比例';
+                    options.coordinate.grids.vertical.value = 11;
+                    options.coordinate.scale[1].labels = labels;
+                    var line = new iChart.LineBasic2D( options );
 
-            //开始画图
-            line.draw();
+                    //开始画图
+                    line.draw();
+                    var html = "";
+
+                    if(result.data.length){
+                        html += "<tr>";
+                        html += "<td>付费用户流失比例</td>";
+                        result.data.forEach(function(a){
+                            html += "<td>"+ a +"</td>";
+                        });
+                        html += "</tr>";
+                    }
+                    $('tbody').empty().html(html);
+                }
+            });
         });
     });
 
@@ -132,20 +186,7 @@
             </tr>
 
             </thead>
-            <tbody>
-            <tr>
-                <td>流失付费用户数</td>
-                <% ARPPU.forEach(function( a ){%>
-                <td><%= a %></td>
-                <%});%>
-            </tr>
-            <tr>
-                <td>回流付费用户数</td>
-                <% ARPU.forEach(function( a ){%>
-                <td><%= a %></td>
-                <%});%>
-            </tr>
-            </tbody>
+            <tbody></tbody>
         </table>
     </div>
 
