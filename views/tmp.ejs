@@ -1,18 +1,43 @@
-<% include nav.ejs %>
-<br><br><br>
-<div id="addnew">
-    <input type="text" id="id">
-    <input type="text" id="content">
-    <input type="button" value="Add" id="submit">
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-<div id="check">
-    <input type="text" id="input">
-    <input type="button" value="Search" id="search">
-</div>
+    <title>测试</title>
+
+    <link href="/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Add custom CSS here -->
+    <link href="/css/sb-admin.css" rel="stylesheet">
+    <!-- Page Specific CSS -->
+    <link rel="stylesheet" href="/css/morris-0.4.3.min.css">
+    <script src="/js/jquery-1.11.1.min.js"></script>
+    <script src="/js/bootstrap.js"></script>
+
+</head>
+
+<body>
 <script>
-    $(document).ready(function(){
-
+$(document).ready(function(){
+    $('#submit').on('click',function(){
+        var userName = $('#userName').val();
+        $('#show').html(userName);
     });
+});
 </script>
-<% include footer.ejs%>
+
+<div id="wrapper">
+    <input type="text" id="userName" name="userName"/>
+
+    <button id="submit" class="btn btn-primary">显示</button>
+
+    <div>
+        Hello <label id="show"></label>
+    </div>
+</div><!-- /#wrapper -->
+
+</body>
+</html>
