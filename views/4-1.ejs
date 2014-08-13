@@ -23,18 +23,6 @@
     //线型图表
     $(function(){
         labels();//调用labels day_labels week_labels month_labels
-
-        var active = [90000,90000,98000,90000,97000,99000,90000,90000,98000,92000,97000,99000,90000,90000,98000,90000,97000,99000,90000,97000,98000,92000,97000,99000,92000,93000,96000,91000,94000,94000,92000];
-        var data = [
-            {
-                name : '活跃用户数量',
-                value:active,
-                color:'#0d8ecf',
-                line_width:2
-            }
-        ];
-
-        var tomorrow_labels = day_labels;
         var three_labels = [];
         var seven_labels = week_labels;
         var thirty_labels = month_labels;
@@ -44,10 +32,10 @@
 
         var options = {
             render : 'tomorrow_canvasDiv',
-            data: data,
+            data: '',
             align:'center',
             title : '次日留存率',
-            subtitle : '平均每月的人数(访问量单位：万)',
+            subtitle : '',
             footnote : '数据来源：用户留存率',
             width : 1100,
             height : 400,
@@ -96,55 +84,46 @@
 
                 },{
                     position:'bottom',
-                    labels:tomorrow_labels
+                    labels:day_labels
                 }]
             }
         };
-        var line = new iChart.LineBasic2D( options );
-
-        //开始画图
-        line.draw();
+        $.ajax({
+            url:'/remainUsers?option=day',
+            type:'get',
+            dataType:'json',
+            async:false,
+            success:function( result ){
+                var data = [
+                    {
+                        name : '次日留存',
+                        value:result.day,
+                        color:'#0d8ecf',
+                        line_width:2
+                    }
+                ];
+                options.data = data;
+                var line = new iChart.LineBasic2D( options );
+                //开始画图
+                line.draw();
+                var html = "";
+                html += "<tr>";
+                html += "<td>次日留存率</td>";
+                if(result.day.length){
+                    result.day.forEach(function(a){
+                        html += "<td>"+ a +"</td>";
+                    });
+                }
+                html += "</tr>";
+                $('tbody').empty().html(html);
+            }
+        });
         $('#tomorrow').on('click',function(){
             $('.tomorrow_canvasDiv').css('display','block');
             $('.three_canvasDiv').css('display','none');
             $('.seven_canvasDiv').css('display','none');
             $('.thirty_canvasDiv').css('display','none');
 
-            //动态调用数据
-            $.ajax({
-                url:'/remainUsers?option=day',
-                type:'get',
-                dataType:'json',
-                async:false,
-                success:function( result ){
-                    var data = [
-                        {
-                            name : '次日留存',
-                            value:result.day,
-                            color:'#0d8ecf',
-                            line_width:2
-                        }
-                    ];
-                    options.data = data;
-                    options.render = 'tomorrow_canvasDiv';
-                    options.title = '次日留存';
-                    options.coordinate.grids.vertical.value = 30;
-                    options.coordinate.scale[1].labels = tomorrow_labels;
-                    var line = new iChart.LineBasic2D( options );
-                    //开始画图
-                    line.draw();
-                    var html = "";
-                    html += "<tr>";
-                    html += "<td>次日留存率</td>";
-                    if(result.day.length){
-                        result.day.forEach(function(a){
-                            html += "<td>"+ a +"</td>";
-                        });
-                    }
-                    html += "</tr>";
-                    $('tbody').empty().html(html);
-                }
-            });
         });
 
         $('#three').on('click',function(){

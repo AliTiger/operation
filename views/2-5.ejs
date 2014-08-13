@@ -37,25 +37,9 @@
             }));
         }
         labels();//调用labels day_labels week_labels month_labels
-
-        var new_user = [54841,72400,76776,83361,54841,72400,76776,83361,54841,72400,76776,83361,54841,72400,76776,83361,54841,72400,76776,83361,54841,72400,76776,83361,54841,72400,76776,83361,54841,72400,76776],
-            real_new = [22790,33284,52148,68333,22790,33284,52148,68333,22790,33284,52148,68333,22790,33284,52148,68333,22790,33284,52148,68333,22790,33284,52148,68333,22790,33284,52148,68333,22790,33284,52148];
-        var data = [
-            {
-                name : '新增用户',
-                value:new_user,
-                color:'#32bdbc'
-            },
-            {
-                name : '实际新增',
-                value:real_new,
-                color:'#d75a5e'
-            }
-        ];
-
         var options = {
             render : 'day_columntacked2d',
-            data: data,
+            data: '',
             labels:day_labels,
             title : {
                 text:'日一次用户数及比例',
@@ -121,15 +105,35 @@
                 height:'76%'
             }
         };
-        var chart = new iChart.ColumnStacked2D( options );
-        init();
-        chart.draw();
+        $.ajax({
+            url: '/onceUsers?option=day',
+            type: 'get',
+            dataType: 'json',
+            async: false,
+            success: function (result) {
+                var data = [
+                    {
+                        name : '新增用户',
+                        value:result.day,
+                        color:'#32bdbc'
+                    },
+                    {
+                        name : '实际新增',
+                        value:result.dayAver,
+                        color:'#d75a5e'
+                    }
+                ];
+                options.data = data;
+                var chart = new iChart.ColumnStacked2D( options );
+                init();
+                chart.draw();
+            }
+        });
 
         $('#day').on('click',function(){
-            window.location.href = '/activeUsers/2-5';
-//            $('.day_columntacked2d').css('display','block');
-//            $('.week_columntacked2d').css('display','none');
-//            $('.month_columntacked2d').css('display','none');
+            $('.day_columntacked2d').css('display','block');
+            $('.week_columntacked2d').css('display','none');
+            $('.month_columntacked2d').css('display','none');
         });
         $('#week').on('click',function(){
             $('.day_columntacked2d').css('display','none');

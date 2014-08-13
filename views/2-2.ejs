@@ -37,7 +37,7 @@ $(function(){
         align:'center',
         title : '日新增活跃用户数量',
         subtitle : '',
-        footnote : '数据来源：日新增活跃用户数量',
+        footnote : '数据来源：活跃用户数量',
         width : 1100,
         height : 400,
         tip:{
@@ -89,12 +89,31 @@ $(function(){
             }]
         }
     };
-    var line = new iChart.LineBasic2D(options);
 
-    //开始画图
-    line.draw();
+    $.ajax({
+        url:'/newActiveUsers?option=day',
+        type:'get',
+        dataType:'json',
+        async:false,
+        success:function( result ){
+            var data = [
+                {
+                    name : '日新增活跃用户数量',
+                    value:result.data,
+                    color:'#0d8ecf',
+                    line_width:2
+                }
+            ];
+            options.data = data;
+            var line = new iChart.LineBasic2D( options );
+            line.draw();
+        }
+    });
     $('#day').on('click',function(){
-        window.location.href = '/activeUsers/2-2';
+        $('.day_canvasDiv').css('display','block');
+        $('.week_canvasDiv').css('display','none');
+        $('.month_canvasDiv').css('display','none');
+        $('.active_canvasDiv').css('display','none');
     });
 
     $('#week').on('click',function(){
@@ -102,7 +121,6 @@ $(function(){
         $('.week_canvasDiv').css('display','block');
         $('.month_canvasDiv').css('display','none');
         $('.active_canvasDiv').css('display','none');
-        //动态调用数据
         $.ajax({
             url:'/newActiveUsers?option=week',
             type:'get',

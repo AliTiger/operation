@@ -24,10 +24,11 @@ exports.get = function(req, res){
 
 exports.activeUsers = function(req, res){
 	var option = req.query.option;//日 周 月
-	console.log('option--------:',option);
-
 	active = week;
 
+	if( option == 'day' ){
+		return res.send(200,{data:day});
+	}
 	if( option == 'week' ){
 		return res.send(200,{data:week});
 	}
@@ -42,8 +43,9 @@ exports.activeUsers = function(req, res){
 //新增活跃用户
 exports.newActiveUsers = function(req, res){
 	var option = req.query.option;//日 周 月
-	console.log('option--------:',option);
-
+	if( option == 'day' ){
+		return res.send(200,{data:day});
+	}
 	if( option == 'week' ){
 		return res.send(200,{data:week});
 	}
@@ -57,6 +59,9 @@ exports.loginCount = function(req, res){
 	var option = req.query.option;//日 周 月
 	console.log('option--------:',option);
 
+	if( option == 'day' ){
+		return res.send(200,{day:day,dayAver:dayAver});
+	}
 	if( option == 'week' ){
 		return res.send(200,{week:week,weekAver:weekAver});
 	}
@@ -113,6 +118,9 @@ exports.onceUsers = function(req, res){
 	var option = req.query.option;//日 周 月
 	console.log('option--------:',option);
 
+	if( option == 'day' ){
+		return res.send(200,{day:day,dayAver:dayAver});
+	}
 	if( option == 'week' ){
 		return res.send(200,{week:week,weekAver:weekAver});
 	}
@@ -126,6 +134,9 @@ exports.highActiveUsers = function(req, res){
 	var option = req.query.option;//日 周 月
 	console.log('option--------:',option);
 
+	if( option == 'day' ){
+		return res.send(200,{day:day,dayAver:dayAver});
+	}
 	if( option == 'week' ){
 		return res.send(200,{week:week,weekAver:weekAver});
 	}

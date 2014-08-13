@@ -100,16 +100,42 @@
 
         //开始画图
         line.draw();
+        $.ajax({
+            url:'/loginCount?option=day',
+            type:'get',
+            dataType:'json',
+            async:false,
+            success:function( result ){
+                var data = [
+                    {
+                        name : '每日登陆次数',
+                        value:result.day,
+                        color:'#0d8ecf',
+                        line_width:2
+                    },
+                    {
+                        name : '日均登陆次数',
+                        value:result.dayAver,
+                        color:'#66FF33',
+                        line_width:2
+                    }
+                ];
+                options.data = data;
+                var line = new iChart.LineBasic2D( options );
+                line.draw();
+            }
+        });
         $('#day').on('click',function(){
-            window.location.href = '/activeUsers/2-3';
+            $('.day_canvasDiv').css('display', 'block');
+            $('.week_canvasDiv').css('display', 'none');
+            $('.month_canvasDiv').css('display', 'none');
+
         });
 
         $('#week').on('click',function() {
             $('.day_canvasDiv').css('display', 'none');
             $('.week_canvasDiv').css('display', 'block');
             $('.month_canvasDiv').css('display', 'none');
-
-            //动态调用数据
             $.ajax({
                 url:'/loginCount?option=week',
                 type:'get',
@@ -131,15 +157,12 @@
                             line_width:2
                         }
                     ];
-                    //alert('设置权限成功');
                     options.data = data;
                     options.render = 'week_canvasDiv';
                     options.title = '每周登陆游戏次数/周均登陆游戏次数';
                     options.coordinate.grids.vertical.value = 51;
                     options.coordinate.scale[1].labels = week_labels;
                     var line = new iChart.LineBasic2D( options );
-
-                    //开始画图
                     line.draw();
                 }
             });
@@ -149,8 +172,6 @@
             $('.month_canvasDiv').css('display', 'block');
             $('.week_canvasDiv').css('display', 'none');
             $('.day_canvasDiv').css('display', 'none');
-
-            //动态调用数据
             $.ajax({
                 url:'/loginCount?option=month',
                 type:'get',
@@ -171,19 +192,15 @@
                             line_width:2
                         }
                     ];
-                    //alert('设置权限成功');
                     options.data = data;
                     options.render = 'month_canvasDiv';
                     options.title = '每月登陆游戏次数/月均登陆游戏次数';
                     options.coordinate.grids.vertical.value = 11;
                     options.coordinate.scale[1].labels = month_labels;
                     var line = new iChart.LineBasic2D( options );
-
-                    //开始画图
                     line.draw();
                 }
             });
-
         });
     });
 

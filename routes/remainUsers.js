@@ -21,7 +21,7 @@ exports.get = function(req, res){
 	return res.render(page_id+'.ejs',params);
 }
 
-//次日留存率
+//留存率
 exports.remain = function(req, res){
 	var option = req.query.option;
 	if( option == 'day' ){
@@ -37,4 +37,8 @@ exports.remain = function(req, res){
 	if( option == 'month' ){
 		return res.send(200,{month:month});
 	}
+}
+//回流活跃用户
+exports.backUser = function(req, res){
+	return res.send(200,{week:week,weekAver:weekAver});
 }

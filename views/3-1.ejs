@@ -6,27 +6,17 @@
 <script type="text/javascript">
     //线型图表
     $(function(){
-        var online    = [500,400,300,200,300,400,600,800,900,1200,1100,1000,1100,1400,1600,1300,1200,1100,1000,1300,1000,1400,1500,1800];
-        var data = [
-            {
-                name : '用户在线数据',
-                value:online,
-                color:'#0d8ecf',
-                line_width:2
-            }
-        ];
-
-        var labels = []; //= ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"];
+        var labels = [];
         for(var i=0;i<24;i++){
             labels[i] = i+1;
         }
-        var line = new iChart.LineBasic2D({
+        var options = {
             render : 'canvasDiv',
-            data: data,
+            data: '',
             align:'center',
-            title : '用在线数据',
-            subtitle : '每小时的人数(访问量单位：万)',
-            footnote : '数据来源：点击下载安装注册数',
+            title : '用户在线数据',
+            subtitle : '',
+            footnote : '数据来源：用户在线数据',
             width : 1100,
             height : 400,
             tip:{
@@ -67,8 +57,8 @@
                 scale:[{
                     position:'left',
                     start_scale:0,
-                    end_scale:2000,//设置结束刻度
-                    scale_space:200,//设置刻度间距
+                    end_scale:0,//设置结束刻度
+                    scale_space:0,//设置刻度间距
                     scale_size:2,
                     scale_color:'#9f9f9f'
 
@@ -77,10 +67,27 @@
                     labels:labels
                 }]
             }
+        };
+        $.ajax({
+            url: '/userOnline',
+            type: 'get',
+            dataType: 'json',
+            async: false,
+            success: function (result) {
+                var data = [
+                    {
+                        name : '用户在线数据',
+                        value:result.onlineUser,
+                        color:'#0d8ecf',
+                        line_width:2
+                    }
+                ];
+                options.data = data;
+                var line = new iChart.LineBasic2D(options);
+                line.draw();
+            }
         });
 
-        //开始画图
-        line.draw();
     });
 
 </script>

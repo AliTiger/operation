@@ -71,8 +71,12 @@ app.get('/onceUsers',activeUsers.onceUsers);
 //活跃用户高活跃用户数
 app.get('/highActiveUsers',activeUsers.highActiveUsers);
 
+//用户在线
+app.get('/userOnline',onlineUsers.userOnline);
+
 //用户留存率
 app.get('/remainUsers',remainUsers.remain);
+app.get('/backUser',remainUsers.backUser);
 
 //用户流失
 app.get('/lostUser',lostUsers.lost);
