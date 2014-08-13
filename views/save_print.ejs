@@ -1,5 +1,5 @@
 <div class="col-lg-1">
-    <button class="save" name="save" id="save">另存</button>
+    <button class="111" name="save" id="save">另存</button>
 </div>
 <div class="col-lg-1">
     <button name="print" id="print" >打印</button>
@@ -20,7 +20,8 @@
 
         });
         $('#save').on('click',function(){
-
+            var url = document.getElementById('save').className;
+            alert(url);
         });
     });
 </script>
