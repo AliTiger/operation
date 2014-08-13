@@ -8,7 +8,8 @@ var col = 'users';
 
 
 exports.test = function(req, res) {
-  res.render('tmp', { title: 'Express',user:req.session.user });
+  //return res.send({title: 'Express',user:req.session.user });
+  return res.send({title: 'Express',name:'lixiaodong',age:25,gender:'男',email:'hautlixiaodong@163.com'});
 };
 
 exports.index = function(req, res) {
