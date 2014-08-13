@@ -11,7 +11,9 @@ exports.test = function(req, res) {
 };
 
 exports.index = function(req, res) {
-  res.render('index', { title: 'Express' });
+	if(!req.session.login){
+		res.render('login', { title: '登陆后台查询系统' });
+	}
 };
 
 exports.login = function(req, res) {
@@ -62,14 +64,13 @@ exports.homePage = function(req, res){
 				if(user.power[0] == 1 ){
 					//获取所有用户 root用户可以手动配置这些用户的权限
 					collection.find({}).toArray(function(err,users ){
-						console.log('============all user:',users);
 						req.session.users = users;
 						res.setHeader("Set-Cookie", ["user="+user, "users="+users]);
-						return res.render('home', { title: '运营后台数据查询系统',user: user,users:users,curpage:'home'});
+						return res.render('home', { title: '运营后台数据查询系统',user: user,users:users});
 					});
 				} else {
 					req.session.users = [];
-					return res.render('home', { title: '运营后台数据查询系统',user: user,curpage:'home'});
+					return res.render('home', { title: '运营后台数据查询系统',user: user});
 				}
 			});
 

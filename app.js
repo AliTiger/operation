@@ -54,6 +54,10 @@ app.get('/gameIncome/:page_id',gameIncome.get);
 app.get('/operationCost/:page_id',operationCost.get);
 app.get('/userInformation/:page_id',userInformation.get);
 
+//获取用户点击下载安装注册数量
+app.get('/getUserData',getUsers.getData);
+//新增实增数
+app.get('/userRealAppend',getUsers.userRealAppend);
 //活跃用户数量
 app.get('/activeUser',activeUsers.activeUsers);
 //新增活跃用户数据
