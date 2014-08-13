@@ -6,6 +6,7 @@ var favicon = require('static-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var log4js = require("./lib/logger");
 
 var routes = require('./routes/index');
 var getUsers = require('./routes/getUsers');
@@ -17,6 +18,7 @@ var gameIncome = require('./routes/gameIncome');
 var operationCost = require('./routes/operationCost');
 var userInformation = require('./routes/userInformation');
 var power = require('./routes/power');
+var save = require('./routes/save');
 
 var app = express();
 
@@ -31,6 +33,7 @@ app.use(bodyParser.urlencoded());
 app.use(cookieParser());
 app.use(session({secret:'operation',resave:true,saveUninitialized:true}));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(log4js.connectLogger());
 
 app.get('/', routes.index);
 //登陆后台
@@ -119,6 +122,9 @@ app.get('/chargeRank',userInformation.chargeRank);
 app.get('/map',userInformation.map);
 //用户战场次数
 app.get('/battlefield',userInformation.battlefield);
+
+//另存为xlsx文件
+app.get('/save/:url',save.saveAs);
 
 app.get('/test',routes.test);
 

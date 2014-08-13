@@ -1,5 +1,5 @@
 <div class="col-lg-1">
-    <button name="save" id="save">另存</button>
+    <button class="save" name="save" id="save">另存</button>
 </div>
 <div class="col-lg-1">
     <button name="print" id="print" >打印</button>
@@ -17,6 +17,9 @@
 //            newwin.document.close();
 //            document.body.innerHTML=document.getElementById('print').innerHTML;
             window.print();
+
+        });
+        $('#save').on('click',function(){
 
         });
     });

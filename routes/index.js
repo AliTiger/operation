@@ -1,4 +1,5 @@
 var config = require('../config.js');
+var logger = require("../lib/logger").logger("index");
 
 var db = config.db;
 
@@ -17,6 +18,7 @@ exports.index = function(req, res) {
 };
 
 exports.login = function(req, res) {
+	logger.info('login ===========');
 	res.render('login', { title: '登陆后台查询系统' });
 };
 
