@@ -1,11 +1,14 @@
 //用户
 var logger = require('../lib/logger').logger('gerUsers');
 var LRU = require('lru-cache');
+var config = require('../config.js');
+
+var db = config.db;
+var col = 'users';
 var max = 1024;
 var maxAge = 1000*60*60;
 var option = {max:max,maxAge:maxAge};
 var usersData = LRU(option); 
-var cache = require('../lib/lru-cache');
 
 exports.get = function(req, res){
 	var page_id = req.params.page_id;
@@ -21,10 +24,10 @@ exports.get = function(req, res){
 		download = [89000,80000,80000,88000,80000,87000,89000,88000,80000,87000,84000,80000,89000,81000,80000,88000,81000,87000,89000,88000,83000,87000,84000,84000,89000,80000,83000,88000,80000,87000,89000],
 		install  = [78000,70000,77000,79000,78000,70000,77000,79000,70000,73000,70000,70000,78000,70000,77000,79000,78000,70000,77000,89000,80000,83000,80000,70000,78000,90000,87000,89000,78000,90000,87000],
 		register = [70000,78000,90000,87000,89000,78000,78000,90000,87000,76000,78000,90000,70000,78000,90000,87000,89000,78000,78000,90000,87000,76000,78000,90000,70000,78000,90000,87000,89000,78000,78000];
-		cache.set(usersData,'click',click);
-		cache.set(usersData,'download',download);
-		cache.set(usersData,'install',install);
-		cache.set(usersData,'register',register);
+		usersData.set('click',click);
+		usersData.set('download',download);
+		usersData.set('install',install);
+		usersData.set('register',register);
 		params.click = click;
 		params.download = download;
 		params.install = install;
@@ -46,10 +49,10 @@ exports.get = function(req, res){
 }
 //获取点击下载安装注册人数
 exports.getData = function(req, res){
-		var click = cache.get(usersData,'click'),
-		download = cache.get(usersData,'download'),
-		install = cache.get(usersData,'install'),
-		register = cache.get(usersData,'register');
+		var click = usersData.get('click'),
+		download = usersData.get('download'),
+		install = usersData.get('install'),
+		register = usersData.get('register');
 		return res.send(200,{click:click,download:download,install:install,register:register});
 }
 

@@ -17,6 +17,7 @@ var lostUsers = require('./routes/lostUsers');
 var gameIncome = require('./routes/gameIncome');
 var operationCost = require('./routes/operationCost');
 var userInformation = require('./routes/userInformation');
+var platform = require('./routes/platform');
 var power = require('./routes/power');
 var save = require('./routes/save');
 
@@ -47,14 +48,26 @@ app.get('/getPower', power.getPower);
 app.get('/setPower', power.get);
 app.post('/setPower', power.setPower);
 
+//获取运营平台和区服
+app.get('/getPlatforms',platform.getPlatforms);
+app.get('/getServers',platform.getServers);
+
 //渲染页面
+//获取用户
 app.get('/getUsers/:page_id',getUsers.get);
+//用户活跃
 app.get('/activeUsers/:page_id',activeUsers.get);
+//用户在线
 app.get('/onlineUsers/:page_id',onlineUsers.get);
+//用户留存
 app.get('/remainUsers/:page_id',remainUsers.get);
+//用户流失
 app.get('/lostUsers/:page_id',lostUsers.get);
+//游戏收入
 app.get('/gameIncome/:page_id',gameIncome.get);
+//运营成本
 app.get('/operationCost/:page_id',operationCost.get);
+//用户信息
 app.get('/userInformation/:page_id',userInformation.get);
 
 //获取用户点击下载安装注册数量
