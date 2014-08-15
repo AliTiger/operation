@@ -68,43 +68,60 @@
                 $('#platform').multiselect( 'refresh' );//刷新select数据
             }
         });
-        $("#platform").on("multiselectclick", function(event, ui) {
-            console.log('=====event:',event);
-            console.log('=====ui:',ui);
-            $.ajax({
-                url: '/getServers?name='+ui.value,
-                type: 'get',
-                dataType: 'json',
-                async: false,
-                success: function (result) {
-                    var servers = result.servers[0].server;
-                    var option = '';
-                    for(var i=0;i<servers.length;i++){
-                        console.log('=====:',servers[i]);
-                        option += '<option value="' + servers[i] + '">' + servers[i] + '</option>';
-                    }
-                    $('#myselect').append(option);
-                    $('#myselect').multiselect( 'refresh' );//刷新select数据
-
-                }
-            });
-        });
-
-        //选择平台之后，相应的区服列表动态更新
-//        $('#platform').on('change',function(){
-//            //需要修改
-//            var selected = $('#platform').val();
-//            console.log('=====selected:',selected);
-//            var options = [{id:1,value:'1001'},{id:2,value:'1002'},{id:3,value:'1003'}];
-//            for(var i=0;i<selected.length;i++){
-//                for(var j = 0; j < options.length; j++) {
-//                    var data = options[j];
-//                    var option = '<option value="' + data['value'] + '">' + data['value'] + '</option>';
+        //单个选择事件
+//        $("#platform").on("multiselectclick", function(event, ui) {
+//            console.log('=====event:',event);
+//            console.log('=====ui:',ui);
+//            $.ajax({
+//                url: '/getServers?name='+ui.value,
+//                type: 'get',
+//                dataType: 'json',
+//                async: false,
+//                success: function (result) {
+//                    var servers = result.servers[0].server;
+//                    var option = '';
+//                    for(var i=0;i<servers.length;i++){
+//                        console.log('=====:',servers[i]);
+//                        option += '<option value="' + servers[i] + '">' + servers[i] + '</option>';
+//                    }
 //                    $('#myselect').append(option);
 //                    $('#myselect').multiselect( 'refresh' );//刷新select数据
 //                }
-//            }
+//            });
 //        });
+
+        //选择平台之后，相应的区服列表动态更新
+        $('#platform').on('change',function(){
+            //需要修改
+            var selected = $('#platform').val();
+            console.log('=====selected:',selected);
+            var servers = [];
+            for(var i=0;i<selected.length;i++ ){
+                $.ajax({
+                    url: '/getServers?name='+selected[i],
+                    type: 'get',
+                    dataType: 'json',
+                    async: false,
+                    success: function (result) {
+                        var server = result.servers[0].server;
+                        servers.push( server );
+                    }
+                });
+            }
+            console.log('选中平台下的区服：',servers);
+            var option = '';
+            for(var i=0;i<servers.length;i++){
+                for(var j = 0; j < servers[i].length; j++) {
+                    option += '<option value="' + servers[i][j] + '">' + servers[i][j] + '</option>';
+                }
+            }
+            //清空select options
+            $('#myselect').empty();
+            //重新加载option
+            $('#myselect').append(option);
+            //刷新select数据
+            $('#myselect').multiselect( 'refresh' );
+        });
 
     });
 </script>

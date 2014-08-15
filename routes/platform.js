@@ -33,20 +33,12 @@ exports.getPlatforms = function(req, res){
 exports.getServers = function(req, res){
 	var name = req.query.name;
 	console.log('name:',name);
-	var server = cacheServers.get(name);
-	if ( server ){
-		console.log('01010101010101');
-		//缓存中存在
-		return res.send(200,{servers:servers});
-	} else {
-		console.log('10101010101010');
 		db.query(col,function( collection ){
 			collection.find({name:name},{_id:0,name:1,server:1}).toArray(function(err,servers){
 			cacheServers.set(name,servers);
 				return res.send(200,{servers:servers});
 			});
 		});
-	}
 }
 
 
