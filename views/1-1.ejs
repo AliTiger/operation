@@ -6,6 +6,11 @@
 
     //线型图表
     $(function(){
+        //初始化标签
+        $('#mark').val('/getUserData');
+
+        console.log('markmarkmark:',$('#mark').val());
+        $('#mark').val('/getUserData') ;
         dateOption.onSelect = function(selectedDate){
             console.log('=======',selectedDate);
             var mark = $('#mark').val();

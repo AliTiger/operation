@@ -18,20 +18,12 @@
 <script type="text/javascript">
 //线型图表
 $(function(){
-    var day_active  = [90000,90000,98000,90000,97000,99000,90000,90000,98000,92000,97000,99000,90000,90000,98000,
-        90000,97000,99000,90000,97000,98000,92000,97000,99000,92000,93000,96000,91000,94000,94000,92000];
+    //初始化标签
+    $('#mark').val('/newActiveUsers?option=day');
 
-    var data = [
-        {
-            name : '日新增活跃用户数量',
-            value:day_active,
-            color:'#0d8ecf',
-            line_width:2
-        }
-    ];
     var options = {
         render : 'day_canvasDiv',
-        data: data,
+        data: '',
         align:'center',
         title : '日新增活跃用户数量',
         subtitle : '',

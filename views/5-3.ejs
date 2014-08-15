@@ -24,6 +24,8 @@
 </div>
 <script>
     $(document).ready(function(){
+        //初始化标签
+        $('#mark').val('/taskRank');
         $.ajax({
             url: '/taskRank',
             type: 'get',

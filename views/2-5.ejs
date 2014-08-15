@@ -18,7 +18,9 @@
 <script type="text/javascript">
     //柱状图表 两段数据 上下
     $(function(){
-        var init = function(){
+        //初始化标签
+        $('#mark').val('/onceUsers?option=day');
+        var init = function(chart){
             //利用自定义组件构造左上侧单位
             chart.plugin(new iChart.Custom({
                 drawFn:function(){
@@ -123,7 +125,7 @@
                 ];
                 options.data = data;
                 var chart = new iChart.ColumnStacked2D( options );
-                init();
+                init(chart);
                 chart.draw();
             }
         });
@@ -163,7 +165,7 @@
                     options.title.text = '周一次用户数及比例';
                     options.footnote.text = '数据来源：周一次用户数及比例';
                     var chart = new iChart.ColumnStacked2D( options );
-                    init();
+                    init(chart);
                     chart.draw();
 
                     var html = "";
@@ -227,7 +229,7 @@
                     options.footnote.text = '数据来源：月一次用户数及比例';
 
                     var chart = new iChart.ColumnStacked2D( options );
-                    init();
+                    init(chart);
                     chart.draw();
                     var html = "";
                     html += "<tr>";

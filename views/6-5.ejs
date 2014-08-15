@@ -16,10 +16,10 @@
 <script type="text/javascript">
     //线型图表
     $(function(){
-        var labels = []; //= ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"];
-        for(var i=0;i<12;i++){
-            labels[i] = i+1;
-        }
+        //初始化标签
+        $('#mark').val('/chargeUserLost?option=lostBack');
+        var labels = month_labels; //= ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"];
+
         var options = {
             render : 'lost_back_canvasDiv',
             align:'center',

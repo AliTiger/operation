@@ -25,6 +25,8 @@
 <br><br>
 <script>
     $(document).ready(function(){
+        //初始化标签
+        $('#mark').val('/otherCount?option=firstCharge');
         $.ajax({
             url: '/otherCount?option=firstCharge',
             type: 'get',

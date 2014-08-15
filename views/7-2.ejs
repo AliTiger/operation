@@ -5,10 +5,9 @@
 
 <script type="text/javascript">
     $(function(){
-        var labels = [];
-        for(var i=0;i<31;i++){
-            labels[i] = i + 1;
-        }
+        //初始化标签
+        $('#mark').val('/popularize');
+        var labels = day_labels;
         var options = {
             render : 'columnmulti2d',
             labels:labels,
