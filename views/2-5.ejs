@@ -15,7 +15,6 @@
         <% include save_print.ejs %>
     </div>
 </div>
-<% include labels.ejs %>
 <script type="text/javascript">
     //柱状图表 两段数据 上下
     $(function(){
@@ -36,7 +35,6 @@
                 }
             }));
         }
-        labels();//调用labels day_labels week_labels month_labels
         var options = {
             render : 'day_columntacked2d',
             data: '',

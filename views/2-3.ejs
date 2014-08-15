@@ -15,32 +15,12 @@
         <% include save_print.ejs %>
     </div>
 </div>
-<% include labels.ejs %>
 <script type="text/javascript">
     //线型图表
     $(function(){
-        labels();//调用labels day_labels week_labels month_labels
-        var click    = [90000,90000,98000,90000,97000,99000,90000,90000,98000,92000,97000,99000,90000,90000,98000,90000,97000,99000,90000,97000,98000,92000,97000,99000,92000,93000,96000,91000,94000,94000,92000],
-            register = [70000,78000,90000,87000,89000,78000,78000,90000,87000,76000,78000,90000,70000,78000,90000,87000,89000,78000,78000,90000,87000,76000,78000,90000,70000,78000,90000,87000,89000,78000,78000];
-
-        var data = [
-            {
-                name : '每日登陆次数',
-                value:click,
-                color:'#0d8ecf',
-                line_width:2
-            },
-            {
-                name : '日均登陆次数',
-                value:register,
-                color:'#66FF33',
-                line_width:2
-            }
-        ];
-
         var options = {
             render : 'day_canvasDiv',
-            data: data,
+            data: '',
             align:'center',
             title : '登陆游戏次数',
             subtitle : '',
@@ -96,10 +76,6 @@
                 }]
             }
         };
-        var line = new iChart.LineBasic2D(options);
-
-        //开始画图
-        line.draw();
         $.ajax({
             url:'/loginCount?option=day',
             type:'get',

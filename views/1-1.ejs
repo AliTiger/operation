@@ -3,8 +3,87 @@
 <% include save_print.ejs %>
 
 <script type="text/javascript">
+
     //线型图表
     $(function(){
+        dateOption.onSelect = function(selectedDate){
+            console.log('=======',selectedDate);
+            var mark = $('#mark').val();
+            var server =
+            $.ajax({
+                url: mark+'?date='+selectedDate,
+                type: 'get',
+                dataType: 'json',
+                async: false,
+                success: function (result) {
+                    var data = [
+                        {
+                            name : '点击次数',
+                            value:result.click,
+                            color:'#0d8ecf',
+                            line_width:2
+                        },
+                        {
+                            name : '下载次数',
+                            value:result.download,
+                            color:'#ef7707',
+                            line_width:2
+                        },
+                        {
+                            name : '安装次数',
+                            value:result.install,
+                            color:'#660033',
+                            line_width:2
+                        },
+                        {
+                            name : '注册次数',
+                            value:result.register,
+                            color:'#66FF33',
+                            line_width:2
+                        }
+                    ];
+                    options.data = data;
+                    var line = new iChart.LineBasic2D(options);
+                    line.draw();
+                    var html = "";
+                    html += "<tr>";
+                    if(result.click.length){
+                        html += "<td>点击</td>";
+                        result.click.forEach(function(a){
+                            html += "<td>"+ a +"</td>";
+                        });
+                    }
+                    html += "</tr>";
+                    html += "<tr>";
+                    if(result.download.length){
+                        html += "<td>下载</td>";
+                        result.download.forEach(function(a){
+                            html += "<td>"+ a +"</td>";
+                        });
+                    }
+                    html += "</tr>";
+                    html += "<tr>";
+                    if(result.install.length){
+                        html += "<td>安装</td>";
+                        result.install.forEach(function(a){
+                            html += "<td>"+ a +"</td>";
+                        });
+                    }
+                    html += "</tr>";
+                    html += "<tr>";
+                    if(result.register.length){
+                        html += "<td>注册</td>";
+                        result.register.forEach(function(a){
+                            html += "<td>"+ a +"</td>";
+                        });
+                    }
+                    html += "</tr>";
+                    $('tbody').empty().html(html);
+                }
+            });
+        }
+        $("#datePicker").datepicker( dateOption );
+
         var labels = []; //= ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"];
         for(var i=0;i<31;i++){
             labels[i] = i+1;
@@ -16,7 +95,7 @@
             title : '2014年12个月点击下载安装注册人数',
             subtitle : '',
             footnote : '数据来源：点击下载安装注册数',
-            width : 1100,
+            width : 1300,
             height : 400,
             tip:{
                 enable:true,
@@ -41,7 +120,7 @@
                 point_hollow : false
             },
             coordinate:{
-                width:900,
+                width:1100,
                 height:240,
                 axis:{
                     color:'#9f9f9f',
