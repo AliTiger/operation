@@ -96,13 +96,13 @@ app.post('/remainUsers',remainUsers.remain);
 app.post('/backUser',remainUsers.backUser);
 
 //用户流失
-app.get('/lostUser',lostUsers.lost);
+app.post('/lostUser',lostUsers.lost);
 //用户流失等级分布
-app.get('/levelRank',lostUsers.levelRank);
+app.post('/levelRank',lostUsers.levelRank);
 //用户流失任务分布
-app.get('/taskRank',lostUsers.taskRank);
+app.post('/taskRank',lostUsers.taskRank);
 //平均生命周期
-app.get('/lifeCycle',lostUsers.lifeCycle);
+app.post('/lifeCycle',lostUsers.lifeCycle);
 
 //游戏收入
 //充值消费金额

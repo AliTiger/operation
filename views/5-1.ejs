@@ -79,59 +79,80 @@
                 }]
             }
         };
-        $.ajax({
-            url:'/lostUser?option=day',
-            type:'get',
-            dataType:'json',
-            async:false,
-            success:function( result ){
-                var data = [
-                    {
-                        name : '每日用户流失率',
-                        value:result.dayAver,
-                        color:'#0d8ecf',
-                        line_width:2
-                    }
-                ];
-                options.data = data;
-                var line = new iChart.LineBasic2D( options );
-                line.draw();
 
-                var html = "";
-                html += "<tr>";
-                html += "<td>日活跃用户流失</td>";
-                if(result.day.length){
-                    result.day.forEach(function(a){
-                        html += "<td>"+ a +"</td>";
-                    });
-                }
-                html += "</tr>";
-                html += "<tr>";
-                html += "<td>日活跃用户流失率</td>";
-                if(result.dayAver.length){
-                    result.dayAver.forEach(function(a){
-                        html += "<td>"+ a +"</td>";
-                    });
-                }
-                html += "</tr>";
-                $('tbody').empty().html(html);
-            }
-        });
         $('#day').on('click',function(){
-            window.location.href = '/lostUsers/5-1';
-//            $('.day_canvasDiv').css('display','block');
-//            $('.week_canvasDiv').css('display','none');
-//            $('.month_canvasDiv').css('display','none');
+            $('.day_canvasDiv').css('display','block');
+            $('.week_canvasDiv').css('display','none');
+            $('.month_canvasDiv').css('display','none');
+            var servers = $('#servers').val();
+            var date = $('#datePicker').val();
+            if(!servers){
+                alert('请选择服务器');
+                return false;
+            }
+            if(!date.length){
+                alert('请选择日期');
+                return false;
+            }
+            $.ajax({
+                url:'/lostUser',
+                type: 'POST',
+                data:{date:date,servers:servers,option:'day'},
+                dataType:'json',
+                async:false,
+                success:function( result ){
+                    var data = [
+                        {
+                            name : '每日用户流失率',
+                            value:result.dayAver,
+                            color:'#0d8ecf',
+                            line_width:2
+                        }
+                    ];
+                    options.data = data;
+                    var line = new iChart.LineBasic2D( options );
+                    line.draw();
+
+                    var html = "";
+                    html += "<tr>";
+                    html += "<td>日活跃用户流失</td>";
+                    if(result.day.length){
+                        result.day.forEach(function(a){
+                            html += "<td>"+ a +"</td>";
+                        });
+                    }
+                    html += "</tr>";
+                    html += "<tr>";
+                    html += "<td>日活跃用户流失率</td>";
+                    if(result.dayAver.length){
+                        result.dayAver.forEach(function(a){
+                            html += "<td>"+ a +"</td>";
+                        });
+                    }
+                    html += "</tr>";
+                    $('tbody').empty().html(html);
+                }
+            });
         });
 
         $('#week').on('click',function(){
             $('.day_canvasDiv').css('display','none');
             $('.week_canvasDiv').css('display','block');
             $('.month_canvasDiv').css('display','none');
-            //动态调用数据
+            var servers = $('#servers').val();
+            var date = $('#datePicker').val();
+            if(!servers){
+                alert('请选择服务器');
+                return false;
+            }
+            if(!date.length){
+                alert('请选择日期');
+                return false;
+            }
             $.ajax({
-                url:'/lostUser?option=week',
-                type:'get',
+                url:'/lostUser',
+                type: 'POST',
+                data:{date:date,servers:servers,option:'week'},
                 dataType:'json',
                 async:false,
                 success:function( result ){
@@ -178,9 +199,20 @@
             $('.day_canvasDiv').css('display','none');
             $('.week_canvasDiv').css('display','none');
             $('.month_canvasDiv').css('display','block');
+            var servers = $('#servers').val();
+            var date = $('#datePicker').val();
+            if(!servers){
+                alert('请选择服务器');
+                return false;
+            }
+            if(!date.length){
+                alert('请选择日期');
+                return false;
+            }
             $.ajax({
-                url:'/lostUser?option=month',
-                type:'get',
+                url:'/lostUser',
+                type: 'POST',
+                data:{date:date,servers:servers,option:'month'},
                 dataType:'json',
                 async:false,
                 success:function( result ){
@@ -235,22 +267,8 @@
                 <th><%=i%></th>
                 <% } %>
             </tr>
-
             </thead>
-            <tbody>
-            <tr>
-                <td>每日用户流失</td>
-                <% day.forEach(function( a ){%>
-                <td><%= a %></td>
-                <%});%>
-            </tr>
-            <tr>
-                <td>每日用户流失率</td>
-                <% dayAver.forEach(function( a ){%>
-                <td><%= a %></td>
-                <%});%>
-            </tr>
-            </tbody>
+            <tbody></tbody>
         </table>
     </div>
 

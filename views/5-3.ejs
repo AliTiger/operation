@@ -24,30 +24,39 @@
 </div>
 <script>
     $(document).ready(function(){
+        dateOption.onSelect = function(selectedDate) {
+            var servers = $('#servers').val();
+            console.log('selected servers:', servers);
+            if (!servers) {
+                alert('请选择服务器');
+                return false;
+            }
+            $.ajax({
+                url: '/taskRank',
+                type: 'POST',
+                data:{date:selectedDate,servers:servers},
+                dataType: 'json',
+                async: false,
+                success: function (result) {
+                    var html = "";
+
+                    if(result.task.length){
+                        result.task.forEach(function(a){
+                            html += "<tr>";
+                            html += "<td>"+ a.id +"</td>";
+                            html += "<td>"+ a.taskId +"</td>";
+                            html += "<td>"+ a.taskName +"</td>";
+                            html += "<td>"+ a.personCount +"</td>";
+                            html += "<td>"+ a.percent +"</td>";
+                            html += "</tr>";
+                        });
+                    }
+                    $('tbody').empty().html(html);
+                }
+            });
+        };
         //初始化日期插件
         $("#datePicker").datepicker( dateOption );
-        $.ajax({
-            url: '/taskRank',
-            type: 'get',
-            dataType: 'json',
-            async: false,
-            success: function (result) {
-                var html = "";
-
-                if(result.task.length){
-                    result.task.forEach(function(a){
-                        html += "<tr>";
-                        html += "<td>"+ a.id +"</td>";
-                        html += "<td>"+ a.taskId +"</td>";
-                        html += "<td>"+ a.taskName +"</td>";
-                        html += "<td>"+ a.personCount +"</td>";
-                        html += "<td>"+ a.percent +"</td>";
-                        html += "</tr>";
-                    });
-                }
-                $('tbody').empty().html(html);
-            }
-        });
     });
 </script>
 <% include footer.ejs %>

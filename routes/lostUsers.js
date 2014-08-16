@@ -22,7 +22,9 @@ exports.get = function(req, res){
 
 //流失人数和流失率
 exports.lost = function(req, res){
-	var option = req.query.option;
+	var date = req.body.date;
+	var servers = req.body.servers;
+	var option = req.body.option;//日 周 月
 	console.log('====option',option);
 
 	if(option == 'day'){
@@ -38,6 +40,8 @@ exports.lost = function(req, res){
 
 //等级分布
 exports.levelRank = function(req, res){
+	var date = req.body.date;
+	var servers = req.body.servers;
 	var rank = [100000,90000,80000,70000,60000,50000,40000,30000,20000,19000,
 		18000,17000,16000,15000,14000,13000,12000,11000,10000,9000,
 		8000,7000,6000,5000,4000,3000,2000,1000,1000,1000,
@@ -47,6 +51,8 @@ exports.levelRank = function(req, res){
 
 //任务分布
 exports.taskRank = function(req, res){
+	var date = req.body.date;
+	var servers = req.body.servers;
 	var task = [
 		{id:'1',taskId:'200001',taskName:'杀死4个怪物',personCount:100000,percent:'10%'},
 		{id:'2',taskId:'200001',taskName:'杀死4个怪物',personCount:100000,percent:'10%'},
@@ -58,6 +64,8 @@ exports.taskRank = function(req, res){
 
 //生命周期
 exports.lifeCycle = function(req, res){
+	var date = req.body.date;
+	var servers = req.body.servers;
 	var lifeCycle = day;
 	return res.send(200,{lifeCycle:lifeCycle});
 }
