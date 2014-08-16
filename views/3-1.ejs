@@ -6,6 +6,35 @@
 <script type="text/javascript">
     //线型图表
     $(function(){
+        dateOption.onSelect = function(selectedDate) {
+            var servers = $('#servers').val();
+            console.log('selected servers:', servers);
+            if (!servers) {
+                alert('请选择服务器');
+                return false;
+            }
+            $.ajax({
+                url: '/userOnline',
+                type: 'POST',
+                data:{date:selectedDate,servers:servers},
+                dataType: 'json',
+                async: false,
+                success: function (result) {
+                    var data = [
+                        {
+                            name : '用户在线数据',
+                            value:result.onlineUser,
+                            color:'#0d8ecf',
+                            line_width:2
+                        }
+                    ];
+                    options.data = data;
+                    var line = new iChart.LineBasic2D(options);
+                    line.draw();
+                }
+            });
+        };
+
         //初始化日期插件
         $("#datePicker").datepicker( dateOption );
         var labels = [];
@@ -70,26 +99,6 @@
                 }]
             }
         };
-        $.ajax({
-            url: '/userOnline',
-            type: 'get',
-            dataType: 'json',
-            async: false,
-            success: function (result) {
-                var data = [
-                    {
-                        name : '用户在线数据',
-                        value:result.onlineUser,
-                        color:'#0d8ecf',
-                        line_width:2
-                    }
-                ];
-                options.data = data;
-                var line = new iChart.LineBasic2D(options);
-                line.draw();
-            }
-        });
-
     });
 
 </script>

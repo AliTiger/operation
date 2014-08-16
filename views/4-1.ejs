@@ -4,7 +4,7 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="col-lg-1">
-            <button name="tomorrow" id="tomorrow">次日</button>
+            <button name="morrow" id="morrow">次日</button>
         </div>
         <div class="col-lg-1">
             <button name="three" id="three">3日</button>
@@ -31,7 +31,7 @@
         }
 
         var options = {
-            render : 'tomorrow_canvasDiv',
+            render : 'morrow_canvasDiv',
             data: '',
             align:'center',
             title : '次日留存率',
@@ -88,53 +88,74 @@
                 }]
             }
         };
-        $.ajax({
-            url:'/remainUsers?option=day',
-            type:'get',
-            dataType:'json',
-            async:false,
-            success:function( result ){
-                var data = [
-                    {
-                        name : '次日留存',
-                        value:result.day,
-                        color:'#0d8ecf',
-                        line_width:2
-                    }
-                ];
-                options.data = data;
-                var line = new iChart.LineBasic2D( options );
-                //开始画图
-                line.draw();
-                var html = "";
-                html += "<tr>";
-                html += "<td>次日留存率</td>";
-                if(result.day.length){
-                    result.day.forEach(function(a){
-                        html += "<td>"+ a +"</td>";
-                    });
-                }
-                html += "</tr>";
-                $('tbody').empty().html(html);
-            }
-        });
-        $('#tomorrow').on('click',function(){
-            $('.tomorrow_canvasDiv').css('display','block');
+
+        $('#morrow').on('click',function(){
+            $('.morrow_canvasDiv').css('display','block');
             $('.three_canvasDiv').css('display','none');
             $('.seven_canvasDiv').css('display','none');
             $('.thirty_canvasDiv').css('display','none');
-
+            var servers = $('#servers').val();
+            var date = $('#datePicker').val();
+            if(!servers){
+                alert('请选择服务器');
+                return false;
+            }
+            if(!date.length){
+                alert('请选择日期');
+                return false;
+            }
+            $.ajax({
+                url:'/remainUsers',
+                type: 'POST',
+                data:{date:date,servers:servers,option:'morrow'},
+                dataType:'json',
+                async:false,
+                success:function( result ){
+                    var data = [
+                        {
+                            name : '次日留存',
+                            value:result.day,
+                            color:'#0d8ecf',
+                            line_width:2
+                        }
+                    ];
+                    options.data = data;
+                    var line = new iChart.LineBasic2D( options );
+                    //开始画图
+                    line.draw();
+                    var html = "";
+                    html += "<tr>";
+                    html += "<td>次日留存率</td>";
+                    if(result.day.length){
+                        result.day.forEach(function(a){
+                            html += "<td>"+ a +"</td>";
+                        });
+                    }
+                    html += "</tr>";
+                    $('tbody').empty().html(html);
+                }
+            });
         });
 
         $('#three').on('click',function(){
-            $('.tomorrow_canvasDiv').css('display','none');
+            $('.morrow_canvasDiv').css('display','none');
             $('.three_canvasDiv').css('display','block');
             $('.seven_canvasDiv').css('display','none');
             $('.thirty_canvasDiv').css('display','none');
-            //动态调用数据
+            var servers = $('#servers').val();
+            var date = $('#datePicker').val();
+            if(!servers){
+                alert('请选择服务器');
+                return false;
+            }
+            if(!date.length){
+                alert('请选择日期');
+                return false;
+            }
             $.ajax({
-                url:'/remainUsers?option=three',
-                type:'get',
+                url:'/remainUsers',
+                type: 'POST',
+                data:{date:date,servers:servers,option:'threeDays'},
                 dataType:'json',
                 async:false,
                 success:function( result ){
@@ -169,15 +190,24 @@
         });
 
         $('#seven').on('click',function(){
-            $('.tomorrow_canvasDiv').css('display','none');
+            $('.morrow_canvasDiv').css('display','none');
             $('.three_canvasDiv').css('display','none');
             $('.seven_canvasDiv').css('display','block');
             $('.thirty_canvasDiv').css('display','none');
-
-            //动态调用数据
+            var servers = $('#servers').val();
+            var date = $('#datePicker').val();
+            if(!servers){
+                alert('请选择服务器');
+                return false;
+            }
+            if(!date.length){
+                alert('请选择日期');
+                return false;
+            }
             $.ajax({
-                url:'/remainUsers?option=week',
-                type:'get',
+                url:'/remainUsers',
+                type: 'POST',
+                data:{date:date,servers:servers,option:'week'},
                 dataType:'json',
                 async:false,
                 success:function( result ){
@@ -211,14 +241,24 @@
         });
 
         $('#thirty').on('click',function(){
-            $('.tomorrow_canvasDiv').css('display','none');
+            $('.morrow_canvasDiv').css('display','none');
             $('.three_canvasDiv').css('display','none');
             $('.seven_canvasDiv').css('display','none');
             $('.thirty_canvasDiv').css('display','block');
-            //动态调用数据
+            var servers = $('#servers').val();
+            var date = $('#datePicker').val();
+            if(!servers){
+                alert('请选择服务器');
+                return false;
+            }
+            if(!date.length){
+                alert('请选择日期');
+                return false;
+            }
             $.ajax({
-                url:'/remainUsers?option=month',
-                type:'get',
+                url:'/remainUsers',
+                type: 'POST',
+                data:{date:date,servers:servers,option:'month'},
                 dataType:'json',
                 async:false,
                 success:function( result ){
@@ -254,8 +294,8 @@
 
 </script>
 <div class="col-lg-12">
-    <div class="tomorrow_canvasDiv">
-        <div id='tomorrow_canvasDiv'></div>
+    <div class="morrow_canvasDiv">
+        <div id='morrow_canvasDiv'></div>
         <table class="table table-bordered">
             <thead>
             <tr>
@@ -266,14 +306,7 @@
             </tr>
 
             </thead>
-            <tbody>
-            <tr>
-                <td>次日留存率</td>
-                <% day.forEach(function( a ){%>
-                    <td><%= a %></td>
-                <%});%>
-            </tr>
-            </tbody>
+            <tbody></tbody>
         </table>
     </div>
     <div class="three_canvasDiv" style="display: none">

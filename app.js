@@ -89,11 +89,11 @@ app.post('/onceUsers',activeUsers.onceUsers);
 app.post('/highActiveUsers',activeUsers.highActiveUsers);
 
 //用户在线
-app.get('/userOnline',onlineUsers.userOnline);
+app.post('/userOnline',onlineUsers.userOnline);
 
 //用户留存率
-app.get('/remainUsers',remainUsers.remain);
-app.get('/backUser',remainUsers.backUser);
+app.post('/remainUsers',remainUsers.remain);
+app.post('/backUser',remainUsers.backUser);
 
 //用户流失
 app.get('/lostUser',lostUsers.lost);

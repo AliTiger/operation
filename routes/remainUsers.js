@@ -23,11 +23,13 @@ exports.get = function(req, res){
 
 //留存率
 exports.remain = function(req, res){
-	var option = req.query.option;
-	if( option == 'day' ){
+	var date = req.body.date;
+	var servers = req.body.servers;
+	var option = req.body.option;//日 周 月
+	if( option == 'morrow' ){
 		return res.send(200,{day:day});
 	}
-	if( option == 'three' ){
+	if( option == 'threeDays' ){
 		var three = day.slice(0,10);
 		return res.send(200,{three:three});
 	}
@@ -40,5 +42,8 @@ exports.remain = function(req, res){
 }
 //回流活跃用户
 exports.backUser = function(req, res){
+	var date = req.body.date;
+	var servers = req.body.servers;
+	var option = req.body.option;//日 周 月
 	return res.send(200,{week:week,weekAver:weekAver});
 }

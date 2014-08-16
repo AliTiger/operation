@@ -11,6 +11,9 @@ exports.get = function(req, res){
 
 //在线用户
 exports.userOnline = function(req, res){
+	var date = req.body.date;
+	var servers = req.body.servers;
+	console.log('servers',servers);
 	var onlineUser = day.slice(0,24);
 	return res.send(200,{onlineUser:onlineUser});
 }

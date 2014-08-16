@@ -6,12 +6,7 @@
 <script type="text/javascript">
     //周回流用户数据
     $(function(){
-        //初始化日期插件
-        $("#datePicker").datepicker( dateOption );
-        var labels = [];
-        for(var i=0;i<52;i++){
-            labels[i] = i + 1;
-        }
+        var labels = week_labels;
         var options = {
             render : 'columnmulti2d',
             data: '',
@@ -41,48 +36,58 @@
                 height:260
             }
         };
-        $.ajax({
-            url:'/backUser',
-            type:'get',
-            dataType:'json',
-            async:false,
-            success:function( result ){
-                var data = [
-                    {
-                        name : '回流活跃用户',
-                        value:result.week,
-                        color:'#1385a5'
-                    },
-                    {
-                        name : '回流高活用户',
-                        value:result.weekAver,
-                        color:'#c56966'
-                    }
-                ];
-                options.data = data;
-                var chart = new iChart.ColumnMulti2D(options);
-                chart.draw();
-                var html = "";
-                html += "<tr>";
-                html += "<td>回流活跃用户</td>";
-                if(result.week.length){
-                    result.week.forEach(function(a){
-                        html += "<td>"+ a +"</td>";
-                    });
-                }
-                html += "</tr>";
-                html += "<tr>";
-                html += "<td>回流高活用户</td>";
-                if(result.weekAver.length){
-                    result.weekAver.forEach(function(a){
-                        html += "<td>"+ a +"</td>";
-                    });
-                }
-                html += "</tr>";
-                $('tbody').empty().html(html);
+        dateOption.onSelect = function(selectedDate) {
+            var servers = $('#servers').val();
+            console.log('selected servers:', servers);
+            if (!servers) {
+                alert('请选择服务器');
+                return false;
             }
-        });
-
+            $.ajax({
+                url:'/backUser',
+                type: 'POST',
+                data:{date:selectedDate,servers:servers},
+                dataType:'json',
+                async:false,
+                success:function( result ){
+                    var data = [
+                        {
+                            name : '回流活跃用户',
+                            value:result.week,
+                            color:'#1385a5'
+                        },
+                        {
+                            name : '回流高活用户',
+                            value:result.weekAver,
+                            color:'#c56966'
+                        }
+                    ];
+                    options.data = data;
+                    var chart = new iChart.ColumnMulti2D(options);
+                    chart.draw();
+                    var html = "";
+                    html += "<tr>";
+                    html += "<td>回流活跃用户</td>";
+                    if(result.week.length){
+                        result.week.forEach(function(a){
+                            html += "<td>"+ a +"</td>";
+                        });
+                    }
+                    html += "</tr>";
+                    html += "<tr>";
+                    html += "<td>回流高活用户</td>";
+                    if(result.weekAver.length){
+                        result.weekAver.forEach(function(a){
+                            html += "<td>"+ a +"</td>";
+                        });
+                    }
+                    html += "</tr>";
+                    $('tbody').empty().html(html);
+                }
+            });
+        };
+        //初始化日期插件
+        $("#datePicker").datepicker( dateOption );
     });
 </script>
 <div class="col-lg-12">
