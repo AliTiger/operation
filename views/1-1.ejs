@@ -3,21 +3,78 @@
 <% include save_print.ejs %>
 
 <script type="text/javascript">
-
     //线型图表
     $(function(){
-        //初始化标签
-        $('#mark').val('/getUserData');
+        var labels = day_labels;
+        var options = {
+            render : 'canvasDiv',
+            data: '',
+            align:'center',
+            title : '2014年12个月点击下载安装注册人数',
+            subtitle : '',
+            footnote : '数据来源：点击下载安装注册数',
+            width : 1300,
+            height : 400,
+            tip:{
+                enable:true,
+                shadow:true
+            },
+            legend : {
+                enable : true,
+                row:1,//设置在一行上显示，与column配合使用
+                column : 'max',
+                valign:'top',
+                sign:'bar',
+                background_color:null,//设置透明背景
+                offsetx:-80,//设置x轴偏移，满足位置需要
+                border : true
+            },
+            crosshair:{
+                enable:true,
+                line_color:'#62bce9'
+            },
+            sub_option : {
+                label:false,
+                point_hollow : false
+            },
+            coordinate:{
+                width:1100,
+                height:240,
+                axis:{
+                    color:'#9f9f9f',
+                    width:[0,0,2,2]
+                },
+                grids:{
+                    vertical:{
+                        way:'share_alike',
+                        value:30//割线
+                    }
+                },
+                scale:[{
+                    position:'left',
+                    start_scale:0,
+                    end_scale:120000,//设置结束刻度
+                    scale_space:20000,//设置刻度间距
+                    scale_size:2,
+                    scale_color:'#9f9f9f'
 
-        console.log('markmarkmark:',$('#mark').val());
-        $('#mark').val('/getUserData') ;
+                },{
+                    position:'bottom',
+                    labels:labels
+                }]
+            }
+        };
         dateOption.onSelect = function(selectedDate){
-            console.log('=======',selectedDate);
-            var mark = $('#mark').val();
-            var server =
+            var servers = $('#servers').val();
+            console.log('selected servers:',servers);
+            if(!servers){
+                alert('请选择服务器');
+                return false;
+            }
             $.ajax({
-                url: mark+'?date='+selectedDate,
-                type: 'get',
+                url: '/getUserData',
+                type: 'POST',
+                data:{date:selectedDate,servers:servers},
                 dataType: 'json',
                 async: false,
                 success: function (result) {
@@ -86,144 +143,10 @@
                     $('tbody').empty().html(html);
                 }
             });
-        }
-        $("#datePicker").datepicker( dateOption );
-
-        var labels = []; //= ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"];
-        for(var i=0;i<31;i++){
-            labels[i] = i+1;
-        }
-        var options = {
-            render : 'canvasDiv',
-            data: '',
-            align:'center',
-            title : '2014年12个月点击下载安装注册人数',
-            subtitle : '',
-            footnote : '数据来源：点击下载安装注册数',
-            width : 1300,
-            height : 400,
-            tip:{
-                enable:true,
-                shadow:true
-            },
-            legend : {
-                enable : true,
-                row:1,//设置在一行上显示，与column配合使用
-                column : 'max',
-                valign:'top',
-                sign:'bar',
-                background_color:null,//设置透明背景
-                offsetx:-80,//设置x轴偏移，满足位置需要
-                border : true
-            },
-            crosshair:{
-                enable:true,
-                line_color:'#62bce9'
-            },
-            sub_option : {
-                label:false,
-                point_hollow : false
-            },
-            coordinate:{
-                width:1100,
-                height:240,
-                axis:{
-                    color:'#9f9f9f',
-                    width:[0,0,2,2]
-                },
-                grids:{
-                    vertical:{
-                        way:'share_alike',
-                        value:30//割线
-                    }
-                },
-                scale:[{
-                    position:'left',
-                    start_scale:0,
-                    end_scale:120000,//设置结束刻度
-                    scale_space:20000,//设置刻度间距
-                    scale_size:2,
-                    scale_color:'#9f9f9f'
-
-                },{
-                    position:'bottom',
-                    labels:labels
-                }]
-            }
         };
-        $.ajax({
-            url: '/getUserData',
-            type: 'get',
-            dataType: 'json',
-            async: false,
-            success: function (result) {
-                var data = [
-                    {
-                        name : '点击次数',
-                        value:result.click,
-                        color:'#0d8ecf',
-                        line_width:2
-                    },
-                    {
-                        name : '下载次数',
-                        value:result.download,
-                        color:'#ef7707',
-                        line_width:2
-                    },
-                    {
-                        name : '安装次数',
-                        value:result.install,
-                        color:'#660033',
-                        line_width:2
-                    },
-                    {
-                        name : '注册次数',
-                        value:result.register,
-                        color:'#66FF33',
-                        line_width:2
-                    }
-                ];
-                options.data = data;
-                var line = new iChart.LineBasic2D(options);
-                line.draw();
-                var html = "";
-                html += "<tr>";
-                if(result.click.length){
-                    html += "<td>点击</td>";
-                    result.click.forEach(function(a){
-                        html += "<td>"+ a +"</td>";
-                    });
-                }
-                html += "</tr>";
-                html += "<tr>";
-                if(result.download.length){
-                    html += "<td>下载</td>";
-                    result.download.forEach(function(a){
-                        html += "<td>"+ a +"</td>";
-                    });
-                }
-                html += "</tr>";
-                html += "<tr>";
-                if(result.install.length){
-                    html += "<td>安装</td>";
-                    result.install.forEach(function(a){
-                        html += "<td>"+ a +"</td>";
-                    });
-                }
-                html += "</tr>";
-                html += "<tr>";
-                if(result.register.length){
-                    html += "<td>注册</td>";
-                    result.register.forEach(function(a){
-                        html += "<td>"+ a +"</td>";
-                    });
-                }
-                html += "</tr>";
-                $('tbody').empty().html(html);
-            }
-        });
+        //初始化日期选择器
+        $("#datePicker").datepicker( dateOption );
     });
-
 </script>
 <div class="row">
 <div class="col-lg-12">

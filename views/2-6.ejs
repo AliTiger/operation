@@ -17,9 +17,8 @@
 </div>
 <script type="text/javascript">
     $(function(){
-        //初始化标签
-        $('#mark').val('/highActiveUsers?option=day');
-
+        //初始化日期插件
+        $("#datePicker").datepicker( dateOption );
         var options = {
             render : 'day_canvasDiv',
             data: '',
@@ -78,44 +77,67 @@
                 }]
             }
         };
-        $.ajax({
-            url:'/highActiveUsers?option=day',
-            type:'get',
-            dataType:'json',
-            async:false,
-            success:function( result ){
-                var data = [
-                    {
-                        name : '本日高活跃用户',
-                        value:result.day,
-                        color:'#0d8ecf',
-                        line_width:2
-                    },
-                    {
-                        name : '日新增高活跃用户数',
-                        value:result.dayAver,
-                        color:'#66FF33',
-                        line_width:2
-                    }
-                ];
-                options.data = data;
-                var line = new iChart.LineBasic2D( options );
-                line.draw();
-            }
-        });
+
         $('#day').on('click',function(){
             $('.day_canvasDiv').css('display','block');
             $('.week_canvasDiv').css('display','none');
             $('.month_canvasDiv').css('display','none');
+            var servers = $('#servers').val();
+            var date = $('#datePicker').val();
+            if(!servers){
+                alert('请选择服务器');
+                return false;
+            }
+            if(!date.length){
+                alert('请选择日期');
+                return false;
+            }
+            $.ajax({
+                url:'/highActiveUsers',
+                type: 'POST',
+                data:{date:date,servers:servers,option:'day'},
+                dataType:'json',
+                async:false,
+                success:function( result ){
+                    var data = [
+                        {
+                            name : '本日高活跃用户',
+                            value:result.day,
+                            color:'#0d8ecf',
+                            line_width:2
+                        },
+                        {
+                            name : '日新增高活跃用户数',
+                            value:result.dayAver,
+                            color:'#66FF33',
+                            line_width:2
+                        }
+                    ];
+                    options.data = data;
+                    var line = new iChart.LineBasic2D( options );
+                    line.draw();
+                }
+            });
 
         });
         $('#week').on('click',function(){
             $('.day_canvasDiv').css('display','none');
             $('.week_canvasDiv').css('display','block');
             $('.month_canvasDiv').css('display','none');
+            var servers = $('#servers').val();
+            var date = $('#datePicker').val();
+            if(!servers){
+                alert('请选择服务器');
+                return false;
+            }
+            if(!date.length){
+                alert('请选择日期');
+                return false;
+            }
             $.ajax({
-                url:'/highActiveUsers?option=week',
-                type:'get',
+                url:'/highActiveUsers',
+                type: 'POST',
+                data:{date:date,servers:servers,option:'week'},
                 dataType:'json',
                 async:false,
                 success:function( result ){
@@ -147,11 +169,20 @@
             $('.day_canvasDiv').css('display','none');
             $('.week_canvasDiv').css('display','none');
             $('.month_canvasDiv').css('display','block');
-
-            //动态调用数据
+            var servers = $('#servers').val();
+            var date = $('#datePicker').val();
+            if(!servers){
+                alert('请选择服务器');
+                return false;
+            }
+            if(!date.length){
+                alert('请选择日期');
+                return false;
+            }
             $.ajax({
-                url:'/highActiveUsers?option=month',
-                type:'get',
+                url:'/highActiveUsers',
+                type: 'POST',
+                data:{date:date,servers:servers,option:'month'},
                 dataType:'json',
                 async:false,
                 success:function( result ){

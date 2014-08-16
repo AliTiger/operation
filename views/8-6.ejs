@@ -4,8 +4,8 @@
 <% include save_print.ejs %>
 <script type="text/javascript">
     $(function(){
-        //初始化标签
-        $('#mark').val('/battlefield');
+        //初始化日期插件
+        $("#datePicker").datepicker( dateOption );
         var labels = [];
         for(var i=0;i<20;i++){
             labels[i] = i + 1;

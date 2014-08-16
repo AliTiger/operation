@@ -5,9 +5,9 @@
 <script type="text/javascript">
     //线型图表
     $(function(){
-        //初始化标签
-        $('#mark').val('/lifeCycle');
-        var labels = day_labels; //= ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"];
+        //初始化日期插件
+        $("#datePicker").datepicker( dateOption );
+        var labels = day_labels;
 
         $.ajax({
             url: '/lifeCycle',

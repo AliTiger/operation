@@ -23,8 +23,13 @@ exports.get = function(req, res){
 }
 
 exports.activeUsers = function(req, res){
-	var option = req.query.option;//日 周 月
+	var date = req.body.date;
+	var servers = req.body.servers;
+	var option = req.body.option;//日 周 月
 	active = week;
+	console.log('date:',date);
+	console.log('servers:',servers);
+
 
 	if( option == 'day' ){
 		return res.send(200,{data:day});
@@ -42,7 +47,9 @@ exports.activeUsers = function(req, res){
 
 //新增活跃用户
 exports.newActiveUsers = function(req, res){
-	var option = req.query.option;//日 周 月
+	var date = req.body.date;
+	var servers = req.body.servers;
+	var option = req.body.option;//日 周 月
 	if( option == 'day' ){
 		return res.send(200,{data:day});
 	}
@@ -56,7 +63,9 @@ exports.newActiveUsers = function(req, res){
 
 //登录游戏次数
 exports.loginCount = function(req, res){
-	var option = req.query.option;//日 周 月
+	var date = req.body.date;
+	var servers = req.body.servers;
+	var option = req.body.option;//日 周 月
 	console.log('option--------:',option);
 
 	if( option == 'day' ){
@@ -72,9 +81,10 @@ exports.loginCount = function(req, res){
 
 
 //使用时长
-exports.useLength = function(req, res){
-	var option = req.query.option;//日 周 月
-	console.log('option--------:',option);
+exports.useTimeLength = function(req, res){
+	var date = req.body.date;
+	var servers = req.body.servers;
+	var option = req.body.option;//日 周 月
 
 	var dayActive = day;
 	var weekActive = week;
@@ -115,8 +125,9 @@ exports.useLength = function(req, res){
 
 //登录游戏次数
 exports.onceUsers = function(req, res){
-	var option = req.query.option;//日 周 月
-	console.log('option--------:',option);
+	var date = req.body.date;
+	var servers = req.body.servers;
+	var option = req.body.option;//日 周 月
 
 	if( option == 'day' ){
 		return res.send(200,{day:day,dayAver:dayAver});
@@ -131,8 +142,9 @@ exports.onceUsers = function(req, res){
 
 //高活跃用户数量
 exports.highActiveUsers = function(req, res){
-	var option = req.query.option;//日 周 月
-	console.log('option--------:',option);
+	var date = req.body.date;
+	var servers = req.body.servers;
+	var option = req.body.option;//日 周 月
 
 	if( option == 'day' ){
 		return res.send(200,{day:day,dayAver:dayAver});

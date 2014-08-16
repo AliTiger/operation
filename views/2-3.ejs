@@ -16,10 +16,9 @@
     </div>
 </div>
 <script type="text/javascript">
-    //线型图表
     $(function(){
-        //初始化标签
-        $('#mark').val('/loginCount?option=day');
+        //初始化日期插件
+        $("#datePicker").datepicker( dateOption );
         var options = {
             render : 'day_canvasDiv',
             data: '',
@@ -78,45 +77,67 @@
                 }]
             }
         };
-        $.ajax({
-            url:'/loginCount?option=day',
-            type:'get',
-            dataType:'json',
-            async:false,
-            success:function( result ){
-                var data = [
-                    {
-                        name : '每日登陆次数',
-                        value:result.day,
-                        color:'#0d8ecf',
-                        line_width:2
-                    },
-                    {
-                        name : '日均登陆次数',
-                        value:result.dayAver,
-                        color:'#66FF33',
-                        line_width:2
-                    }
-                ];
-                options.data = data;
-                var line = new iChart.LineBasic2D( options );
-                line.draw();
-            }
-        });
+
         $('#day').on('click',function(){
             $('.day_canvasDiv').css('display', 'block');
             $('.week_canvasDiv').css('display', 'none');
             $('.month_canvasDiv').css('display', 'none');
-
+            var servers = $('#servers').val();
+            var date = $('#datePicker').val();
+            if(!servers){
+                alert('请选择服务器');
+                return false;
+            }
+            if(!date.length){
+                alert('请选择日期');
+                return false;
+            }
+            $.ajax({
+                url:'/loginCount',
+                type: 'POST',
+                data:{date:date,servers:servers,option:'day'},
+                dataType:'json',
+                async:false,
+                success:function( result ){
+                    var data = [
+                        {
+                            name : '每日登陆次数',
+                            value:result.day,
+                            color:'#0d8ecf',
+                            line_width:2
+                        },
+                        {
+                            name : '日均登陆次数',
+                            value:result.dayAver,
+                            color:'#66FF33',
+                            line_width:2
+                        }
+                    ];
+                    options.data = data;
+                    var line = new iChart.LineBasic2D( options );
+                    line.draw();
+                }
+            });
         });
 
         $('#week').on('click',function() {
             $('.day_canvasDiv').css('display', 'none');
             $('.week_canvasDiv').css('display', 'block');
             $('.month_canvasDiv').css('display', 'none');
+            var servers = $('#servers').val();
+            var date = $('#datePicker').val();
+            if(!servers){
+                alert('请选择服务器');
+                return false;
+            }
+            if(!date.length){
+                alert('请选择日期');
+                return false;
+            }
             $.ajax({
-                url:'/loginCount?option=week',
-                type:'get',
+                url:'/loginCount',
+                type: 'POST',
+                data:{date:date,servers:servers,option:'week'},
                 dataType:'json',
                 async:false,
                 success:function( result ){
@@ -150,9 +171,20 @@
             $('.month_canvasDiv').css('display', 'block');
             $('.week_canvasDiv').css('display', 'none');
             $('.day_canvasDiv').css('display', 'none');
+            var servers = $('#servers').val();
+            var date = $('#datePicker').val();
+            if(!servers){
+                alert('请选择服务器');
+                return false;
+            }
+            if(!date.length){
+                alert('请选择日期');
+                return false;
+            }
             $.ajax({
-                url:'/loginCount?option=month',
-                type:'get',
+                url:'/loginCount',
+                type: 'POST',
+                data:{date:date,servers:servers,option:'month'},
                 dataType:'json',
                 async:false,
                 success:function( result ){
@@ -195,16 +227,6 @@
     <div class="month_canvasDiv" style="display: none">
         <div id='month_canvasDiv'></div>
     </div>
-
-
-    <!--<div class='ichartjs_info'>-->
-        <!--<div class='ichartjs_sm'>说明</div>-->
-        <!--<div class='ichartjs_details'>-->
-            <!--这是一个很常见的的折线图示例，示例展示了网站最近5天的流量统计。每隔6个小时统计一次。此示例用了平滑曲线代替直线。-->
-        <!--</div>-->
-        <!--<span class='ichartjs_sm'>备注：</span>-->
-        <!--<span class='ichartjs_details'>数据均为模拟。</span>-->
-    <!--</div>-->
 </div>
 
 <% include footer.ejs %>

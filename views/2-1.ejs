@@ -20,9 +20,10 @@
 </div>
 <script type="text/javascript">
     //初始化标签
-    $('#mark').val('/activeUser?option=day');
     //线型图表
     $(function(){
+        $("#datePicker").datepicker( dateOption );
+
         var options = {
             render : 'day_canvasDiv',
             data: '',
@@ -82,40 +83,51 @@
             }
         };
 
-        $.ajax({
-            url: '/activeUser?option=day',
-            type: 'get',
-            dataType: 'json',
-            async: false,
-            success: function (result) {
-                var data = [
-                    {
-                        name : '活跃用户数量',
-                        value:result.data,
-                        color:'#0d8ecf',
-                        line_width:2
-                    }
-                ];
-                options.data = data;
-                var line = new iChart.LineBasic2D(options);
-                line.draw();
-                var html = "";
-                html += "<tr>";
-                html+="<td>DAU</td>";
-                if(result.data.length){
-                    result.data.forEach(function(a){
-                        html += "<td>"+ a +"</td>";
-                    });
-                }
-                html += "</tr>";
-                $('tbody').empty().html(html);
-            }
-        });
         $('#day').on('click',function(){
             $('.day_canvasDiv').css('display','block');
             $('.week_canvasDiv').css('display','none');
             $('.month_canvasDiv').css('display','none');
             $('.active_canvasDiv').css('display','none');
+            var servers = $('#servers').val();
+            var date = $('#datePicker').val();
+            if(!servers){
+                alert('请选择服务器');
+                return false;
+            }
+            if(!date.length){
+                alert('请选择日期');
+                return false;
+            }
+            $.ajax({
+                url: '/activeUser',
+                type: 'POST',
+                data:{date:date,servers:servers,option:'day'},
+                dataType: 'json',
+                async: false,
+                success: function (result) {
+                    var data = [
+                        {
+                            name : '活跃用户数量',
+                            value:result.data,
+                            color:'#0d8ecf',
+                            line_width:2
+                        }
+                    ];
+                    options.data = data;
+                    var line = new iChart.LineBasic2D(options);
+                    line.draw();
+                    var html = "";
+                    html += "<tr>";
+                    html+="<td>DAU</td>";
+                    if(result.data.length){
+                        result.data.forEach(function(a){
+                            html += "<td>"+ a +"</td>";
+                        });
+                    }
+                    html += "</tr>";
+                    $('tbody').empty().html(html);
+                }
+            });
         });
 
         $('#week').on('click',function(){
@@ -123,10 +135,21 @@
             $('.week_canvasDiv').css('display','block');
             $('.month_canvasDiv').css('display','none');
             $('.active_canvasDiv').css('display','none');
+            var servers = $('#servers').val();
+            var date = $('#datePicker').val();
+            if(!servers){
+                alert('请选择服务器');
+                return false;
+            }
+            if(!date.length){
+                alert('请选择日期');
+                return false;
+            }
             //动态调用数据
             $.ajax({
-                url:'/activeUser?option=week',
-                type:'get',
+                url:'/activeUser',
+                type: 'POST',
+                data:{date:date,servers:servers,option:'week'},
                 dataType:'json',
                 async:false,
                 success:function( result ){
@@ -168,10 +191,20 @@
             $('.week_canvasDiv').css('display','none');
             $('.day_canvasDiv').css('display','none');
             $('.active_canvasDiv').css('display','none');
-            //动态调用数据
+            var servers = $('#servers').val();
+            var date = $('#datePicker').val();
+            if(!servers){
+                alert('请选择服务器');
+                return false;
+            }
+            if(!date.length){
+                alert('请选择日期');
+                return false;
+            }
             $.ajax({
-                url:'/activeUser?option=month',
-                type:'get',
+                url:'/activeUser',
+                type: 'POST',
+                data:{date:date,servers:servers,option:'month'},
                 dataType:'json',
                 async:false,
                 success:function( result ){
@@ -210,11 +243,20 @@
             $('.month_canvasDiv').css('display','none');
             $('.week_canvasDiv').css('display','none');
             $('.day_canvasDiv').css('display','none');
-
+            var servers = $('#servers').val();
+            var date = $('#datePicker').val();
+            if(!servers){
+                alert('请选择服务器');
+                return false;
+            }
+            if(!date.length){
+                alert('请选择日期');
+                return false;
+            }
             $.ajax({
-                url:'/activeUser?option=active',
-                type:'get',
-                dataType:'json',
+                url:'/activeUser',
+                type: 'POST',
+                data:{date:date,servers:servers,option:'active'},
                 async:false,
                 success:function( result ){
                     result = result.data;
@@ -268,14 +310,7 @@
             </tr>
 
             </thead>
-            <tbody>
-            <tr>
-                <td>活跃用户</td>
-                <% day.forEach(function( a ){%>
-                <td><%= a %></td>
-                <%});%>
-            </tr>
-            </tbody>
+            <tbody></tbody>
         </table>
     </div>
 

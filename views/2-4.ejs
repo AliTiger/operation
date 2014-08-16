@@ -36,8 +36,8 @@
 <script type="text/javascript">
     //线型图表
     $(function(){
-        //初始化标签
-        $('#mark').val('/useLength?option=day');
+        //初始化日期插件
+        $("#datePicker").datepicker( dateOption );
         var options = {
             render : 'day_canvasDiv',
             data: '',
@@ -96,40 +96,6 @@
                 }]
             }
         };
-        //动态调用数据
-        $.ajax({
-            url:'/useLength?option=day',
-            type:'get',
-            dataType:'json',
-            async:false,
-            success:function( result ){
-                console.log('result:',result);
-                var data = [
-                    {
-                        name : '每日使用时长',
-                        value:result.day,
-                        color:'#0d8ecf',
-                        line_width:2
-                    },
-                    {
-                        name : '日均使用时长',
-                        value:result.dayAver,
-                        color:'#66FF33',
-                        line_width:2
-                    }
-                ];
-                //alert('设置权限成功');
-                options.data = data;
-                options.render = 'day_canvasDiv';
-                options.title = '每周及周均使用时长';
-                options.coordinate.grids.vertical.value = 30;
-                options.coordinate.scale[1].labels = day_labels;
-                var line = new iChart.LineBasic2D( options );
-
-                //开始画图
-                line.draw();
-            }
-        });
 
         $('#day').on('click',function(){
             $('.day_canvasDiv').css('display','block');
@@ -141,6 +107,49 @@
             $('.charge_day_canvasDiv').css('display','none');
             $('.charge_week_canvasDiv').css('display','none');
             $('.charge_month_canvasDiv').css('display','none');
+            var servers = $('#servers').val();
+            var date = $('#datePicker').val();
+            if(!servers){
+                alert('请选择服务器');
+                return false;
+            }
+            if(!date.length){
+                alert('请选择日期');
+                return false;
+            }
+            $.ajax({
+                url:'/useTimeLength',
+                type: 'POST',
+                data:{date:date,servers:servers,option:'day'},
+                dataType:'json',
+                async:false,
+                success:function( result ){
+                    console.log('result:',result);
+                    var data = [
+                        {
+                            name : '每日使用时长',
+                            value:result.day,
+                            color:'#0d8ecf',
+                            line_width:2
+                        },
+                        {
+                            name : '日均使用时长',
+                            value:result.dayAver,
+                            color:'#66FF33',
+                            line_width:2
+                        }
+                    ];
+                    options.data = data;
+                    options.render = 'day_canvasDiv';
+                    options.title = '每日及日均使用时长';
+                    options.coordinate.grids.vertical.value = 30;
+                    options.coordinate.scale[1].labels = day_labels;
+                    var line = new iChart.LineBasic2D( options );
+
+                    //开始画图
+                    line.draw();
+                }
+            });
         });
         $('#week').on('click',function(){
             $('.day_canvasDiv').css('display','none');
@@ -152,11 +161,21 @@
             $('.charge_day_canvasDiv').css('display','none');
             $('.charge_week_canvasDiv').css('display','none');
             $('.charge_month_canvasDiv').css('display','none');
-
+            var servers = $('#servers').val();
+            var date = $('#datePicker').val();
+            if(!servers){
+                alert('请选择服务器');
+                return false;
+            }
+            if(!date.length){
+                alert('请选择日期');
+                return false;
+            }
             //动态调用数据
             $.ajax({
-                url:'/useLength?option=week',
-                type:'get',
+                url:'/useTimeLength',
+                type: 'POST',
+                data:{date:date,servers:servers,option:'week'},
                 dataType:'json',
                 async:false,
                 success:function( result ){
@@ -199,11 +218,20 @@
             $('.charge_day_canvasDiv').css('display','none');
             $('.charge_week_canvasDiv').css('display','none');
             $('.charge_month_canvasDiv').css('display','none');
-
-            //动态调用数据
+            var servers = $('#servers').val();
+            var date = $('#datePicker').val();
+            if(!servers){
+                alert('请选择服务器');
+                return false;
+            }
+            if(!date.length){
+                alert('请选择日期');
+                return false;
+            }
             $.ajax({
-                url:'/useLength?option=month',
-                type:'get',
+                url:'/useTimeLength',
+                type: 'POST',
+                data:{date:date,servers:servers,option:'month'},
                 dataType:'json',
                 async:false,
                 success:function( result ){
@@ -245,10 +273,20 @@
             $('.charge_day_canvasDiv').css('display','none');
             $('.charge_week_canvasDiv').css('display','none');
             $('.charge_month_canvasDiv').css('display','none');
-            //动态调用数据
+            var servers = $('#servers').val();
+            var date = $('#datePicker').val();
+            if(!servers){
+                alert('请选择服务器');
+                return false;
+            }
+            if(!date.length){
+                alert('请选择日期');
+                return false;
+            }
             $.ajax({
-                url:'/useLength?option=dayActive',
-                type:'get',
+                url:'/useTimeLength',
+                type: 'POST',
+                data:{date:date,servers:servers,option:'dayActive'},
                 dataType:'json',
                 async:false,
                 success:function( result ){
@@ -290,11 +328,20 @@
             $('.charge_day_canvasDiv').css('display','none');
             $('.charge_week_canvasDiv').css('display','none');
             $('.charge_month_canvasDiv').css('display','none');
-
-            //动态调用数据
+            var servers = $('#servers').val();
+            var date = $('#datePicker').val();
+            if(!servers){
+                alert('请选择服务器');
+                return false;
+            }
+            if(!date.length){
+                alert('请选择日期');
+                return false;
+            }
             $.ajax({
-                url:'/useLength?option=weekActive',
-                type:'get',
+                url:'/useTimeLength',
+                type: 'POST',
+                data:{date:date,servers:servers,option:'weekActive'},
                 dataType:'json',
                 async:false,
                 success:function( result ){
@@ -335,11 +382,20 @@
             $('.charge_day_canvasDiv').css('display','none');
             $('.charge_week_canvasDiv').css('display','none');
             $('.charge_month_canvasDiv').css('display','none');
-
-            //动态调用数据
+            var servers = $('#servers').val();
+            var date = $('#datePicker').val();
+            if(!servers){
+                alert('请选择服务器');
+                return false;
+            }
+            if(!date.length){
+                alert('请选择日期');
+                return false;
+            }
             $.ajax({
-                url:'/useLength?option=monthActive',
-                type:'get',
+                url:'/useTimeLength',
+                type: 'POST',
+                data:{date:date,servers:servers,option:'monthActive'},
                 dataType:'json',
                 async:false,
                 success:function( result ){
@@ -380,11 +436,20 @@
             $('.charge_day_canvasDiv').css('display','block');
             $('.charge_week_canvasDiv').css('display','none');
             $('.charge_month_canvasDiv').css('display','none');
-
-            //动态调用数据
+            var servers = $('#servers').val();
+            var date = $('#datePicker').val();
+            if(!servers){
+                alert('请选择服务器');
+                return false;
+            }
+            if(!date.length){
+                alert('请选择日期');
+                return false;
+            }
             $.ajax({
-                url:'/useLength?option=dayCharge',
-                type:'get',
+                url:'/useTimeLength',
+                type: 'POST',
+                data:{date:date,servers:servers,option:'dayCharge'},
                 dataType:'json',
                 async:false,
                 success:function( result ){
@@ -425,11 +490,20 @@
             $('.charge_day_canvasDiv').css('display','none');
             $('.charge_week_canvasDiv').css('display','block');
             $('.charge_month_canvasDiv').css('display','none');
-
-            //动态调用数据
+            var servers = $('#servers').val();
+            var date = $('#datePicker').val();
+            if(!servers){
+                alert('请选择服务器');
+                return false;
+            }
+            if(!date.length){
+                alert('请选择日期');
+                return false;
+            }
             $.ajax({
-                url:'/useLength?option=weekCharge',
-                type:'get',
+                url:'/useTimeLength',
+                type: 'POST',
+                data:{date:date,servers:servers,option:'weekCharge'},
                 dataType:'json',
                 async:false,
                 success:function( result ){
@@ -469,11 +543,20 @@
             $('.charge_day_canvasDiv').css('display','none');
             $('.charge_week_canvasDiv').css('display','none');
             $('.charge_month_canvasDiv').css('display','block');
-
-            //动态调用数据
+            var servers = $('#servers').val();
+            var date = $('#datePicker').val();
+            if(!servers){
+                alert('请选择服务器');
+                return false;
+            }
+            if(!date.length){
+                alert('请选择日期');
+                return false;
+            }
             $.ajax({
-                url:'/useLength?option=monthCharge',
-                type:'get',
+                url:'/useTimeLength',
+                type: 'POST',
+                data:{date:date,servers:servers,option:'monthCharge'},
                 dataType:'json',
                 async:false,
                 success:function( result ){

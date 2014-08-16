@@ -49,7 +49,9 @@ exports.get = function(req, res){
 }
 //获取点击下载安装注册人数
 exports.getData = function(req, res){
-	var date = req.query.date;
+	var servers = req.body.servers;
+	console.log('servers:',servers);
+	var date = req.body.date;
 	console.log('date:',date);
 	var click = usersData.get('click'),
 	download = usersData.get('download'),

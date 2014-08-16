@@ -18,9 +18,9 @@
 <script type="text/javascript">
 //线型图表
 $(function(){
+    //初始化日期插件
+    $("#datePicker").datepicker( dateOption );
     //初始化标签
-    $('#mark').val('/newActiveUsers?option=day');
-
     var options = {
         render : 'day_canvasDiv',
         data: '',
@@ -80,30 +80,41 @@ $(function(){
         }
     };
 
-    $.ajax({
-        url:'/newActiveUsers?option=day',
-        type:'get',
-        dataType:'json',
-        async:false,
-        success:function( result ){
-            var data = [
-                {
-                    name : '日新增活跃用户数量',
-                    value:result.data,
-                    color:'#0d8ecf',
-                    line_width:2
-                }
-            ];
-            options.data = data;
-            var line = new iChart.LineBasic2D( options );
-            line.draw();
-        }
-    });
     $('#day').on('click',function(){
         $('.day_canvasDiv').css('display','block');
         $('.week_canvasDiv').css('display','none');
         $('.month_canvasDiv').css('display','none');
         $('.active_canvasDiv').css('display','none');
+        var servers = $('#servers').val();
+        var date = $('#datePicker').val();
+        if(!servers){
+            alert('请选择服务器');
+            return false;
+        }
+        if(!date.length){
+            alert('请选择日期');
+            return false;
+        }
+        $.ajax({
+            url:'/newActiveUsers',
+            type: 'POST',
+            data:{date:date,servers:servers,option:'day'},
+            dataType:'json',
+            async:false,
+            success:function( result ){
+                var data = [
+                    {
+                        name : '日新增活跃用户数量',
+                        value:result.data,
+                        color:'#0d8ecf',
+                        line_width:2
+                    }
+                ];
+                options.data = data;
+                var line = new iChart.LineBasic2D( options );
+                line.draw();
+            }
+        });
     });
 
     $('#week').on('click',function(){
@@ -111,9 +122,20 @@ $(function(){
         $('.week_canvasDiv').css('display','block');
         $('.month_canvasDiv').css('display','none');
         $('.active_canvasDiv').css('display','none');
+        var servers = $('#servers').val();
+        var date = $('#datePicker').val();
+        if(!servers){
+            alert('请选择服务器');
+            return false;
+        }
+        if(!date.length){
+            alert('请选择日期');
+            return false;
+        }
         $.ajax({
             url:'/newActiveUsers?option=week',
-            type:'get',
+            type: 'POST',
+            data:{date:date,servers:servers,option:'week'},
             dataType:'json',
             async:false,
             success:function( result ){
@@ -144,10 +166,20 @@ $(function(){
         $('.week_canvasDiv').css('display','none');
         $('.day_canvasDiv').css('display','none');
         $('.active_canvasDiv').css('display','none');
-        //动态调用数据
+        var servers = $('#servers').val();
+        var date = $('#datePicker').val();
+        if(!servers){
+            alert('请选择服务器');
+            return false;
+        }
+        if(!date.length){
+            alert('请选择日期');
+            return false;
+        }
         $.ajax({
             url:'/newActiveUsers?option=month',
-            type:'get',
+            type: 'POST',
+            data:{date:date,servers:servers,option:'week'},
             dataType:'json',
             async:false,
             success:function( result ){

@@ -18,8 +18,8 @@
 <script type="text/javascript">
     //柱状图表 两段数据 上下
     $(function(){
-        //初始化标签
-        $('#mark').val('/onceUsers?option=day');
+        //初始化日期插件
+        $("#datePicker").datepicker( dateOption );
         var init = function(chart){
             //利用自定义组件构造左上侧单位
             chart.plugin(new iChart.Custom({
@@ -105,44 +105,91 @@
                 height:'76%'
             }
         };
-        $.ajax({
-            url: '/onceUsers?option=day',
-            type: 'get',
-            dataType: 'json',
-            async: false,
-            success: function (result) {
-                var data = [
-                    {
-                        name : '新增用户',
-                        value:result.day,
-                        color:'#32bdbc'
-                    },
-                    {
-                        name : '实际新增',
-                        value:result.dayAver,
-                        color:'#d75a5e'
-                    }
-                ];
-                options.data = data;
-                var chart = new iChart.ColumnStacked2D( options );
-                init(chart);
-                chart.draw();
-            }
-        });
 
         $('#day').on('click',function(){
             $('.day_columntacked2d').css('display','block');
             $('.week_columntacked2d').css('display','none');
             $('.month_columntacked2d').css('display','none');
+            var servers = $('#servers').val();
+            var date = $('#datePicker').val();
+            if(!servers){
+                alert('请选择服务器');
+                return false;
+            }
+            if(!date.length){
+                alert('请选择日期');
+                return false;
+            }
+            $.ajax({
+                url: '/onceUsers',
+                type: 'POST',
+                data:{date:date,servers:servers,option:'day'},
+                dataType: 'json',
+                async: false,
+                success: function (result) {
+                    var data = [
+                        {
+                            name : '新增用户',
+                            value:result.day,
+                            color:'#32bdbc'
+                        },
+                        {
+                            name : '实际新增',
+                            value:result.dayAver,
+                            color:'#d75a5e'
+                        }
+                    ];
+                    options.data = data;
+                    var chart = new iChart.ColumnStacked2D( options );
+                    init(chart);
+                    chart.draw();
+                    var html = "";
+                    html += "<tr>";
+                    html += "<td>一次用户比例</td>";
+                    if(result.day.length){
+                        result.day.forEach(function(a){
+                            html += "<td>"+ a +"</td>";
+                        });
+                    }
+                    html += "</tr>";
+                    html += "<tr>";
+                    html += "<td>日一次用户数</td>";
+                    if(result.dayAver.length){
+                        result.dayAver.forEach(function(a){
+                            html += "<td>"+ a +"</td>";
+                        });
+                    }
+                    html += "</tr>";
+                    html += "<tr>";
+                    html += "<td>日新增用户数</td>";
+                    if(result.day.length){
+                        result.day.forEach(function(a){
+                            html += "<td>"+ a +"</td>";
+                        });
+                    }
+                    html += "</tr>";
+                    $('tbody').empty().html(html);
+                }
+            });
         });
         $('#week').on('click',function(){
             $('.day_columntacked2d').css('display','none');
             $('.week_columntacked2d').css('display','block');
             $('.month_columntacked2d').css('display','none');
-            //动态调用数据
+            var servers = $('#servers').val();
+            var date = $('#datePicker').val();
+            if(!servers){
+                alert('请选择服务器');
+                return false;
+            }
+            if(!date.length){
+                alert('请选择日期');
+                return false;
+            }
             $.ajax({
-                url:'/onceUsers?option=week',
-                type:'get',
+                url:'/onceUsers',
+                type: 'POST',
+                data:{date:date,servers:servers,option:'week'},
                 dataType:'json',
                 async:false,
                 success:function( result ){
@@ -201,12 +248,20 @@
             $('.day_columntacked2d').css('display','none');
             $('.week_columntacked2d').css('display','none');
             $('.month_columntacked2d').css('display','block');
-
-            //动态调用数据
+            var servers = $('#servers').val();
+            var date = $('#datePicker').val();
+            if(!servers){
+                alert('请选择服务器');
+                return false;
+            }
+            if(!date.length){
+                alert('请选择日期');
+                return false;
+            }
             $.ajax({
-                url:'/onceUsers?option=month',
-                type:'get',
-                dataType:'json',
+                url:'/onceUsers',
+                type: 'POST',
+                data:{date:date,servers:servers,option:'month'},
                 async:false,
                 success:function( result ){
                     console.log('result:',result);
@@ -275,26 +330,7 @@
             </tr>
 
             </thead>
-            <tbody>
-            <tr>
-                <td>日一次用户比例</td>
-                <% day.forEach(function( a ){%>
-                <td><%= a %></td>
-                <%});%>
-            </tr>
-            <tr>
-                <td>日一次用户数</td>
-                <% day.forEach(function( a ){%>
-                <td><%= a %></td>
-                <%});%>
-            </tr>
-            <tr>
-                <td>日新增用户数</td>
-                <% day.forEach(function( a ){%>
-                <td><%= a %></td>
-                <%});%>
-            </tr>
-            </tbody>
+            <tbody></tbody>
         </table>
     </div>
     <div class="week_columntacked2d" style="display: none">

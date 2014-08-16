@@ -71,21 +71,22 @@ app.get('/operationCost/:page_id',operationCost.get);
 app.get('/userInformation/:page_id',userInformation.get);
 
 //获取用户点击下载安装注册数量
-app.get('/getUserData',getUsers.getData);
+app.post('/getUserData',getUsers.getData);
 //新增实增数
-app.get('/userRealAppend',getUsers.userRealAppend);
+app.post('/userRealAppend',getUsers.userRealAppend);
+
 //活跃用户数量
-app.get('/activeUser',activeUsers.activeUsers);
+app.post('/activeUser',activeUsers.activeUsers);
 //新增活跃用户数据
-app.get('/newActiveUsers',activeUsers.newActiveUsers);
+app.post('/newActiveUsers',activeUsers.newActiveUsers);
 //活跃用户登录次数
-app.get('/loginCount',activeUsers.loginCount);
+app.post('/loginCount',activeUsers.loginCount);
 //活跃用户使用时长
-app.get('/useLength',activeUsers.useLength);
+app.post('/useTimeLength',activeUsers.useTimeLength);
 //活跃用户一次用户数量
-app.get('/onceUsers',activeUsers.onceUsers);
+app.post('/onceUsers',activeUsers.onceUsers);
 //活跃用户高活跃用户数
-app.get('/highActiveUsers',activeUsers.highActiveUsers);
+app.post('/highActiveUsers',activeUsers.highActiveUsers);
 
 //用户在线
 app.get('/userOnline',onlineUsers.userOnline);

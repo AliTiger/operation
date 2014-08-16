@@ -18,8 +18,8 @@
 </div>
 <script type="text/javascript">
     $(function(){
-        //初始化标签
-        $('#mark').val('/chargeRank');
+        //初始化日期插件
+        $("#datePicker").datepicker( dateOption );
         $.ajax({
             url: '/chargeRank',
             type: 'get',
