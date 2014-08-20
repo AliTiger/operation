@@ -106,36 +106,36 @@ app.post('/lifeCycle',lostUsers.lifeCycle);
 
 //游戏收入
 //充值消费金额
-app.get('/chargeConsume',gameIncome.chargeConsume);
+app.post('/chargeConsume',gameIncome.chargeConsume);
 //用户平均收益
-app.get('/averIncome',gameIncome.averIncome);
+app.post('/averIncome',gameIncome.averIncome);
 //充值用户统计
-app.get('/chargeCount',gameIncome.chargeCount);
+app.post('/chargeCount',gameIncome.chargeCount);
 //活跃充值比例
-app.get('/activeCharge',gameIncome.activeCharge);
+app.post('/activeCharge',gameIncome.activeCharge);
 //充值用户流失
-app.get('/chargeUserLost',gameIncome.userLost);
+app.post('/chargeUserLost',gameIncome.userLost);
 //其他相关统计
-app.get('/otherCount',gameIncome.otherCount);
+app.post('/otherCount',gameIncome.otherCount);
 
 //投入产出比
-app.get('/inputOutput',operationCost.inputOutput);
+app.post('/inputOutput',operationCost.inputOutput);
 //推广成本
-app.get('/popularize',operationCost.popularize);
+app.post('/popularize',operationCost.popularize);
 
 //用户信息
 //用户等级分布
-app.get('/gradeDistribute',userInformation.gradeDistribute);
+app.post('/gradeDistribute',userInformation.gradeDistribute);
 //用户等级排名
-app.get('/gradeRank',userInformation.gradeRank);
+app.post('/gradeRank',userInformation.gradeRank);
 //用户任务分布
-app.get('/taskDistribute',userInformation.taskDistribute);
+app.post('/taskDistribute',userInformation.taskDistribute);
 //用户充值排名
-app.get('/chargeRank',userInformation.chargeRank);
+app.post('/chargeRank',userInformation.chargeRank);
 //用户地图分布
-app.get('/map',userInformation.map);
+app.post('/map',userInformation.map);
 //用户战场次数
-app.get('/battlefield',userInformation.battlefield);
+app.post('/battlefield',userInformation.battlefield);
 
 //另存为xlsx文件
 app.get('/save/:url',save.saveAs);

@@ -87,55 +87,7 @@
                 }]
             }
         };
-        $.ajax({
-            url: '/chargeCount?option=chargeUser',
-            type: 'get',
-            dataType: 'json',
-            async: false,
-            success: function (result) {
-                var data = [
-                    {
-                        name : '付费用户数量',
-                        value:result.data1,
-                        color:'#0d8ecf',
-                        line_width:2
-                    },
-                    {
-                        name : '新增付费数量',
-                        value:result.data2,
-                        color:'#66FF33',
-                        line_width:2
-                    }
-                ];
-                options.data = data;
-                options.render = 'charge_user_canvasDiv';
-                options.title = '付费用户数量/新增付费数量';
-                options.coordinate.grids.vertical.value = 11;
-                options.coordinate.scale[1].labels = month_labels;
-                var line = new iChart.LineBasic2D(options);
-                //开始画图
-                line.draw();
-                var html = "";
 
-                if(result.data1.length){
-                    html += "<tr>";
-                    html += "<td>付费用户数量</td>";
-                    result.data1.forEach(function(a){
-                        html += "<td>"+ a +"</td>";
-                    });
-                    html += "</tr>";
-                }
-                if(result.data2.length){
-                    html += "<tr>";
-                    html += "<td>新增付费数量</td>";
-                    result.data2.forEach(function(a){
-                        html += "<td>"+ a +"</td>";
-                    });
-                    html += "</tr>";
-                }
-                $('tbody').empty().html(html);
-            }
-        });
         $('#charge_user').on('click',function(){
             $('.charge_user_canvasDiv').css('display','block');
             $('.charge_convert_canvasDiv').css('display','none');
@@ -143,6 +95,66 @@
             $('.loyal_charge_canvasDiv').css('display','none');
             $('.eff_user_canvasDiv').css('display','none');
             $('.first_charge_canvasDiv').css('display','none');
+            var servers = $('#servers').val();
+            var date = $('#datePicker').val();
+            if(!servers){
+                alert('请选择服务器');
+                return false;
+            }
+            if(!date.length){
+                alert('请选择日期');
+                return false;
+            }
+            $.ajax({
+                url: '/chargeCount',
+                type: 'POST',
+                data:{date:date,servers:servers,option:'chargeUser'},
+                dataType: 'json',
+                async: false,
+                success: function (result) {
+                    var data = [
+                        {
+                            name : '付费用户数量',
+                            value:result.data1,
+                            color:'#0d8ecf',
+                            line_width:2
+                        },
+                        {
+                            name : '新增付费数量',
+                            value:result.data2,
+                            color:'#66FF33',
+                            line_width:2
+                        }
+                    ];
+                    options.data = data;
+                    options.render = 'charge_user_canvasDiv';
+                    options.title = '付费用户数量/新增付费数量';
+                    options.coordinate.grids.vertical.value = 11;
+                    options.coordinate.scale[1].labels = month_labels;
+                    var line = new iChart.LineBasic2D(options);
+                    //开始画图
+                    line.draw();
+                    var html = "";
+
+                    if(result.data1.length){
+                        html += "<tr>";
+                        html += "<td>付费用户数量</td>";
+                        result.data1.forEach(function(a){
+                            html += "<td>"+ a +"</td>";
+                        });
+                        html += "</tr>";
+                    }
+                    if(result.data2.length){
+                        html += "<tr>";
+                        html += "<td>新增付费数量</td>";
+                        result.data2.forEach(function(a){
+                            html += "<td>"+ a +"</td>";
+                        });
+                        html += "</tr>";
+                    }
+                    $('tbody').empty().html(html);
+                }
+            });
         });
         $('#charge_convert').on('click',function(){
             $('.charge_user_canvasDiv').css('display','none');
@@ -151,9 +163,20 @@
             $('.loyal_charge_canvasDiv').css('display','none');
             $('.eff_user_canvasDiv').css('display','none');
             $('.first_charge_canvasDiv').css('display','none');
+            var servers = $('#servers').val();
+            var date = $('#datePicker').val();
+            if(!servers){
+                alert('请选择服务器');
+                return false;
+            }
+            if(!date.length){
+                alert('请选择日期');
+                return false;
+            }
             $.ajax({
-                url: '/chargeCount?option=convert',
-                type: 'get',
+                url: '/chargeCount',
+                type: 'POST',
+                data:{date:date,servers:servers,option:'convert'},
                 dataType: 'json',
                 async: false,
                 success: function (result) {
@@ -187,7 +210,6 @@
             });
 
         });
-
         $('#month_charge').on('click',function(){
             $('.charge_user_canvasDiv').css('display','none');
             $('.charge_convert_canvasDiv').css('display','none');
@@ -195,9 +217,20 @@
             $('.loyal_charge_canvasDiv').css('display','none');
             $('.eff_user_canvasDiv').css('display','none');
             $('.first_charge_canvasDiv').css('display','none');
+            var servers = $('#servers').val();
+            var date = $('#datePicker').val();
+            if(!servers){
+                alert('请选择服务器');
+                return false;
+            }
+            if(!date.length){
+                alert('请选择日期');
+                return false;
+            }
             $.ajax({
-                url: '/chargeCount?option=monthCharge',
-                type: 'get',
+                url: '/chargeCount',
+                type: 'POST',
+                data:{date:date,servers:servers,option:'monthCharge'},
                 dataType: 'json',
                 async: false,
                 success: function (result) {
@@ -229,7 +262,6 @@
                 }
             });
         });
-
         $('#loyal_charge').on('click',function(){
             $('.charge_user_canvasDiv').css('display','none');
             $('.charge_convert_canvasDiv').css('display','none');
@@ -237,9 +269,20 @@
             $('.loyal_charge_canvasDiv').css('display','block');
             $('.eff_user_canvasDiv').css('display','none');
             $('.first_charge_canvasDiv').css('display','none');
+            var servers = $('#servers').val();
+            var date = $('#datePicker').val();
+            if(!servers){
+                alert('请选择服务器');
+                return false;
+            }
+            if(!date.length){
+                alert('请选择日期');
+                return false;
+            }
             $.ajax({
-                url: '/chargeCount?option=loyal',
-                type: 'get',
+                url: '/chargeCount',
+                type: 'POST',
+                data:{date:date,servers:servers,option:'loyal'},
                 dataType: 'json',
                 async: false,
                 success: function (result) {
@@ -271,7 +314,6 @@
                 }
             });
         });
-
         $('#eff_user').on('click',function(){
             $('.charge_user_canvasDiv').css('display','none');
             $('.charge_convert_canvasDiv').css('display','none');
@@ -279,9 +321,20 @@
             $('.loyal_charge_canvasDiv').css('display','none');
             $('.eff_user_canvasDiv').css('display','block');
             $('.first_charge_canvasDiv').css('display','none');
+            var servers = $('#servers').val();
+            var date = $('#datePicker').val();
+            if(!servers){
+                alert('请选择服务器');
+                return false;
+            }
+            if(!date.length){
+                alert('请选择日期');
+                return false;
+            }
             $.ajax({
-                url: '/chargeCount?option=effective',
-                type: 'get',
+                url: '/chargeCount',
+                type: 'POST',
+                data:{date:date,servers:servers,option:'effective'},
                 dataType: 'json',
                 async: false,
                 success: function (result) {
@@ -313,7 +366,6 @@
                 }
             });
         });
-
         $('#first_charge').on('click',function(){
             $('.charge_user_canvasDiv').css('display','none');
             $('.charge_convert_canvasDiv').css('display','none');
@@ -321,9 +373,20 @@
             $('.loyal_charge_canvasDiv').css('display','none');
             $('.eff_user_canvasDiv').css('display','none');
             $('.first_charge_canvasDiv').css('display','block');
+            var servers = $('#servers').val();
+            var date = $('#datePicker').val();
+            if(!servers){
+                alert('请选择服务器');
+                return false;
+            }
+            if(!date.length){
+                alert('请选择日期');
+                return false;
+            }
             $.ajax({
-                url: '/chargeCount?option=first',
-                type: 'get',
+                url: '/chargeCount',
+                type: 'POST',
+                data:{date:date,servers:servers,option:'first'},
                 dataType: 'json',
                 async: false,
                 success: function (result) {
@@ -371,21 +434,7 @@
             </tr>
 
             </thead>
-            <tbody>
-            <tr>
-                <td>付费用户数量</td>
-                <% ARPPU.forEach(function( a ){%>
-                <td><%= a %></td>
-                <%});%>
-            </tr>
-            <tr>
-                <td>新增付费数量</td>
-                <% ARPU.forEach(function( a ){%>
-                <td><%= a %></td>
-                <%});%>
-            </tr>
-
-            </tbody>
+            <tbody></tbody>
         </table>
     </div>
     <div class="charge_convert_canvasDiv" style="display: none">
@@ -400,14 +449,7 @@
             </tr>
 
             </thead>
-            <tbody>
-            <tr>
-                <td>付费渗透比例</td>
-                <% ARPPU.forEach(function( a ){%>
-                <td><%= a %></td>
-                <%});%>
-            </tr>
-            </tbody>
+            <tbody></tbody>
         </table>
     </div>
 
@@ -423,14 +465,7 @@
             </tr>
 
             </thead>
-            <tbody>
-            <tr>
-                <td>付费用户月均充值次数</td>
-                <% ARPPU.forEach(function( a ){%>
-                <td><%= a %></td>
-                <%});%>
-            </tr>
-            </tbody>
+            <tbody></tbody>
         </table>
     </div>
 
@@ -446,14 +481,7 @@
             </tr>
 
             </thead>
-            <tbody>
-            <tr>
-                <td>忠实付费用户数</td>
-                <% ARPPU.forEach(function( a ){%>
-                <td><%= a %></td>
-                <%});%>
-            </tr>
-            </tbody>
+            <tbody></tbody>
         </table>
     </div>
 
@@ -469,14 +497,7 @@
             </tr>
 
             </thead>
-            <tbody>
-            <tr>
-                <td>高效付费用户数</td>
-                <% ARPPU.forEach(function( a ){%>
-                <td><%= a %></td>
-                <%});%>
-            </tr>
-            </tbody>
+            <tbody></tbody>
         </table>
     </div>
 
@@ -492,14 +513,7 @@
             </tr>
 
             </thead>
-            <tbody>
-            <tr>
-                <td>用户首次付费率</td>
-                <% ARPPU.forEach(function( a ){%>
-                <td><%= a %></td>
-                <%});%>
-            </tr>
-            </tbody>
+            <tbody></tbody>
         </table>
     </div>
 

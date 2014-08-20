@@ -25,13 +25,15 @@ exports.get = function(req, res){
 
 //用户充值消费金额
 exports.chargeConsume = function(req, res){
-	var option = req.query.option;
+	var date = req.body.date;
+	var servers = req.body.servers;
+	var option = req.body.option;//日 周 月
 	//每天曲线
-	if( option == 'day_line'){
+	if( option == 'dayLine'){
 		return res.send(200,{charge:day,consume:dayAver});
 	}
 	//每天数据
-	if( option == 'day_data'){
+	if( option == 'dayData'){
 		var data = [
 			{server:'3区力拔山河',a:'1000/900',b:'1000/900',c:'1000/900',d:'1000/900',e:'1000/900',f:'1000/900',g:'1000/900',total:'1000/900'},
 			{server:'3区力拔山河',a:'1000/900',b:'1000/900',c:'1000/900',d:'1000/900',e:'1000/900',f:'1000/900',g:'1000/900',total:'1000/900'},
@@ -46,11 +48,11 @@ exports.chargeConsume = function(req, res){
 		return res.send(200,{data:data});
 	}
 	//每月曲线
-	if( option == 'month_line'){
+	if( option == 'monthLine'){
 		return res.send(200,{charge:month,consume:monthAver});
 	}
 	//每月数据
-	if( option == 'month_data'){
+	if( option == 'monthData'){
 		var data = [
 			{server:'1区力拔山河',a:'1000/900',b:'1000/900',c:'1000/900',d:'1000/900',e:'1000/900',f:'1000/900',total:'1000/900'},
 			{server:'2区力拔山河',a:'1000/900',b:'1000/900',c:'1000/900',d:'1000/900',e:'1000/900',f:'1000/900',total:'1000/900'},
@@ -65,9 +67,22 @@ exports.chargeConsume = function(req, res){
 		return res.send(200,{data:data});
 	}
 }
+
+//用户平均收益
+exports.averIncome = function(req, res){
+	var date = req.body.date;
+	var servers = req.body.servers;
+	var ARPPU = month;
+	var ARPU= monthAver;
+	return res.send(200,{ARPPU:ARPPU,ARPU:ARPU});
+
+}
+
 //充值用户统计
 exports.chargeCount = function(req, res){
-	var option = req.query.option;
+	var date = req.body.date;
+	var servers = req.body.servers;
+	var option = req.body.option;//日 周 月
 	var data1 = month;
 	var data2 = monthAver;
 	//充值用户
@@ -98,17 +113,11 @@ exports.chargeCount = function(req, res){
 
 }
 
-//用户平均收益
-exports.averIncome = function(req, res){
-	var ARPPU = month;
-	var ARPU= monthAver;
-	return res.send(200,{ARPPU:ARPPU,ARPU:ARPU});
-
-}
-
 //活跃充值比例
 exports.activeCharge = function(req, res){
-	var option = req.query.option;
+	var date = req.body.date;
+	var servers = req.body.servers;
+	var option = req.body.option;//日 周 月
 	//日活跃用户充值人数
 	if(option == 'day'){
 		return res.send(200,{data:day});
@@ -138,7 +147,10 @@ exports.activeCharge = function(req, res){
 
 //充值用户流失
 exports.userLost = function(req, res){
-	var option = req.query.option;
+	var date = req.body.date;
+	var servers = req.body.servers;
+	var option = req.body.option;
+	console.log('====================option:',option);
 	//流失用户和回流用户人数
 	if(option == 'lostBack'){
 		return res.send(200,{data1:month,data2:monthAver});
@@ -151,7 +163,9 @@ exports.userLost = function(req, res){
 }
 //其他相关统计
 exports.otherCount = function(req, res){
-	var option = req.query.option;
+	var date = req.body.date;
+	var servers = req.body.servers;
+	var option = req.body.option;//日 周 月
 	var data = [];
 	//首次付费
 	if(option == 'firstCharge'){

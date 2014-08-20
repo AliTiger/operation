@@ -86,40 +86,6 @@
                 }]
             }
         };
-        $.ajax({
-            url: '/activeCharge?option=day',
-            type: 'get',
-            dataType: 'json',
-            async: false,
-            success: function (result) {
-                var data = [
-                    {
-                        name : '日活跃用户充值比例',
-                        value:result.data,
-                        color:'#0d8ecf',
-                        line_width:2
-                    }
-                ];
-                options.data = data;
-                options.render = 'day_active_canvasDiv';
-                options.title = '日活跃用户充值比例';
-                options.coordinate.grids.vertical.value = 30;
-                options.coordinate.scale[1].labels = day_labels;
-                var line = new iChart.LineBasic2D( options );
-                line.draw();
-                var html = "";
-
-                if(result.data.length){
-                    html += "<tr>";
-                    html += "<td>日活跃用户充值比例</td>";
-                    result.data.forEach(function(a){
-                        html += "<td>"+ a +"</td>";
-                    });
-                    html += "</tr>";
-                }
-                $('tbody').empty().html(html);
-            }
-        });
 
         $('#day_active').on('click',function(){
             $('.day_active_canvasDiv').css('display','block');
@@ -128,6 +94,51 @@
             $('.week_active_new_canvasDiv').css('display','none');
             $('.month_active_canvasDiv').css('display','none');
             $('.month_active_new_canvasDiv').css('display','none');
+            var servers = $('#servers').val();
+            var date = $('#datePicker').val();
+            if(!servers){
+                alert('请选择服务器');
+                return false;
+            }
+            if(!date.length){
+                alert('请选择日期');
+                return false;
+            }
+            $.ajax({
+                url: '/activeCharge',
+                type: 'POST',
+                data:{date:date,servers:servers,option:'day'},
+                dataType: 'json',
+                async: false,
+                success: function (result) {
+                    var data = [
+                        {
+                            name : '日活跃用户充值比例',
+                            value:result.data,
+                            color:'#0d8ecf',
+                            line_width:2
+                        }
+                    ];
+                    options.data = data;
+                    options.render = 'day_active_canvasDiv';
+                    options.title = '日活跃用户充值比例';
+                    options.coordinate.grids.vertical.value = 30;
+                    options.coordinate.scale[1].labels = day_labels;
+                    var line = new iChart.LineBasic2D( options );
+                    line.draw();
+                    var html = "";
+
+                    if(result.data.length){
+                        html += "<tr>";
+                        html += "<td>日活跃用户充值比例</td>";
+                        result.data.forEach(function(a){
+                            html += "<td>"+ a +"</td>";
+                        });
+                        html += "</tr>";
+                    }
+                    $('tbody').empty().html(html);
+                }
+            });
 
         });
         $('#day_active_new').on('click',function(){
@@ -137,9 +148,20 @@
             $('.week_active_new_canvasDiv').css('display','none');
             $('.month_active_canvasDiv').css('display','none');
             $('.month_active_new_canvasDiv').css('display','none');
+            var servers = $('#servers').val();
+            var date = $('#datePicker').val();
+            if(!servers){
+                alert('请选择服务器');
+                return false;
+            }
+            if(!date.length){
+                alert('请选择日期');
+                return false;
+            }
             $.ajax({
-                url: '/activeCharge?option=dayNew',
-                type: 'get',
+                url: '/activeCharge',
+                type: 'POST',
+                data:{date:date,servers:servers,option:'dayNew'},
                 dataType: 'json',
                 async: false,
                 success: function (result) {
@@ -172,7 +194,6 @@
                 }
             });
         });
-
         $('#week_active').on('click',function(){
             $('.day_active_canvasDiv').css('display','none');
             $('.day_active_new_canvasDiv').css('display','none');
@@ -180,9 +201,20 @@
             $('.week_active_new_canvasDiv').css('display','none');
             $('.month_active_canvasDiv').css('display','none');
             $('.month_active_new_canvasDiv').css('display','none');
+            var servers = $('#servers').val();
+            var date = $('#datePicker').val();
+            if(!servers){
+                alert('请选择服务器');
+                return false;
+            }
+            if(!date.length){
+                alert('请选择日期');
+                return false;
+            }
             $.ajax({
-                url: '/activeCharge?option=week',
-                type: 'get',
+                url: '/activeCharge',
+                type: 'POST',
+                data:{date:date,servers:servers,option:'week'},
                 dataType: 'json',
                 async: false,
                 success: function (result) {
@@ -215,7 +247,6 @@
                 }
             });
         });
-
         $('#week_active_new').on('click',function(){
             $('.day_active_canvasDiv').css('display','none');
             $('.day_active_new_canvasDiv').css('display','none');
@@ -223,9 +254,20 @@
             $('.week_active_new_canvasDiv').css('display','block');
             $('.month_active_canvasDiv').css('display','none');
             $('.month_active_new_canvasDiv').css('display','none');
+            var servers = $('#servers').val();
+            var date = $('#datePicker').val();
+            if(!servers){
+                alert('请选择服务器');
+                return false;
+            }
+            if(!date.length){
+                alert('请选择日期');
+                return false;
+            }
             $.ajax({
-                url: '/activeCharge?option=weekNew',
-                type: 'get',
+                url: '/activeCharge',
+                type: 'POST',
+                data:{date:date,servers:servers,option:'weekNew'},
                 dataType: 'json',
                 async: false,
                 success: function (result) {
@@ -258,7 +300,6 @@
                 }
             });
         });
-
         $('#month_active').on('click',function(){
             $('.day_active_canvasDiv').css('display','none');
             $('.day_active_new_canvasDiv').css('display','none');
@@ -266,9 +307,20 @@
             $('.week_active_new_canvasDiv').css('display','none');
             $('.month_active_canvasDiv').css('display','block');
             $('.month_active_new_canvasDiv').css('display','none');
+            var servers = $('#servers').val();
+            var date = $('#datePicker').val();
+            if(!servers){
+                alert('请选择服务器');
+                return false;
+            }
+            if(!date.length){
+                alert('请选择日期');
+                return false;
+            }
             $.ajax({
-                url: '/activeCharge?option=month',
-                type: 'get',
+                url: '/activeCharge',
+                type: 'POST',
+                data:{date:date,servers:servers,option:'month'},
                 dataType: 'json',
                 async: false,
                 success: function (result) {
@@ -301,7 +353,6 @@
                 }
             });
         });
-
         $('#month_active_new').on('click',function(){
             $('.day_active_canvasDiv').css('display','none');
             $('.day_active_new_canvasDiv').css('display','none');
@@ -309,9 +360,20 @@
             $('.week_active_new_canvasDiv').css('display','none');
             $('.month_active_canvasDiv').css('display','none');
             $('.month_active_new_canvasDiv').css('display','block');
+            var servers = $('#servers').val();
+            var date = $('#datePicker').val();
+            if(!servers){
+                alert('请选择服务器');
+                return false;
+            }
+            if(!date.length){
+                alert('请选择日期');
+                return false;
+            }
             $.ajax({
-                url: '/activeCharge?option=monthNew',
-                type: 'get',
+                url: '/activeCharge',
+                type: 'POST',
+                data:{date:date,servers:servers,option:'monthNew'},
                 dataType: 'json',
                 async: false,
                 success: function (result) {
@@ -360,14 +422,7 @@
             </tr>
 
             </thead>
-            <tbody>
-            <tr>
-                <td>日活跃用户充值比例</td>
-                <% ARPPU.forEach(function( a ){%>
-                <td><%= a %></td>
-                <%});%>
-            </tr>
-            </tbody>
+            <tbody></tbody>
         </table>
     </div>
 
@@ -381,16 +436,8 @@
                 <th><%=i%></th>
                 <% } %>
             </tr>
-
             </thead>
-            <tbody>
-            <tr>
-                <td>日新增活跃用户充值比例</td>
-                <% ARPPU.forEach(function( a ){%>
-                <td><%= a %></td>
-                <%});%>
-            </tr>
-            </tbody>
+            <tbody></tbody>
         </table>
     </div>
 
@@ -404,16 +451,8 @@
                 <th><%=i%></th>
                 <% } %>
             </tr>
-
             </thead>
-            <tbody>
-            <tr>
-                <td>高活跃用户充值比例</td>
-                <% ARPPU.forEach(function( a ){%>
-                <td><%= a %></td>
-                <%});%>
-            </tr>
-            </tbody>
+            <tbody></tbody>
         </table>
     </div>
 
@@ -427,16 +466,8 @@
                 <th><%=i%></th>
                 <% } %>
             </tr>
-
             </thead>
-            <tbody>
-            <tr>
-                <td>新增高活跃用户充值比例</td>
-                <% ARPPU.forEach(function( a ){%>
-                <td><%= a %></td>
-                <%});%>
-            </tr>
-            </tbody>
+            <tbody></tbody>
         </table>
     </div>
 
@@ -450,16 +481,8 @@
                 <th><%=i%></th>
                 <% } %>
             </tr>
-
             </thead>
-            <tbody>
-            <tr>
-                <td>月活跃用户充值比例</td>
-                <% ARPPU.forEach(function( a ){%>
-                <td><%= a %></td>
-                <%});%>
-            </tr>
-            </tbody>
+            <tbody></tbody>
         </table>
     </div>
 
@@ -473,22 +496,10 @@
                 <th><%=i%></th>
                 <% } %>
             </tr>
-
             </thead>
-            <tbody>
-            <tr>
-                <td>月新增活跃用户充值比例</td>
-                <% ARPPU.forEach(function( a ){%>
-                <td><%= a %></td>
-                <%});%>
-            </tr>
-            </tbody>
+            <tbody></tbody>
         </table>
     </div>
-
-
-
-
 </div>
 
 <% include footer.ejs %>

@@ -4,16 +4,16 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="col-lg-1">
-            <button name="day_line" id="day_line">每日曲线</button>
+            <button name="dayLine" id="dayLine">每日曲线</button>
         </div>
         <div class="col-lg-1">
-            <button name="day_data" id="day_data">每日数据</button>
+            <button name="dayData" id="dayData">每日数据</button>
         </div>
         <div class="col-lg-1">
-            <button name="month_line" id="month_line">每月曲线</button>
+            <button name="monthLine" id="monthLine">每月曲线</button>
         </div>
         <div class="col-lg-1">
-            <button name="month_data" id="month_data">每月数据</button>
+            <button name="monthData" id="monthData">每月数据</button>
         </div>
         <% include save_print.ejs %>
     </div>
@@ -81,52 +81,74 @@
                 }]
             }
         };
-        $.ajax({
-            url: '/chargeConsume?option=day_line',
-            type: 'get',
-            dataType: 'json',
-            async: false,
-            success: function (result) {
-                var data = [
-                    {
-                        name : '每日用户充值金额',
-                        value:result.charge,
-                        color:'#0d8ecf',
-                        line_width:2
-                    },
-                    {
-                        name : '每日用户消费金额',
-                        value:result.consume,
-                        color:'#66FF33',
-                        line_width:2
-                    }
-                ];
-                options.data = data;
-                options.render = 'day_canvasDiv';
-                options.title = '每日充值和消费金额';
-                options.coordinate.grids.vertical.value = 30;
-                options.coordinate.scale[1].labels = day_labels;
-                var line = new iChart.LineBasic2D( options );
 
-                //开始画图
-                line.draw();
+        $('#dayLine').on('click',function(){
+            $('.dayLine').css('display','block');
+            $('.dayData').css('display','none');
+            $('.monthLine').css('display','none');
+            $('.monthData').css('display','none');
+            var servers = $('#servers').val();
+            var date = $('#datePicker').val();
+            if(!servers){
+                alert('请选择服务器');
+                return false;
             }
-        });
-
-        $('#day_line').on('click',function(){
-            $('.day_line').css('display','block');
-            $('.day_data').css('display','none');
-            $('.month_line').css('display','none');
-            $('.month_data').css('display','none');
-        });
-        $('#day_data').on('click',function(){
-            $('.day_line').css('display','none');
-            $('.day_data').css('display','block');
-            $('.month_line').css('display','none');
-            $('.month_data').css('display','none');
+            if(!date.length){
+                alert('请选择日期');
+                return false;
+            }
             $.ajax({
-                url: '/chargeConsume?option=day_data',
-                type: 'get',
+                url: '/chargeConsume',
+                type: 'POST',
+                data:{date:date,servers:servers,option:'dayLine'},
+                dataType: 'json',
+                async: false,
+                success: function (result) {
+                    var data = [
+                        {
+                            name : '每日用户充值金额',
+                            value:result.charge,
+                            color:'#0d8ecf',
+                            line_width:2
+                        },
+                        {
+                            name : '每日用户消费金额',
+                            value:result.consume,
+                            color:'#66FF33',
+                            line_width:2
+                        }
+                    ];
+                    options.data = data;
+                    options.render = 'day_canvasDiv';
+                    options.title = '每日充值和消费金额';
+                    options.coordinate.grids.vertical.value = 30;
+                    options.coordinate.scale[1].labels = day_labels;
+                    var line = new iChart.LineBasic2D( options );
+
+                    //开始画图
+                    line.draw();
+                }
+            });
+        });
+        $('#dayData').on('click',function(){
+            $('.dayLine').css('display','none');
+            $('.dayData').css('display','block');
+            $('.monthLine').css('display','none');
+            $('.monthData').css('display','none');
+            var servers = $('#servers').val();
+            var date = $('#datePicker').val();
+            if(!servers){
+                alert('请选择服务器');
+                return false;
+            }
+            if(!date.length){
+                alert('请选择日期');
+                return false;
+            }
+            $.ajax({
+                url: '/chargeConsume',
+                type: 'POST',
+                data:{date:date,servers:servers,option:'dayData'},
                 dataType: 'json',
                 async: false,
                 success: function (result) {
@@ -153,16 +175,25 @@
             });
 
         });
-        $('#month_line').on('click',function(){
-            $('.day_line').css('display','none');
-            $('.day_data').css('display','none');
-            $('.month_line').css('display','block');
-            $('.month_data').css('display','none');
-
+        $('#monthLine').on('click',function(){
+            $('.dayLine').css('display','none');
+            $('.dayData').css('display','none');
+            $('.monthLine').css('display','block');
+            $('.monthData').css('display','none');
+            var servers = $('#servers').val();
+            var date = $('#datePicker').val();
+            if(!servers){
+                alert('请选择服务器');
+                return false;
+            }
+            if(!date.length){
+                alert('请选择日期');
+                return false;
+            }
             $.ajax({
-                url: '/chargeConsume?option=month_line',
-                type: 'get',
-                dataType: 'json',
+                url: '/chargeConsume',
+                type: 'POST',
+                data:{date:date,servers:servers,option:'monthLine'},
                 async: false,
                 success: function (result) {
                     var data = [
@@ -191,20 +222,30 @@
                 }
             });
         });
-        $('#month_data').on('click',function(){
-            $('.day_line').css('display','none');
-            $('.day_data').css('display','none');
-            $('.month_line').css('display','none');
-            $('.month_data').css('display','block');
+        $('#monthData').on('click',function(){
+            $('.dayLine').css('display','none');
+            $('.dayData').css('display','none');
+            $('.monthLine').css('display','none');
+            $('.monthData').css('display','block');
+            var servers = $('#servers').val();
+            var date = $('#datePicker').val();
+            if(!servers){
+                alert('请选择服务器');
+                return false;
+            }
+            if(!date.length){
+                alert('请选择日期');
+                return false;
+            }
             $.ajax({
-                url: '/chargeConsume?option=month_data',
-                type: 'get',
+                url: '/chargeConsume',
+                type: 'POST',
+                data:{date:date,servers:servers,option:'monthData'},
                 dataType: 'json',
                 async: false,
                 success: function (result) {
                     console.log('result:',result);
                     var html = "";
-
                     if(result.data.length){
                         result.data.forEach(function( data ){
                             html += "<tr>";
@@ -229,83 +270,30 @@
 
 </script>
 <div class="col-lg-12">
-    <div class="day_line">
+    <div class="dayLine">
         <div id='day_canvasDiv'></div>
     </div>
 
-    <div class="day_data" style="display: none">
-        <table id="day_data_table" class="table table-bordered">
+    <div class="dayData" style="display: none">
+        <table id="dayData_table" class="table table-bordered">
             <thead>
-            <tr>
-                <th>服务器/日</th>
-                <th>5.1</th>
-                <th>5.2</th>
-                <th>5.3</th>
-                <th>5.4</th>
-                <th>5.5</th>
-                <th>5.6</th>
-                <th>5.7</th>
-                <th>总计</th>
-            </tr>
+            <tr></tr>
             </thead>
             <tbody></tbody>
         </table>
     </div>
 
-    <div class="month_line" style="display: none">
+    <div class="monthLine" style="display: none">
         <div id='month_canvasDiv'></div>
     </div>
 
-    <div class="month_data" style="display: none">
-        <table id="month_data_table" class="table table-bordered">
+    <div class="monthData" style="display: none">
+        <table id="monthData_table" class="table table-bordered">
             <thead>
-            <tr>
-                <th>服务器/月份</th>
-                <th>6</th>
-                <th>5</th>
-                <th>4</th>
-                <th>3</th>
-                <th>2</th>
-                <th>1</th>
-                <th>总计</th>
-            </tr>
+            <tr></tr>
 
             </thead>
             <tbody>
-            <tr>
-                <td>3区力拔山河</td>
-                <td>1000/900</td>
-                <td>1000/900</td>
-                <td>1000/900</td>
-                <td>1000/900</td>
-                <td>1000/900</td>
-                <td>1000/900</td>
-                <td>1000/900</td>
-                <td>1000/900</td>
-            </tr>
-            <tr>
-                <td>2区横扫千军</td>
-                <td>1000/900</td>
-                <td>1000/900</td>
-                <td>1000/900</td>
-                <td>1000/900</td>
-                <td>1000/900</td>
-                <td>1000/900</td>
-                <td>1000/900</td>
-                <td>1000/900</td>
-
-            </tr>
-            <tr>
-                <td>1区艾泽拉斯</td>
-                <td>1000/900</td>
-                <td>1000/900</td>
-                <td>1000/900</td>
-                <td>1000/900</td>
-                <td>1000/900</td>
-                <td>1000/900</td>
-                <td>1000/900</td>
-                <td>1000/900</td>
-            </tr>
             </tbody>
         </table>
     </div>
@@ -317,8 +305,8 @@
         console.log('year:',date.getFullYear());
         console.log('month:',date.getMonth()+1);
         console.log('day:',date.getDate());
-        var day_tb = document.getElementById("day_data_table");
-        var month_tb = document.getElementById("month_data_table");
+        var day_tb = document.getElementById("dayData_table");
+        var month_tb = document.getElementById("monthData_table");
         var day = date.getDate();
         var month = date.getMonth()+1;
         var monthMulti = month / 6;
